@@ -23,6 +23,9 @@ protected:
     int width = 0;
     int height = 0;
 
+    float f_width = 0.0f;
+    float f_height = 0.0f;
+
 };
 
 
