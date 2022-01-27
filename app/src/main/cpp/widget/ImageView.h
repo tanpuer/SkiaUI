@@ -6,11 +6,19 @@
 #define SKIAUI_IMAGEVIEW_H
 
 
+#include "View.h"
 
-class ImageView {
+class ImageView : public View {
+
+public:
+
+    ImageView();
+
+    virtual ~ImageView();
+
+#pragma mark ImageView api
 
 };
-
 
 
 #endif //SKIAUI_IMAGEVIEW_H

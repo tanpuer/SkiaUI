@@ -6,33 +6,68 @@
 #define SKIAUI_VIEW_H
 
 #include <cstdint>
-#include "FlexLayout.h"
+#include <yoga/Yoga.h>
 #include "array"
+#include "memory"
+#include "core/SkPaint.h"
+#include "core/SkCanvas.h"
+
+static int64_t VIEW_ID = 0;
 
 class View {
 
 public:
 
-    View() : margins{0, 0, 0, 0}, paddings{0, 0, 0, 0} {}
+    View();
 
-    virtual ~View() {}
+    virtual ~View();
 
-public:
+    int64_t viewId;
 
-    Order order;
-    FlexGrow flexGrow;
-    FlexShrink flexShrink;
-    FlexBias flexBias;
-    Flex flex;
-    AlignSelf alignSelf;
+#pragma mark yoga
 
-    std::array<int, 4> margins;
-    std::array<int, 4> paddings;
+    virtual void measure();
 
-    int minWidth = INT32_MIN;
-    int minHeight = INT32_MIN;
-    int maxWidth = INT32_MAX;
-    int maxHeight = INT32_MAX;
+    virtual void layout();
+
+    virtual void draw(SkCanvas *canvas);
+
+    virtual void invalidate();
+
+    virtual void requestLayout();
+
+    virtual void setMargins(std::array<float, 4> margins);
+
+    virtual void setMargins(float margin);
+
+    virtual void setPaddings(std::array<float, 4> paddings);
+
+    virtual void setPaddings(float padding);
+
+    virtual void setSize(float _availableWidth, float _availableHeight);
+
+    virtual void setAlignSelf(YGAlign align);
+
+    YGNodeRef node;
+
+    int width, height;
+
+    float availableWidth, availableHeight;
+
+#pragma mark skia
+
+    virtual void setBackgroundColor(SkColor color);
+
+    virtual void setAntiAlias(bool antiAlias);
+
+    virtual void setStyle(SkPaint::Style style);
+
+    SkPaint *paint;
+
+    std::array<int, 4> cornerRadius;
+
+protected:
+    SkRect skRect;
 
 };
 

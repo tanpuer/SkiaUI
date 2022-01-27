@@ -16,7 +16,12 @@ public:
 
     virtual void setWindowSize(int width, int height) = 0;
 
-    virtual void doFrame() = 0;
+    virtual void doFrame() {
+        drawCount++;
+        if (drawCount > width) {
+            drawCount = 0;
+        }
+    };
 
 protected:
 
@@ -25,6 +30,8 @@ protected:
 
     float f_width = 0.0f;
     float f_height = 0.0f;
+
+    long drawCount = 0;
 
 };
 

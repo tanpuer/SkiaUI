@@ -3,3 +3,11 @@
 //
 
 #include "ImageView.h"
+
+ImageView::ImageView() : View() {
+
+}
+
+ImageView::~ImageView() {
+
+}

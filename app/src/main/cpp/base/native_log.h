@@ -8,7 +8,7 @@
 #include <android/log.h>
 
 #define JNI_DEBUG 1
-#define JNI_TAG "HYNDKPlayer"
+#define JNI_TAG "SkiaUI"
 
 #define ALOGE(format, ...) if (JNI_DEBUG) { __android_log_print(ANDROID_LOG_ERROR, JNI_TAG, format, ##__VA_ARGS__); }
 #define ALOGI(format, ...) if (JNI_DEBUG) { __android_log_print(ANDROID_LOG_INFO,  JNI_TAG, format, ##__VA_ARGS__); }

@@ -56,9 +56,10 @@ enum class AlignContent {
 //order, flex-grow, flex-shrink,
 
 //定义项目的排列顺序，数值越小，排列越靠前，默认0
-struct Order {
-    int value = 0;
-};
+//不考虑，后面的view自然渲染在前面的view上方
+//struct Order {
+//    int value = 0;
+//};
 
 //定义项目的放大比例，默认为0 = 如果存在剩余空间也不放大
 struct FlexGrow {

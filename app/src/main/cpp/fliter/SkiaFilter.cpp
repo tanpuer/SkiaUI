@@ -5,11 +5,12 @@
 #include <GLES3/gl3.h>
 #include <base/native_log.h>
 #include <yoga/Yoga.h>
+#include "LinearLayout.h"
+#include "TextView.h"
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
-#include "core/SkFont.h"
 
-SkiaFilter::SkiaFilter() {
+SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
 }
 
@@ -55,48 +56,34 @@ void SkiaFilter::setWindowSize(int width, int height) {
 }
 
 void SkiaFilter::doFrame() {
+    IFilter::doFrame();
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 
-    YGConfigRef config = YGConfigNew();
-    YGNodeRef root = YGNodeNewWithConfig(config);
-    YGNodeStyleSetFlexDirection(root, YGFlexDirectionRow);
-    YGNodeStyleSetPadding(root, YGEdgeAll, 20);
-    YGNodeStyleSetMargin(root, YGEdgeAll, 20);
+    LinearLayout root;
+    root.setOrientation(YGFlexDirectionRow);
+    root.setAlignItems(YGAlignCenter);
+    root.setSize(f_width, f_height);
+    auto view = new View();
+    view->setBackgroundColor(SK_ColorRED);
+    view->setStyle(SkPaint::kFill_Style);
+    view->setSize(300, 200);
+    view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
+    root.addView(view);
+    auto textView = new TextView();
+    textView->setText(SkString("123456"));
+    textView->setTextColor(SK_ColorBLACK);
+    textView->setTextSize(60);
+    textView->setMargins(100);
+    textView->setPaddings(50);
+    textView->setBackgroundColor(SK_ColorRED);
+    textView->setStyle(SkPaint::kStroke_Style);
+//    textView->setAlignSelf(YGAlignFlexEnd);
+    root.addView(textView);
 
-    {
-        YGNodeRef view = YGNodeNew();
-        YGNodeStyleSetWidth(view, 300);
-        YGNodeStyleSetHeight(view, 200);
-        YGNodeStyleSetAlignSelf(view, YGAlignCenter);
-        YGNodeStyleSetFlexGrow(view, 0);
-        YGNodeInsertChild(root, view, 0);
-        YGNodeCalculateLayout(root, f_width, f_height, YGDirectionLTR);
-        SkRect rect = SkRect::MakeXYWH(YGNodeLayoutGetLeft(view), YGNodeLayoutGetTop(view),
-                                       YGNodeLayoutGetWidth(view), YGNodeLayoutGetHeight(view));
-        auto paint = SkPaint();
-        paint.setColor(SK_ColorRED);
-        paint.setStyle(SkPaint::kFill_Style);
-        skCanvas->drawRect(rect, paint);
-    }
-
-    {
-        YGNodeRef textView = YGNodeNew();
-        YGNodeStyleSetWidth(textView, 200);
-        YGNodeStyleSetHeight(textView, 100);
-        YGNodeStyleSetMargin(textView, YGEdgeLeft, 100);
-        YGNodeStyleSetAlignSelf(textView, YGAlignCenter);
-        YGNodeInsertChild(root, textView, 1);
-        YGNodeCalculateLayout(root, f_width, f_height, YGDirectionLTR);
-        auto textPaint = SkPaint();
-        textPaint.setColor(SK_ColorBLACK);
-        const char *text = "123";
-        SkFont font;
-        font.setSize(60);
-        skCanvas->drawString(text, YGNodeLayoutGetLeft(textView), YGNodeLayoutGetTop(textView),
-                             font, textPaint);
-    }
-
+    root.measure();
+    root.layout();
+    root.draw(skCanvas);
 
     skCanvas->flush();
 }

@@ -6,11 +6,27 @@
 #define SKIAUI_LINEARLAYOUT_H
 
 
+#include "ViewGroup.h"
 
-class LinearLayout {
+class LinearLayout : public ViewGroup {
+
+public:
+
+    LinearLayout();
+
+    virtual ~LinearLayout();
+
+    virtual bool addView(View *view) override;
+
+    virtual bool removeView(View *view) override;
+
+#pragma mark LinearLayoyt api
+
+    virtual void setOrientation(YGFlexDirection orientation);
+
+    YGFlexDirection orientation = YGFlexDirectionRow;
 
 };
-
 
 
 #endif //SKIAUI_LINEARLAYOUT_H

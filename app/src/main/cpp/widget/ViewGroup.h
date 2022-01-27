@@ -7,23 +7,35 @@
 
 
 #include "View.h"
-#include "../flexbox/FlexLayout.h"
+#include "vector"
 
 class ViewGroup : public View {
 
 public:
 
-    ViewGroup() {}
+    ViewGroup();
 
-    virtual ~ViewGroup() {}
+    virtual ~ViewGroup();
 
-public:
+    virtual void measure() override;
 
-    FlexDirection flexDirection;
-    FlexWarp flexWarp;
-    JustifyContent justifyContent;
-    AlignItems alignItems;
-    AlignContent alignContent;
+    virtual void layout() override;
+
+    virtual void draw(SkCanvas *canvas) override;
+
+#pragma mark ViewGroup api
+
+    virtual bool addView(View *view);
+
+    virtual bool removeView(View *view);
+
+    virtual void removeAllViews();
+
+    virtual void setAlignItems(YGAlign align);
+
+    YGNodeRef root;
+
+    std::vector<View *> children;
 
 };
 
