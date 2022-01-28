@@ -5,8 +5,10 @@
 #include <base/native_log.h>
 #include <yoga/Utils.h>
 #include "View.h"
+#include "effects/SkCornerPathEffect.h"
 
-View::View() : width(0), height(0), skRect(SkRect::MakeEmpty()), cornerRadius() {
+View::View() : width(0), height(0), skRect(SkRect::MakeEmpty()), cornerRadius(),
+               availableHeight(0.0), availableWidth(0.0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -124,3 +126,13 @@ void View::setStyle(SkPaint::Style style) {
     SkASSERT(paint);
     paint->setStyle(style);
 }
+
+void View::setCorner(float radius) {
+    SkASSERT(paint);
+    if (radius <= 0.0) {
+        ALOGE("radius must > 0.0")
+        return;
+    }
+    paint->setPathEffect(SkCornerPathEffect::Make(radius));
+}
+

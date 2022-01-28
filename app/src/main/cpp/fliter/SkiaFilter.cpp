@@ -5,6 +5,7 @@
 #include <GLES3/gl3.h>
 #include <base/native_log.h>
 #include <yoga/Yoga.h>
+#include <widget/ImageView.h>
 #include "LinearLayout.h"
 #include "TextView.h"
 #include "SkiaFilter.h"
@@ -56,7 +57,7 @@ void SkiaFilter::setWindowSize(int width, int height) {
 }
 
 void SkiaFilter::doFrame() {
-    IFilter::doFrame();
+//    IFilter::doFrame();
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 
@@ -69,17 +70,23 @@ void SkiaFilter::doFrame() {
     view->setStyle(SkPaint::kFill_Style);
     view->setSize(300, 200);
     view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
+    view->setCorner(30);
     root.addView(view);
+
     auto textView = new TextView();
-    textView->setText(SkString("123456"));
+    textView->setText(SkString("Hello World"));
     textView->setTextColor(SK_ColorBLACK);
     textView->setTextSize(60);
-    textView->setMargins(100);
-    textView->setPaddings(50);
+    textView->setMargins(50);
     textView->setBackgroundColor(SK_ColorRED);
     textView->setStyle(SkPaint::kStroke_Style);
 //    textView->setAlignSelf(YGAlignFlexEnd);
     root.addView(textView);
+
+    auto imageView = new ImageView();
+    imageView->setSource("/sdcard/cowboy.png");
+    imageView->setCorner(200);
+    root.addView(imageView);
 
     root.measure();
     root.layout();

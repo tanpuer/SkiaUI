@@ -44,19 +44,22 @@ void ViewGroup::removeAllViews() {
 
 void ViewGroup::measure() {
     //默认不支持rtl
+    for (auto child: children) {
+        child->measure();
+    }
     YGNodeCalculateLayout(root, availableWidth, availableHeight, YGDirectionLTR);
 }
 
 void ViewGroup::layout() {
-    for (auto view: children) {
-        view->layout();
+    for (auto child: children) {
+        child->layout();
     }
 }
 
 void ViewGroup::draw(SkCanvas *canvas) {
     View::draw(canvas);
-    for (auto view: children) {
-        view->draw(canvas);
+    for (auto child: children) {
+        child->draw(canvas);
     }
 }
 

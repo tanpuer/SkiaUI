@@ -18,6 +18,8 @@ public:
 
     virtual ~TextView();
 
+    void measure() override;
+
     void draw(SkCanvas *canvas) override;
 
 #pragma mark TextView api

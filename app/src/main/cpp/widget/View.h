@@ -62,6 +62,8 @@ public:
 
     virtual void setStyle(SkPaint::Style style);
 
+    virtual void setCorner(float radius);
+    
     SkPaint *paint;
 
     std::array<int, 4> cornerRadius;

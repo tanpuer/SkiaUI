@@ -5,6 +5,7 @@
 #include "TextView.h"
 
 #include <utility>
+#include <base/native_log.h>
 
 TextView::TextView() : View() {
     textPaint = new SkPaint();
@@ -28,9 +29,23 @@ void TextView::setTextColor(SkColor color) {
     textPaint->setColor(color);
 }
 
+void TextView::measure() {
+    //todo
+    auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
+                                   SkTextEncoding::kUTF8,
+                                   nullptr);
+    auto height = font.getSize();
+    YGNodeStyleSetWidth(node, length);
+    YGNodeStyleSetHeight(node, height);
+//    ALOGD("TextView measure %f %f %f %f %f %f", length, height, YGNodeLayoutGetLeft(node),
+//          YGNodeLayoutGetTop(node), YGNodeLayoutGetWidth(node), YGNodeLayoutGetHeight(node))
+}
+
 void TextView::draw(SkCanvas *canvas) {
     View::draw(canvas);
-    canvas->drawString(text, YGNodeLayoutGetLeft(node), YGNodeLayoutGetTop(node), font, *textPaint);
+    canvas->drawString(text, YGNodeLayoutGetLeft(node),
+                       YGNodeLayoutGetTop(node) + YGNodeLayoutGetHeight(node), font,
+                       *textPaint);
 }
 
 void TextView::setTextSize(SkScalar textSize) {

@@ -16,7 +16,15 @@ public:
 
     virtual ~ImageView();
 
+    virtual void measure() override;
+
+    virtual void draw(SkCanvas *canvas) override;
+
 #pragma mark ImageView api
+
+    void setSource(const char *path);
+
+    sk_sp<SkImage> skImage;
 
 };
 
