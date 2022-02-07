@@ -16,15 +16,8 @@ public:
 
     virtual ~LinearLayout();
 
-    virtual bool addView(View *view) override;
-
-    virtual bool removeView(View *view) override;
-
 #pragma mark LinearLayoyt api
 
-    virtual void setOrientation(YGFlexDirection orientation);
-
-    YGFlexDirection orientation = YGFlexDirectionRow;
 
 };
 

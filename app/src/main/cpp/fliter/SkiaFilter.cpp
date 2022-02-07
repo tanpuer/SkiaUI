@@ -62,9 +62,11 @@ void SkiaFilter::doFrame() {
     skCanvas->clear(SK_ColorWHITE);
 
     LinearLayout root;
-    root.setOrientation(YGFlexDirectionRow);
-    root.setAlignItems(YGAlignCenter);
     root.setSize(f_width, f_height);
+    root.setFlexDirection(YGFlexDirectionColumn);
+    root.setAlignItems(YGAlignCenter);
+    root.setJustifyContent(YGJustifyCenter);
+    root.setFlexWrap(YGWrapWrap);
     auto view = new View();
     view->setBackgroundColor(SK_ColorRED);
     view->setStyle(SkPaint::kFill_Style);

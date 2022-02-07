@@ -46,6 +46,10 @@ public:
 
     virtual void setSize(float _availableWidth, float _availableHeight);
 
+    /**
+     * 在AlignItems的基础上自定义每个子视图的对齐方式
+     * @param align
+     */
     virtual void setAlignSelf(YGAlign align);
 
     YGNodeRef node;
