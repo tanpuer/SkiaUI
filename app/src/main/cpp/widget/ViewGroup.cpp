@@ -7,11 +7,20 @@
 #include "ViewGroup.h"
 
 ViewGroup::ViewGroup() : View() {
-    auto config = YGConfigNew();
+    config = YGConfigNew();
     root = YGNodeNewWithConfig(config);
 }
 
-ViewGroup::~ViewGroup() = default;
+ViewGroup::~ViewGroup() {
+    if (root == nullptr) {
+        return;
+    }
+    for (auto view: children) {
+        delete view;
+    }
+    YGConfigFree(config);
+    YGNodeFree(root);
+}
 
 bool ViewGroup::addView(View *view) {
     if (view == nullptr || view->node == nullptr) {

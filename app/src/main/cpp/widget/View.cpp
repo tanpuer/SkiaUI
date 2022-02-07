@@ -17,7 +17,9 @@ View::View() : width(0), height(0), skRect(SkRect::MakeEmpty()), cornerRadius(),
 
 View::~View() {
     delete paint;
-    YGNodeFree(node);
+    if (node != nullptr) {
+        YGNodeFree(node);
+    }
 }
 
 #pragma mark yoga
@@ -58,7 +60,7 @@ void View::setMargins(std::array<float, 4> margins) {
     YGNodeStyleSetMargin(node, YGEdgeBottom, margins[3]);
 }
 
-void View::setPaddings(std::array<float, 4> paddings) {
+void View::setPadding(std::array<float, 4> paddings) {
     SkASSERT(node);
     if (node == nullptr) {
         ALOGE("YGNodeRef not initialized, pls check!")
@@ -78,7 +80,7 @@ void View::setMargins(float margin) {
     YGNodeStyleSetMargin(node, YGEdgeAll, margin);
 }
 
-void View::setPaddings(float padding) {
+void View::setPadding(float padding) {
     SkASSERT(node);
     if (node == nullptr) {
         return;

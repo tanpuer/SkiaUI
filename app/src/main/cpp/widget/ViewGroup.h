@@ -63,6 +63,8 @@ public:
 
     YGNodeRef root;
 
+    YGConfigRef config;
+
     std::vector<View *> children;
 
 };

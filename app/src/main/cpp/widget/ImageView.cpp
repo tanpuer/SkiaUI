@@ -12,7 +12,7 @@ ImageView::ImageView() : View() {
 }
 
 ImageView::~ImageView() {
-    skImage->unref();
+
 }
 
 void ImageView::setSource(const char *path) {

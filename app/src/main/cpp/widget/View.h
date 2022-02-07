@@ -40,9 +40,9 @@ public:
 
     virtual void setMargins(float margin);
 
-    virtual void setPaddings(std::array<float, 4> paddings);
+    virtual void setPadding(std::array<float, 4> paddings);
 
-    virtual void setPaddings(float padding);
+    virtual void setPadding(float padding);
 
     virtual void setSize(float _availableWidth, float _availableHeight);
 
