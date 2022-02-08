@@ -33,9 +33,9 @@ void ImageView::measure() {
 }
 
 void ImageView::draw(SkCanvas *canvas) {
-//    View::draw(canvas);
     canvas->drawImage(skImage, YGNodeLayoutGetLeft(node), YGNodeLayoutGetTop(node),
                       SkSamplingOptions(), paint);
+    View::draw(canvas);
 }
 
 

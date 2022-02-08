@@ -46,6 +46,12 @@ public:
 
     virtual void setSize(float _availableWidth, float _availableHeight);
 
+    virtual void setSizePercent(float widthPercent, float heightPercent);
+
+    virtual void setWidthAuto();
+
+    virtual void setHeightAuto();
+
     /**
      * 在AlignItems的基础上自定义每个子视图的对齐方式
      * @param align
@@ -66,8 +72,10 @@ public:
 
     virtual void setStyle(SkPaint::Style style);
 
-    virtual void setCorner(float radius);
-    
+    virtual void setStrokeWidth(SkScalar _width);
+
+    virtual void setCornerRadius(float radius);
+
     SkPaint *paint;
 
     std::array<int, 4> cornerRadius;

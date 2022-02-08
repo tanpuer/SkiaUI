@@ -40,6 +40,8 @@ private:
 
     SkFont font;
 
+    SkRect rect;
+
 };
 
 

@@ -63,7 +63,7 @@ void SkiaFilter::doFrame() {
 
     LinearLayout root;
     root.setSize(f_width, f_height);
-    root.setFlexDirection(YGFlexDirectionColumn);
+    root.setFlexDirection(YGFlexDirectionRow);
     root.setAlignItems(YGAlignCenter);
     root.setJustifyContent(YGJustifyCenter);
     root.setFlexWrap(YGWrapWrap);
@@ -72,7 +72,7 @@ void SkiaFilter::doFrame() {
     view->setStyle(SkPaint::kFill_Style);
     view->setSize(300, 200);
     view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
-    view->setCorner(30);
+    view->setCornerRadius(30);
     root.addView(view);
 
     auto textView = new TextView();
@@ -87,7 +87,10 @@ void SkiaFilter::doFrame() {
 
     auto imageView = new ImageView();
     imageView->setSource("/sdcard/cowboy.png");
-    imageView->setCorner(200);
+    imageView->setCornerRadius(30);
+    imageView->setStyle(SkPaint::kStroke_Style);
+    imageView->setBackgroundColor(SK_ColorRED);
+    imageView->setStrokeWidth(10);
     root.addView(imageView);
 
     root.measure();

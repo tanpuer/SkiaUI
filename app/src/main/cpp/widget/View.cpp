@@ -49,7 +49,7 @@ void View::requestLayout() {
 }
 
 void View::setMargins(std::array<float, 4> margins) {
-    SkASSERT(node);
+    YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         ALOGE("YGNodeRef not initialized, pls check!")
         return;
@@ -61,7 +61,7 @@ void View::setMargins(std::array<float, 4> margins) {
 }
 
 void View::setPadding(std::array<float, 4> paddings) {
-    SkASSERT(node);
+    YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         ALOGE("YGNodeRef not initialized, pls check!")
         return;
@@ -73,7 +73,7 @@ void View::setPadding(std::array<float, 4> paddings) {
 }
 
 void View::setMargins(float margin) {
-    SkASSERT(node);
+    YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         return;
     }
@@ -81,7 +81,7 @@ void View::setMargins(float margin) {
 }
 
 void View::setPadding(float padding) {
-    SkASSERT(node);
+    YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         return;
     }
@@ -89,7 +89,7 @@ void View::setPadding(float padding) {
 }
 
 void View::setSize(float _availableWidth, float _availableHeight) {
-    SkASSERT(node);
+    YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         return;
     }
@@ -102,6 +102,31 @@ void View::setSize(float _availableWidth, float _availableHeight) {
     this->availableHeight = _availableHeight;
     YGNodeStyleSetWidth(node, availableWidth);
     YGNodeStyleSetHeight(node, availableHeight);
+}
+
+void View::setSizePercent(float widthPercent, float heightPercent) {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetWidthPercent(node, widthPercent);
+    YGNodeStyleSetHeightPercent(node, heightPercent);
+}
+
+void View::setWidthAuto() {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetWidthAuto(node);
+}
+
+void View::setHeightAuto() {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetHeightAuto(node);
 }
 
 void View::setAlignSelf(YGAlign align) {
@@ -129,12 +154,21 @@ void View::setStyle(SkPaint::Style style) {
     paint->setStyle(style);
 }
 
-void View::setCorner(float radius) {
+void View::setCornerRadius(float radius) {
     SkASSERT(paint);
     if (radius <= 0.0) {
         ALOGE("radius must > 0.0")
         return;
     }
     paint->setPathEffect(SkCornerPathEffect::Make(radius));
+}
+
+void View::setStrokeWidth(SkScalar _width) {
+    SkASSERT(paint);
+    if (_width < 0.0f) {
+        ALOGE("width must > 0.0")
+        return;
+    }
+    paint->setStrokeWidth(_width);
 }
 

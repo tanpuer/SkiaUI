@@ -30,22 +30,22 @@ void TextView::setTextColor(SkColor color) {
 }
 
 void TextView::measure() {
-    //todo
     auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
                                    SkTextEncoding::kUTF8,
-                                   nullptr);
+                                   &rect, textPaint);
     auto height = font.getSize();
     YGNodeStyleSetWidth(node, length);
-    YGNodeStyleSetHeight(node, height);
-//    ALOGD("TextView measure %f %f %f %f %f %f", length, height, YGNodeLayoutGetLeft(node),
-//          YGNodeLayoutGetTop(node), YGNodeLayoutGetWidth(node), YGNodeLayoutGetHeight(node))
+    //todo 测量出来文字的高度感觉一直偏小
+    YGNodeStyleSetHeight(node, rect.height() * 1.3f);
+    ALOGD("TextView measure %f %f %f %f %f %f %f %f", length, height, YGNodeLayoutGetLeft(node),
+          YGNodeLayoutGetTop(node), YGNodeLayoutGetWidth(node), YGNodeLayoutGetHeight(node),
+          rect.width(), rect.height())
 }
 
 void TextView::draw(SkCanvas *canvas) {
     View::draw(canvas);
-    canvas->drawString(text, YGNodeLayoutGetLeft(node),
-                       YGNodeLayoutGetTop(node) + YGNodeLayoutGetHeight(node), font,
-                       *textPaint);
+    canvas->drawString(text, YGNodeLayoutGetLeft(node), YGNodeLayoutGetTop(node) + rect.height(),
+                       font, *textPaint);
 }
 
 void TextView::setTextSize(SkScalar textSize) {
