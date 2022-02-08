@@ -44,7 +44,7 @@ void TextView::measure() {
 
 void TextView::draw(SkCanvas *canvas) {
     View::draw(canvas);
-    canvas->drawString(text, YGNodeLayoutGetLeft(node), YGNodeLayoutGetTop(node) + rect.height(),
+    canvas->drawString(text, skRect.left(), skRect.top() + rect.height(),
                        font, *textPaint);
 }
 

@@ -64,9 +64,13 @@ void ViewGroup::measure() {
     YGNodeCalculateLayout(root, availableWidth, availableHeight, YGDirectionLTR);
 }
 
-void ViewGroup::layout() {
+void ViewGroup::layout(float l, float t, float r, float b) {
     for (auto child: children) {
-        child->layout();
+        auto left = YGNodeLayoutGetLeft(child->node);
+        auto top = YGNodeLayoutGetTop(child->node);
+        auto width = YGNodeLayoutGetWidth(child->node);
+        auto height = YGNodeLayoutGetHeight(child->node);
+        child->layout(left, top, left + width, top + height);
     }
 }
 

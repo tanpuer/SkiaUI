@@ -8,7 +8,8 @@
 #include "effects/SkCornerPathEffect.h"
 
 View::View() : width(0), height(0), skRect(SkRect::MakeEmpty()), cornerRadius(),
-               availableHeight(0.0), availableWidth(0.0) {
+               availableHeight(0.0), availableWidth(0.0), marginLeft(0.0), marginTop(0.0),
+               marginRight(0.0), marginBottom(0.0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -31,9 +32,8 @@ void View::measure() {
     }
 }
 
-void View::layout() {
-    skRect.setXYWH(YGNodeLayoutGetLeft(node), YGNodeLayoutGetTop(node),
-                   YGNodeLayoutGetWidth(node), YGNodeLayoutGetHeight(node));
+void View::layout(float l, float t, float r, float b) {
+    skRect.setLTRB(l, t, r, b);
 }
 
 void View::draw(SkCanvas *canvas) {
@@ -58,6 +58,36 @@ void View::setMargins(std::array<float, 4> margins) {
     YGNodeStyleSetMargin(node, YGEdgeTop, margins[1]);
     YGNodeStyleSetMargin(node, YGEdgeRight, margins[2]);
     YGNodeStyleSetMargin(node, YGEdgeBottom, margins[3]);
+    marginLeft = margins[0];
+    marginTop = margins[1];
+    marginRight = margins[2];
+    marginBottom = margins[3];
+}
+
+
+void View::setMargins(float margin) {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetMargin(node, YGEdgeAll, margin);
+    marginLeft = marginTop = marginRight = marginBottom = margin;
+}
+
+float View::getMarginLeft() {
+    return marginLeft;
+}
+
+float View::getMarginTop() {
+    return marginTop;
+}
+
+float View::getMarginRight() {
+    return marginRight;
+}
+
+float View::getMarginBottom() {
+    return marginBottom;
 }
 
 void View::setPadding(std::array<float, 4> paddings) {
@@ -70,14 +100,6 @@ void View::setPadding(std::array<float, 4> paddings) {
     YGNodeStyleSetPadding(node, YGEdgeTop, paddings[1]);
     YGNodeStyleSetPadding(node, YGEdgeRight, paddings[2]);
     YGNodeStyleSetPadding(node, YGEdgeBottom, paddings[3]);
-}
-
-void View::setMargins(float margin) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    YGNodeStyleSetMargin(node, YGEdgeAll, margin);
 }
 
 void View::setPadding(float padding) {

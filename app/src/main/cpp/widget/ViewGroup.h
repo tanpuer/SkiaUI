@@ -19,7 +19,7 @@ public:
 
     virtual void measure() override;
 
-    virtual void layout() override;
+    virtual void layout(float l, float t, float r, float b) override;
 
     virtual void draw(SkCanvas *canvas) override;
 

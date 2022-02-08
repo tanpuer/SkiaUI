@@ -61,41 +61,92 @@ void SkiaFilter::doFrame() {
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 
-    LinearLayout root;
-    root.setSize(f_width, f_height);
-    root.setFlexDirection(YGFlexDirectionRow);
-    root.setAlignItems(YGAlignCenter);
-    root.setJustifyContent(YGJustifyCenter);
-    root.setFlexWrap(YGWrapWrap);
-    auto view = new View();
-    view->setBackgroundColor(SK_ColorRED);
-    view->setStyle(SkPaint::kFill_Style);
-    view->setSize(300, 200);
-    view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
-    view->setCornerRadius(30);
-    root.addView(view);
+    //todo test code
 
-    auto textView = new TextView();
-    textView->setText(SkString("Hello World"));
-    textView->setTextColor(SK_ColorBLACK);
-    textView->setTextSize(60);
-    textView->setMargins(50);
-    textView->setBackgroundColor(SK_ColorRED);
-    textView->setStyle(SkPaint::kStroke_Style);
+    LinearLayout _root;
+    _root.setSize(f_width, f_height);
+    _root.setFlexWrap(YGWrapWrap);
+    _root.setOrientation(LinearLayout::Orientation::VERTICAL);
+    _root.setJustifyContent(YGJustifyCenter);
+    _root.setAlignItems(YGAlignCenter);
+
+    {
+        auto vp1 = new LinearLayout();
+        vp1->setSize(f_width, 0);
+        vp1->setHeightAuto();
+        vp1->setFlexWrap(YGWrapWrap);
+        vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
+        vp1->setJustifyContent(YGJustifyCenter);
+        vp1->setAlignItems(YGAlignFlexStart);
+        auto view = new View();
+        view->setBackgroundColor(SK_ColorRED);
+        view->setStyle(SkPaint::kFill_Style);
+        view->setSize(300, 200);
+        view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
+        view->setCornerRadius(30);
+        vp1->addView(view);
+
+        auto textView = new TextView();
+        textView->setText(SkString("Hello World"));
+        textView->setTextColor(SK_ColorBLACK);
+        textView->setTextSize(60);
+        textView->setMargins(50);
+        textView->setBackgroundColor(SK_ColorRED);
+        textView->setStyle(SkPaint::kStroke_Style);
 //    textView->setAlignSelf(YGAlignFlexEnd);
-    root.addView(textView);
+        vp1->addView(textView);
 
-    auto imageView = new ImageView();
-    imageView->setSource("/sdcard/cowboy.png");
-    imageView->setCornerRadius(30);
-    imageView->setStyle(SkPaint::kStroke_Style);
-    imageView->setBackgroundColor(SK_ColorRED);
-    imageView->setStrokeWidth(10);
-    root.addView(imageView);
+        auto imageView = new ImageView();
+        imageView->setSource("/sdcard/cowboy.png");
+        imageView->setCornerRadius(30);
+        imageView->setStyle(SkPaint::kStroke_Style);
+        imageView->setBackgroundColor(SK_ColorRED);
+        imageView->setStrokeWidth(10);
+        vp1->addView(imageView);
 
-    root.measure();
-    root.layout();
-    root.draw(skCanvas);
+        _root.addView(vp1);
+    }
+
+    {
+        auto vp1 = new LinearLayout();
+        vp1->setSize(f_width, 0);
+        vp1->setHeightAuto();
+        vp1->setFlexWrap(YGWrapWrap);
+        vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
+        vp1->setJustifyContent(YGJustifyCenter);
+        vp1->setAlignItems(YGAlignCenter);
+        auto view = new View();
+        view->setBackgroundColor(SK_ColorBLUE);
+        view->setStyle(SkPaint::kFill_Style);
+        view->setSize(300, 200);
+        view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
+        view->setCornerRadius(30);
+        vp1->addView(view);
+
+        auto textView = new TextView();
+        textView->setText(SkString("Hello World"));
+        textView->setTextColor(SK_ColorBLACK);
+        textView->setTextSize(60);
+        textView->setMargins(50);
+        textView->setBackgroundColor(SK_ColorBLUE);
+        textView->setStyle(SkPaint::kStroke_Style);
+//    textView->setAlignSelf(YGAlignFlexEnd);
+        vp1->addView(textView);
+
+        auto imageView = new ImageView();
+        imageView->setSource("/sdcard/cowboy.png");
+        imageView->setCornerRadius(30);
+        imageView->setStyle(SkPaint::kStroke_Style);
+        imageView->setBackgroundColor(SK_ColorBLUE);
+        imageView->setStrokeWidth(10);
+        vp1->addView(imageView);
+
+        _root.addView(vp1);
+    }
+
+    _root.measure();
+    _root.layout(0, 0, f_width, f_height);
+    _root.draw(skCanvas);
 
     skCanvas->flush();
 }

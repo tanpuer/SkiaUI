@@ -28,7 +28,7 @@ public:
 
     virtual void measure();
 
-    virtual void layout();
+    virtual void layout(float l, float t, float r, float b);
 
     virtual void draw(SkCanvas *canvas);
 
@@ -39,6 +39,14 @@ public:
     virtual void setMargins(std::array<float, 4> margins);
 
     virtual void setMargins(float margin);
+
+    virtual float getMarginLeft();
+
+    virtual float getMarginTop();
+
+    virtual float getMarginRight();
+
+    virtual float getMarginBottom();
 
     virtual void setPadding(std::array<float, 4> paddings);
 
@@ -63,6 +71,8 @@ public:
     int width, height;
 
     float availableWidth, availableHeight;
+
+    float marginLeft, marginTop, marginRight, marginBottom;
 
 #pragma mark skia
 
