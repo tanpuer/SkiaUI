@@ -24,7 +24,7 @@ public:
 
     int64_t viewId;
 
-#pragma mark yoga
+#pragma mark yoga 设置相关
 
     virtual void measure();
 
@@ -40,14 +40,6 @@ public:
 
     virtual void setMargins(float margin);
 
-    virtual float getMarginLeft();
-
-    virtual float getMarginTop();
-
-    virtual float getMarginRight();
-
-    virtual float getMarginBottom();
-
     virtual void setPadding(std::array<float, 4> paddings);
 
     virtual void setPadding(float padding);
@@ -60,6 +52,8 @@ public:
 
     virtual void setHeightAuto();
 
+    virtual bool isViewGroup();
+
     /**
      * 在AlignItems的基础上自定义每个子视图的对齐方式
      * @param align
@@ -68,9 +62,27 @@ public:
 
     YGNodeRef node;
 
-    int width, height;
+protected:
+
+    float width, height;
 
     float availableWidth, availableHeight;
+
+#pragma mark yoga 获取相关
+
+public:
+
+    virtual float getHeight();
+
+    virtual float getWidth();
+
+    virtual float getMarginLeft();
+
+    virtual float getMarginTop();
+
+    virtual float getMarginRight();
+
+    virtual float getMarginBottom();
 
     float marginLeft, marginTop, marginRight, marginBottom;
 

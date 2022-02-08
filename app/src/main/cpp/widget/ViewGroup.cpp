@@ -6,7 +6,7 @@
 #include <base/native_log.h>
 #include "ViewGroup.h"
 
-ViewGroup::ViewGroup() : View() {
+ViewGroup::ViewGroup() : View(), maxChildWidth(0.0f), maxChildHeight(0.0f) {
     config = YGConfigNew();
     root = YGNodeNewWithConfig(config);
 }
@@ -70,7 +70,7 @@ void ViewGroup::layout(float l, float t, float r, float b) {
         auto top = YGNodeLayoutGetTop(child->node);
         auto width = YGNodeLayoutGetWidth(child->node);
         auto height = YGNodeLayoutGetHeight(child->node);
-        child->layout(left, top, left + width, top + height);
+        child->layout(left + l, top + t, left + width, top + height);
     }
 }
 
@@ -119,4 +119,42 @@ void ViewGroup::setFlexDirection(YGFlexDirection direction) {
         return;
     }
     YGNodeStyleSetFlexDirection(root, direction);
+}
+
+float ViewGroup::getWidth() {
+    if (YGNodeStyleGetWidth(root).unit == YGUnitAuto) {
+        return getMaxWidthInChildren();
+    } else {
+        //exactly todo percent
+        return View::getWidth();
+    }
+}
+
+float ViewGroup::getHeight() {
+    if (YGNodeStyleGetHeight(root).unit == YGUnitAuto) {
+        return getMaxHeightInChildren();
+    } else {
+        //exactly todo percent
+        return View::getHeight();
+    }
+}
+
+float ViewGroup::getMaxHeightInChildren() {
+    float maxHeight = 0.0f;
+    for (auto &child: children) {
+        maxHeight = std::max(maxHeight, child->getHeight());
+    }
+    return maxHeight;
+}
+
+float ViewGroup::getMaxWidthInChildren() {
+    float maxWidth = 0.0f;
+    for (auto &child: children) {
+        maxWidth = std::max(maxWidth, child->getWidth());
+    }
+    return maxWidth;
+}
+
+bool ViewGroup::isViewGroup() {
+    return true;
 }

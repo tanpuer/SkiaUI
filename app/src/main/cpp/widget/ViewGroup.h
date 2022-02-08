@@ -23,6 +23,16 @@ public:
 
     virtual void draw(SkCanvas *canvas) override;
 
+    bool isViewGroup() override;
+
+    virtual float getWidth() override;
+
+    virtual float getHeight() override;
+
+    float getMaxHeightInChildren();
+
+    float getMaxWidthInChildren();
+
 #pragma mark ViewGroup api
 
     virtual bool addView(View *view);
@@ -66,6 +76,8 @@ public:
     YGConfigRef config;
 
     std::vector<View *> children;
+
+    float maxChildWidth, maxChildHeight;
 
 };
 

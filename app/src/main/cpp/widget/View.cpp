@@ -7,7 +7,7 @@
 #include "View.h"
 #include "effects/SkCornerPathEffect.h"
 
-View::View() : width(0), height(0), skRect(SkRect::MakeEmpty()), cornerRadius(),
+View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
                availableHeight(0.0), availableWidth(0.0), marginLeft(0.0), marginTop(0.0),
                marginRight(0.0), marginBottom(0.0) {
     viewId = VIEW_ID++;
@@ -34,6 +34,8 @@ void View::measure() {
 
 void View::layout(float l, float t, float r, float b) {
     skRect.setLTRB(l, t, r, b);
+    width = r - l;
+    height = b - t;
 }
 
 void View::draw(SkCanvas *canvas) {
@@ -72,22 +74,6 @@ void View::setMargins(float margin) {
     }
     YGNodeStyleSetMargin(node, YGEdgeAll, margin);
     marginLeft = marginTop = marginRight = marginBottom = margin;
-}
-
-float View::getMarginLeft() {
-    return marginLeft;
-}
-
-float View::getMarginTop() {
-    return marginTop;
-}
-
-float View::getMarginRight() {
-    return marginRight;
-}
-
-float View::getMarginBottom() {
-    return marginBottom;
 }
 
 void View::setPadding(std::array<float, 4> paddings) {
@@ -157,6 +143,38 @@ void View::setAlignSelf(YGAlign align) {
         return;
     }
     YGNodeStyleSetAlignSelf(node, align);
+}
+
+bool View::isViewGroup() {
+    return false;
+}
+
+#pragma mark yoga 获取相关
+
+float View::getHeight() {
+//    ALOGD("view getHeight value is: %f", height)
+    return height;
+}
+
+float View::getWidth() {
+//    ALOGD("view getWidth value is: %f", width)
+    return width;
+}
+
+float View::getMarginLeft() {
+    return marginLeft;
+}
+
+float View::getMarginTop() {
+    return marginTop;
+}
+
+float View::getMarginRight() {
+    return marginRight;
+}
+
+float View::getMarginBottom() {
+    return marginBottom;
 }
 
 #pragma mark skia
