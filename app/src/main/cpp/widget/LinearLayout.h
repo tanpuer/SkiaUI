@@ -23,7 +23,8 @@ public:
 
     virtual ~LinearLayout();
 
-    virtual void measure() override;
+    virtual void measure(float _width, YGMeasureMode widthMode, float _height,
+                         YGMeasureMode heightMode) override;
 
     virtual void layout(float l, float t, float r, float b) override;
 

@@ -9,7 +9,7 @@
 
 View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
                availableHeight(0.0), availableWidth(0.0), marginLeft(0.0), marginTop(0.0),
-               marginRight(0.0), marginBottom(0.0) {
+               marginRight(0.0), marginBottom(0.0), skRectWithBorder(SkRect::MakeEmpty()) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -25,7 +25,7 @@ View::~View() {
 
 #pragma mark yoga
 
-void View::measure() {
+void View::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
     if (YGFloatsEqual(availableWidth, 0.0f) && YGFloatsEqual(availableHeight, 0.0f)) {
         ALOGE("view width and height is zero, skip measure")
         return;

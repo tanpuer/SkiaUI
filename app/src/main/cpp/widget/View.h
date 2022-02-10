@@ -11,6 +11,7 @@
 #include "memory"
 #include "core/SkPaint.h"
 #include "core/SkCanvas.h"
+#include "core/SkRRect.h"
 
 static int64_t VIEW_ID = 0;
 
@@ -26,7 +27,7 @@ public:
 
 #pragma mark yoga 设置相关
 
-    virtual void measure();
+    virtual void measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode);
 
     virtual void layout(float l, float t, float r, float b);
 

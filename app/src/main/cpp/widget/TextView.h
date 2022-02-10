@@ -18,9 +18,10 @@ public:
 
     virtual ~TextView();
 
-    void measure() override;
+    virtual void measure(float _width, YGMeasureMode widthMode, float _height,
+                 YGMeasureMode heightMode) override;
 
-    void draw(SkCanvas *canvas) override;
+    virtual void draw(SkCanvas *canvas) override;
 
 #pragma mark TextView api
 

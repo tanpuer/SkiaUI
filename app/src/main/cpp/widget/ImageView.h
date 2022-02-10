@@ -16,7 +16,8 @@ public:
 
     virtual ~ImageView();
 
-    virtual void measure() override;
+    virtual void measure(float _width, YGMeasureMode widthMode, float _height,
+                         YGMeasureMode heightMode) override;
 
     virtual void draw(SkCanvas *canvas) override;
 

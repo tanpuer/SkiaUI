@@ -21,7 +21,8 @@ void ImageView::setSource(const char *path) {
     skImage = SkImage::MakeFromEncoded(data);
 }
 
-void ImageView::measure() {
+void
+ImageView::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
     if (skImage == nullptr) {
         YGNodeStyleSetWidth(node, 0);
         YGNodeStyleSetHeight(node, 0);
@@ -33,7 +34,7 @@ void ImageView::measure() {
 }
 
 void ImageView::draw(SkCanvas *canvas) {
-    canvas->drawImage(skImage, skRect.left(), skRect.top(), SkSamplingOptions(), paint);
+    canvas->drawImage(skImage, skRect.left(), skRect.top(), SkSamplingOptions(), nullptr);
     View::draw(canvas);
 }
 

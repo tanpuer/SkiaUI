@@ -56,10 +56,11 @@ void ViewGroup::removeAllViews() {
     requestLayout();
 }
 
-void ViewGroup::measure() {
+void
+ViewGroup::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
     //默认不支持rtl
     for (auto child: children) {
-        child->measure();
+        child->measure(_width, widthMode, _height, heightMode);
     }
     YGNodeCalculateLayout(root, availableWidth, availableHeight, YGDirectionLTR);
 }

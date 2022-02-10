@@ -184,7 +184,7 @@ void SkiaFilter::doFrame() {
         _root.addView(vp1);
     }
 
-    _root.measure();
+    _root.measure(f_width, YGMeasureModeExactly, f_height, YGMeasureModeExactly);
     _root.layout(0, 0, f_width, f_height);
     _root.draw(skCanvas);
 
