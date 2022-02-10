@@ -9,7 +9,8 @@
 
 View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
                availableHeight(0.0), availableWidth(0.0), marginLeft(0.0), marginTop(0.0),
-               marginRight(0.0), marginBottom(0.0), skRectWithBorder(SkRect::MakeEmpty()) {
+               marginRight(0.0), marginBottom(0.0), skRectWithBorder(SkRect::MakeEmpty()),
+               widthMeasureMode(YGMeasureModeUndefined), heightMeasureMode(YGMeasureModeExactly) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -26,10 +27,19 @@ View::~View() {
 #pragma mark yoga
 
 void View::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
-    if (YGFloatsEqual(availableWidth, 0.0f) && YGFloatsEqual(availableHeight, 0.0f)) {
-        ALOGE("view width and height is zero, skip measure")
+    this->availableWidth = _width;
+    this->availableHeight = _height;
+    if (widthMode == YGMeasureModeExactly && heightMode == YGMeasureModeExactly) {
+        YGNodeStyleSetHeight(node, _width);
+        YGNodeStyleSetWidth(node, _height);
         return;
     }
+    //todo 类似于Android的measure方法，由parent的measureMode和自身的measureMode共同决定
+
+}
+
+void View::setMeasuredDimension(float _width, float _height) {
+
 }
 
 void View::layout(float l, float t, float r, float b) {
@@ -155,6 +165,23 @@ void View::setAlignSelf(YGAlign align) {
 
 bool View::isViewGroup() {
     return false;
+}
+
+float View::setDefaultSize(float size, YGMeasureMode mode) {
+    switch (mode) {
+        case YGMeasureModeExactly: {
+            return size;
+        }
+        case YGMeasureModeAtMost: {
+
+        }
+        case YGMeasureModeUndefined: {
+
+        }
+        default: {
+            return size;
+        }
+    }
 }
 
 #pragma mark yoga 获取相关

@@ -60,7 +60,8 @@ void
 ViewGroup::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
     //默认不支持rtl
     for (auto child: children) {
-        child->measure(_width, widthMode, _height, heightMode);
+        //todo
+        child->measure(_width, YGMeasureModeUndefined, _height, YGMeasureModeUndefined);
     }
     YGNodeCalculateLayout(root, availableWidth, availableHeight, YGDirectionLTR);
 }

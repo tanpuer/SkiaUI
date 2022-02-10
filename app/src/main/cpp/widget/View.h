@@ -27,7 +27,10 @@ public:
 
 #pragma mark yoga 设置相关
 
-    virtual void measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode);
+    virtual void
+    measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode);
+
+    virtual void setMeasuredDimension(float _width, float _height);
 
     virtual void layout(float l, float t, float r, float b);
 
@@ -55,6 +58,8 @@ public:
 
     virtual bool isViewGroup();
 
+    virtual float setDefaultSize(float size, YGMeasureMode mode);
+
     /**
      * 在AlignItems的基础上自定义每个子视图的对齐方式
      * @param align
@@ -68,6 +73,8 @@ protected:
     float width, height;
 
     float availableWidth, availableHeight;
+
+    YGMeasureMode widthMeasureMode, heightMeasureMode;
 
 #pragma mark yoga 获取相关
 
