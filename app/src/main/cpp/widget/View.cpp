@@ -39,7 +39,15 @@ void View::layout(float l, float t, float r, float b) {
 }
 
 void View::draw(SkCanvas *canvas) {
-    canvas->drawRect(skRect, *paint);
+    if (YGFloatsEqual(paint->getStrokeWidth(), 0.0f)) {
+        canvas->drawRect(skRect, *paint);
+    } else {
+        //todo 如果有strokeWidth，就会有一半画在rect外面，简单考虑，默认全部都算内边框
+        auto diff = (paint->getStrokeWidth()) / 2;
+        skRectWithBorder.setLTRB(skRect.left() + diff, skRect.top() + diff, skRect.right() - diff,
+                                 skRect.bottom() - diff);
+        canvas->drawRect(skRectWithBorder, *paint);
+    }
 }
 
 void View::invalidate() {

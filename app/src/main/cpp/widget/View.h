@@ -105,6 +105,8 @@ public:
 protected:
     SkRect skRect;
 
+    SkRect skRectWithBorder;
+
 };
 
 #endif //SKIAUI_VIEW_H
