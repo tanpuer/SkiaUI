@@ -8,9 +8,10 @@
 #include "effects/SkCornerPathEffect.h"
 
 View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
-               availableHeight(0.0), availableWidth(0.0), marginLeft(0.0), marginTop(0.0),
-               marginRight(0.0), marginBottom(0.0), skRectWithBorder(SkRect::MakeEmpty()),
-               widthMeasureMode(YGMeasureModeUndefined), heightMeasureMode(YGMeasureModeExactly) {
+               marginLeft(0.0), marginTop(0.0), marginRight(0.0), marginBottom(0.0),
+               skRectWithBorder(SkRect::MakeEmpty()),
+               widthMeasureMode(YGMeasureModeUndefined), heightMeasureMode(YGMeasureModeExactly),
+               measuredWidth(0), measuredHeight(0), minWidth(0), minHeight(0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -27,19 +28,35 @@ View::~View() {
 #pragma mark yoga
 
 void View::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
-    this->availableWidth = _width;
-    this->availableHeight = _height;
-    if (widthMode == YGMeasureModeExactly && heightMode == YGMeasureModeExactly) {
-        YGNodeStyleSetHeight(node, _width);
-        YGNodeStyleSetWidth(node, _height);
-        return;
-    }
     //todo 类似于Android的measure方法，由parent的measureMode和自身的measureMode共同决定
-
+    setMeasuredDimension(getDefaultSize(_width, widthMode, minWidth),
+                         getDefaultSize(_height, heightMode, minHeight));
 }
 
-void View::setMeasuredDimension(float _width, float _height) {
+void View::setMeasuredDimension(float _measuredWidth, float _measuredHeight) {
+    this->measuredWidth = _measuredWidth;
+    this->measuredHeight = _measuredHeight;
+    YGNodeStyleSetWidth(node, _measuredWidth);
+    YGNodeStyleSetHeight(node, _measuredHeight);
+}
 
+float View::getDefaultSize(float _width, YGMeasureMode mode, float minSize) {
+    float result = minSize;
+    switch (mode) {
+        case YGMeasureModeUndefined: {
+            result = minSize;
+            break;
+        }
+        case YGMeasureModeAtMost:
+        case YGMeasureModeExactly: {
+            result = _width;
+            break;
+        }
+        default: {
+            break;
+        }
+    }
+    return result;
 }
 
 void View::layout(float l, float t, float r, float b) {
@@ -58,14 +75,6 @@ void View::draw(SkCanvas *canvas) {
                                  skRect.bottom() - diff);
         canvas->drawRect(skRectWithBorder, *paint);
     }
-}
-
-void View::invalidate() {
-    //todo
-}
-
-void View::requestLayout() {
-    //todo
 }
 
 void View::setMargins(std::array<float, 4> margins) {
@@ -119,15 +128,15 @@ void View::setSize(float _availableWidth, float _availableHeight) {
     if (node == nullptr) {
         return;
     }
-    if (YGFloatsEqual(_availableWidth, this->availableWidth) &&
-        YGFloatsEqual(_availableHeight, this->availableHeight)) {
+    if (YGFloatsEqual(_availableWidth, this->width) &&
+        YGFloatsEqual(_availableHeight, this->height)) {
         ALOGD("view is the same size, ignore")
         return;
     }
-    this->availableWidth = _availableWidth;
-    this->availableHeight = _availableHeight;
-    YGNodeStyleSetWidth(node, availableWidth);
-    YGNodeStyleSetHeight(node, availableHeight);
+    width = _availableWidth;
+    height = _availableHeight;
+    YGNodeStyleSetWidth(node, _availableWidth);
+    YGNodeStyleSetHeight(node, _availableHeight);
 }
 
 void View::setSizePercent(float widthPercent, float heightPercent) {
@@ -187,29 +196,11 @@ float View::setDefaultSize(float size, YGMeasureMode mode) {
 #pragma mark yoga 获取相关
 
 float View::getHeight() {
-//    ALOGD("view getHeight value is: %f", height)
     return height;
 }
 
 float View::getWidth() {
-//    ALOGD("view getWidth value is: %f", width)
     return width;
-}
-
-float View::getMarginLeft() {
-    return marginLeft;
-}
-
-float View::getMarginTop() {
-    return marginTop;
-}
-
-float View::getMarginRight() {
-    return marginRight;
-}
-
-float View::getMarginBottom() {
-    return marginBottom;
 }
 
 #pragma mark skia

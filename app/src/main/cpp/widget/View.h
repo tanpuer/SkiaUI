@@ -30,15 +30,11 @@ public:
     virtual void
     measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode);
 
-    virtual void setMeasuredDimension(float _width, float _height);
+    virtual void setMeasuredDimension(float _measuredWidth, float _measuredHeight);
 
     virtual void layout(float l, float t, float r, float b);
 
     virtual void draw(SkCanvas *canvas);
-
-    virtual void invalidate();
-
-    virtual void requestLayout();
 
     virtual void setMargins(std::array<float, 4> margins);
 
@@ -48,8 +44,18 @@ public:
 
     virtual void setPadding(float padding);
 
+    /**
+     * 强制指定view的大小，同时mode会被设置成为exactly模式
+     * @param _availableWidth
+     * @param _availableHeight
+     */
     virtual void setSize(float _availableWidth, float _availableHeight);
 
+    /**
+     * 设置百分比布局，同时mode会被设置成exactly模式
+     * @param widthPercent
+     * @param heightPercent
+     */
     virtual void setSizePercent(float widthPercent, float heightPercent);
 
     virtual void setWidthAuto();
@@ -72,9 +78,15 @@ protected:
 
     float width, height;
 
-    float availableWidth, availableHeight;
-
     YGMeasureMode widthMeasureMode, heightMeasureMode;
+
+    float measuredWidth, measuredHeight;
+
+    float minWidth, minHeight;
+
+private:
+
+    static float getDefaultSize(float _width, YGMeasureMode mode, float minSize);
 
 #pragma mark yoga 获取相关
 
@@ -83,14 +95,6 @@ public:
     virtual float getHeight();
 
     virtual float getWidth();
-
-    virtual float getMarginLeft();
-
-    virtual float getMarginTop();
-
-    virtual float getMarginRight();
-
-    virtual float getMarginBottom();
 
     float marginLeft, marginTop, marginRight, marginBottom;
 

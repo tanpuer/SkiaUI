@@ -33,6 +33,10 @@ bool ViewGroup::addView(View *view) {
     return true;
 }
 
+bool ViewGroup::addView(View *view, LayoutParams) {
+    return false;
+}
+
 bool ViewGroup::removeView(View *view) {
     if (view == nullptr || view->node == nullptr) {
         ALOGE("remove null view, pls check view!")
@@ -53,7 +57,6 @@ void ViewGroup::removeAllViews() {
     for (auto view: children) {
         delete view;
     }
-    requestLayout();
 }
 
 void
@@ -61,9 +64,9 @@ ViewGroup::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasu
     //默认不支持rtl
     for (auto child: children) {
         //todo
-        child->measure(_width, YGMeasureModeUndefined, _height, YGMeasureModeUndefined);
+        child->measure(child->getWidth(), YGMeasureModeExactly, child->getHeight(), YGMeasureModeExactly);
     }
-    YGNodeCalculateLayout(root, availableWidth, availableHeight, YGDirectionLTR);
+    YGNodeCalculateLayout(root, _width, _height, YGDirectionLTR);
 }
 
 void ViewGroup::layout(float l, float t, float r, float b) {

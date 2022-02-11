@@ -8,6 +8,7 @@
 
 #include "View.h"
 #include "vector"
+#include "LayoutParams.h"
 
 class ViewGroup : public View {
 
@@ -17,7 +18,8 @@ public:
 
     virtual ~ViewGroup();
 
-    virtual void measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) override;
+    virtual void measure(float _width, YGMeasureMode widthMode, float _height,
+                         YGMeasureMode heightMode) override;
 
     virtual void layout(float l, float t, float r, float b) override;
 
@@ -36,6 +38,8 @@ public:
 #pragma mark ViewGroup api
 
     virtual bool addView(View *view);
+
+    virtual bool addView(View *view, LayoutParams);
 
     virtual bool removeView(View *view);
 
