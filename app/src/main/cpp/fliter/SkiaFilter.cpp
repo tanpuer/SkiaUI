@@ -64,7 +64,7 @@ void SkiaFilter::doFrame() {
     //todo test code
 
     LinearLayout _root;
-    _root.setSize(f_width, f_height);
+    _root.setLayoutParams(LayoutParams::makeExactlyLayoutParams(f_width, f_height));
     _root.setFlexWrap(YGWrapWrap);
     _root.setOrientation(LinearLayout::Orientation::VERTICAL);
     _root.setJustifyContent(YGJustifyCenter);
@@ -72,17 +72,16 @@ void SkiaFilter::doFrame() {
 
     {
         auto vp1 = new LinearLayout();
-        vp1->setSize(f_width, 0);
-        vp1->setHeightAuto();
+        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
         vp1->setFlexWrap(YGWrapWrap);
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
         //todo 设置YGAlignCenter 感觉偏上
         vp1->setAlignItems(YGAlignFlexStart);
         auto view = new View();
+        view->setLayoutParams(LayoutParams::makeExactlyLayoutParams(300, 200));
         view->setBackgroundColor(SK_ColorRED);
         view->setStyle(SkPaint::kFill_Style);
-        view->setSize(300, 200);
         view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
         view->setCornerRadius(30);
         vp1->addView(view);
@@ -110,17 +109,17 @@ void SkiaFilter::doFrame() {
 
     {
         auto vp1 = new LinearLayout();
-        vp1->setSize(f_width, 0);
-        vp1->setHeightAuto();
+        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
         vp1->setFlexWrap(YGWrapWrap);
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
+        //todo 设置YGAlignCenter 感觉偏上
         vp1->setAlignItems(YGAlignFlexStart);
         auto view = new View();
-        view->setBackgroundColor(SK_ColorBLUE);
+        view->setLayoutParams(LayoutParams::makeExactlyLayoutParams(300, 200));
+        view->setBackgroundColor(SK_ColorGREEN);
         view->setStyle(SkPaint::kStroke_Style);
-        view->setStrokeWidth(10.0f);
-        view->setSize(300, 200);
+        view->setStrokeWidth(10);
         view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
         view->setCornerRadius(30);
         vp1->addView(view);
@@ -130,45 +129,7 @@ void SkiaFilter::doFrame() {
         textView->setTextColor(SK_ColorBLACK);
         textView->setTextSize(60);
         textView->setMargins(50);
-        textView->setBackgroundColor(SK_ColorBLUE);
-        textView->setStyle(SkPaint::kStroke_Style);
-//    textView->setAlignSelf(YGAlignFlexEnd);
-        vp1->addView(textView);
-
-        auto imageView = new ImageView();
-        imageView->setSource("/sdcard/cowboy.png");
-        imageView->setCornerRadius(30);
-        imageView->setStyle(SkPaint::kStroke_Style);
-        imageView->setBackgroundColor(SK_ColorBLUE);
-        imageView->setStrokeWidth(10);
-        vp1->addView(imageView);
-
-        _root.addView(vp1);
-    }
-
-    {
-        auto vp1 = new LinearLayout();
-        vp1->setSize(f_width, 0);
-        vp1->setHeightAuto();
-        vp1->setFlexWrap(YGWrapWrap);
-        vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
-        vp1->setJustifyContent(YGJustifyCenter);
-        vp1->setAlignItems(YGAlignFlexStart);
-        auto view = new View();
-        view->setBackgroundColor(SK_ColorGREEN);
-        view->setStyle(SkPaint::kStroke_Style);
-        view->setStrokeWidth(10.0f);
-        view->setSize(300, 200);
-        view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
-        view->setCornerRadius(30);
-        vp1->addView(view);
-
-        auto textView = new TextView();
-        textView->setText(SkString("Hello World"));
-        textView->setTextColor(SK_ColorGREEN);
-        textView->setTextSize(60);
-        textView->setMargins(50);
-        textView->setBackgroundColor(SK_ColorBLUE);
+        textView->setBackgroundColor(SK_ColorGREEN);
         textView->setStyle(SkPaint::kStroke_Style);
 //    textView->setAlignSelf(YGAlignFlexEnd);
         vp1->addView(textView);

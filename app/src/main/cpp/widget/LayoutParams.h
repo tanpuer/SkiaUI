@@ -8,7 +8,9 @@
 #include <yoga/YGEnums.h>
 #include "array"
 
-
+/**
+ * 布局相关参数尽量都放在LayoutParams中
+ */
 class LayoutParams {
 
 public:
@@ -25,7 +27,19 @@ public:
 
     ~LayoutParams();
 
-    static LayoutParams makeEmpty();
+    static LayoutParams *makeEmpty();
+
+    static LayoutParams *makeExactlyLayoutParams(float w, float h);
+
+    static LayoutParams *makeExactlyWidth(float w);
+
+    static LayoutParams *makeExactlyHeight(float h);
+
+    /**
+     * 可以理解为wrap
+     * @return
+     */
+    static LayoutParams *makeUndefinedLayoutPrams();
 
 public:
 

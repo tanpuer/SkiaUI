@@ -33,7 +33,11 @@ bool ViewGroup::addView(View *view) {
     return true;
 }
 
-bool ViewGroup::addView(View *view, LayoutParams) {
+bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
+    if (addView(view)) {
+        view->layoutParams = std::unique_ptr<LayoutParams>(layoutParams);
+        return true;
+    }
     return false;
 }
 
@@ -54,6 +58,11 @@ bool ViewGroup::removeView(View *view) {
 }
 
 void ViewGroup::removeAllViews() {
+    if (root == nullptr) {
+        ALOGE("remove null view, pls check view!")
+        return;
+    }
+    YGNodeRemoveAllChildren(root);
     for (auto view: children) {
         delete view;
     }
@@ -64,7 +73,8 @@ ViewGroup::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasu
     //默认不支持rtl
     for (auto child: children) {
         //todo
-        child->measure(child->getWidth(), YGMeasureModeExactly, child->getHeight(), YGMeasureModeExactly);
+        child->measure(child->getWidth(), YGMeasureModeExactly, child->getHeight(),
+                       YGMeasureModeExactly);
     }
     YGNodeCalculateLayout(root, _width, _height, YGDirectionLTR);
 }

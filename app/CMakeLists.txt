@@ -15,11 +15,11 @@ include_directories(
         src/main/cpp/base
         src/main/cpp/flexbox
         src/main/cpp/gl
-        src/main/cpp/widget
         src/main/cpp/fliter
         src/main/cpp/yoga
         src/main/cpp/yoga/event
         src/main/cpp/yoga/internal
+        src/main/cpp/widget
 )
 
 link_directories(
@@ -35,11 +35,11 @@ aux_source_directory(src/main/cpp srcs)
 aux_source_directory(src/main/cpp/base srcs)
 aux_source_directory(src/main/cpp/flexbox srcs)
 aux_source_directory(src/main/cpp/gl srcs)
-aux_source_directory(src/main/cpp/widget srcs)
 aux_source_directory(src/main/cpp/fliter srcs)
 aux_source_directory(src/main/cpp/yoga srcs)
 aux_source_directory(src/main/cpp/yoga/event srcs)
 aux_source_directory(src/main/cpp/yoga/internal srcs)
+aux_source_directory(src/main/cpp/widget srcs)
 
 add_library(native-lib SHARED ${srcs})
 

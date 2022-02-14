@@ -12,6 +12,7 @@
 #include "core/SkPaint.h"
 #include "core/SkCanvas.h"
 #include "core/SkRRect.h"
+#include "LayoutParams.h"
 
 static int64_t VIEW_ID = 0;
 
@@ -40,31 +41,7 @@ public:
 
     virtual void setMargins(float margin);
 
-    virtual void setPadding(std::array<float, 4> paddings);
-
-    virtual void setPadding(float padding);
-
-    /**
-     * 强制指定view的大小，同时mode会被设置成为exactly模式
-     * @param _availableWidth
-     * @param _availableHeight
-     */
-    virtual void setSize(float _availableWidth, float _availableHeight);
-
-    /**
-     * 设置百分比布局，同时mode会被设置成exactly模式
-     * @param widthPercent
-     * @param heightPercent
-     */
-    virtual void setSizePercent(float widthPercent, float heightPercent);
-
-    virtual void setWidthAuto();
-
-    virtual void setHeightAuto();
-
     virtual bool isViewGroup();
-
-    virtual float setDefaultSize(float size, YGMeasureMode mode);
 
     /**
      * 在AlignItems的基础上自定义每个子视图的对齐方式
@@ -87,6 +64,15 @@ protected:
 private:
 
     static float getDefaultSize(float _width, YGMeasureMode mode, float minSize);
+
+#pragma mark LayoutParams相关
+public:
+
+    std::unique_ptr<LayoutParams> layoutParams;
+
+    virtual void setLayoutParams(LayoutParams *layoutParams);
+
+    virtual LayoutParams *getLayoutParams();
 
 #pragma mark yoga 获取相关
 
@@ -118,6 +104,19 @@ protected:
     SkRect skRect;
 
     SkRect skRectWithBorder;
+
+
+public:
+    //todo 后续才支持的
+    virtual void setPadding(std::array<float, 4> paddings);
+
+    virtual void setPadding(float padding);
+
+    virtual void setSizePercent(float widthPercent, float heightPercent);
+
+    virtual void setWidthAuto();
+
+    virtual void setHeightAuto();
 
 };
 

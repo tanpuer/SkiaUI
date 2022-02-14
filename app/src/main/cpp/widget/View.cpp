@@ -10,12 +10,13 @@
 View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
                marginLeft(0.0), marginTop(0.0), marginRight(0.0), marginBottom(0.0),
                skRectWithBorder(SkRect::MakeEmpty()),
-               widthMeasureMode(YGMeasureModeUndefined), heightMeasureMode(YGMeasureModeExactly),
+               widthMeasureMode(YGMeasureModeUndefined), heightMeasureMode(YGMeasureModeUndefined),
                measuredWidth(0), measuredHeight(0), minWidth(0), minHeight(0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
     node = YGNodeNew();
+    layoutParams = std::make_unique<LayoutParams>();
 }
 
 View::~View() {
@@ -103,67 +104,6 @@ void View::setMargins(float margin) {
     marginLeft = marginTop = marginRight = marginBottom = margin;
 }
 
-void View::setPadding(std::array<float, 4> paddings) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        ALOGE("YGNodeRef not initialized, pls check!")
-        return;
-    }
-    YGNodeStyleSetPadding(node, YGEdgeLeft, paddings[0]);
-    YGNodeStyleSetPadding(node, YGEdgeTop, paddings[1]);
-    YGNodeStyleSetPadding(node, YGEdgeRight, paddings[2]);
-    YGNodeStyleSetPadding(node, YGEdgeBottom, paddings[3]);
-}
-
-void View::setPadding(float padding) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    YGNodeStyleSetPadding(node, YGEdgeAll, padding);
-}
-
-void View::setSize(float _availableWidth, float _availableHeight) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    if (YGFloatsEqual(_availableWidth, this->width) &&
-        YGFloatsEqual(_availableHeight, this->height)) {
-        ALOGD("view is the same size, ignore")
-        return;
-    }
-    width = _availableWidth;
-    height = _availableHeight;
-    YGNodeStyleSetWidth(node, _availableWidth);
-    YGNodeStyleSetHeight(node, _availableHeight);
-}
-
-void View::setSizePercent(float widthPercent, float heightPercent) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    YGNodeStyleSetWidthPercent(node, widthPercent);
-    YGNodeStyleSetHeightPercent(node, heightPercent);
-}
-
-void View::setWidthAuto() {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    YGNodeStyleSetWidthAuto(node);
-}
-
-void View::setHeightAuto() {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    YGNodeStyleSetHeightAuto(node);
-}
-
 void View::setAlignSelf(YGAlign align) {
     SkASSERT(node);
     if (node == nullptr) {
@@ -174,23 +114,6 @@ void View::setAlignSelf(YGAlign align) {
 
 bool View::isViewGroup() {
     return false;
-}
-
-float View::setDefaultSize(float size, YGMeasureMode mode) {
-    switch (mode) {
-        case YGMeasureModeExactly: {
-            return size;
-        }
-        case YGMeasureModeAtMost: {
-
-        }
-        case YGMeasureModeUndefined: {
-
-        }
-        default: {
-            return size;
-        }
-    }
 }
 
 #pragma mark yoga 获取相关
@@ -236,5 +159,94 @@ void View::setStrokeWidth(SkScalar _width) {
         return;
     }
     paint->setStrokeWidth(_width);
+}
+
+#pragma LayoutParams相关
+
+void View::setLayoutParams(LayoutParams *_layoutParams) {
+    layoutParams = std::unique_ptr<LayoutParams>(_layoutParams);
+    //update width
+    switch (_layoutParams->_widthMode) {
+        case YGMeasureModeExactly: {
+            width = _layoutParams->_width;
+            YGNodeStyleSetWidth(node, _layoutParams->_width);
+            break;
+        }
+        case YGMeasureModeAtMost: {
+            break;
+        }
+        case YGMeasureModeUndefined: {
+            break;
+        }
+        default:
+            break;
+    }
+    //update height
+    switch (_layoutParams->_heightMode) {
+        case YGMeasureModeExactly: {
+            height = _layoutParams->_height;
+            YGNodeStyleSetHeight(node, _layoutParams->_height);
+            break;
+        }
+        case YGMeasureModeAtMost: {
+            break;
+        }
+        case YGMeasureModeUndefined: {
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+LayoutParams *View::getLayoutParams() {
+    return layoutParams.get();
+}
+
+#pragma mark 后续才支持的
+
+void View::setPadding(std::array<float, 4> paddings) {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        ALOGE("YGNodeRef not initialized, pls check!")
+        return;
+    }
+    YGNodeStyleSetPadding(node, YGEdgeLeft, paddings[0]);
+    YGNodeStyleSetPadding(node, YGEdgeTop, paddings[1]);
+    YGNodeStyleSetPadding(node, YGEdgeRight, paddings[2]);
+    YGNodeStyleSetPadding(node, YGEdgeBottom, paddings[3]);
+}
+
+void View::setPadding(float padding) {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetPadding(node, YGEdgeAll, padding);
+}
+
+void View::setSizePercent(float widthPercent, float heightPercent) {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetWidthPercent(node, widthPercent);
+    YGNodeStyleSetHeightPercent(node, heightPercent);
+}
+
+void View::setWidthAuto() {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetWidthAuto(node);
+}
+
+void View::setHeightAuto() {
+    YGAssert(node, "view is null, pls check");
+    if (node == nullptr) {
+        return;
+    }
+    YGNodeStyleSetHeightAuto(node);
 }
 
