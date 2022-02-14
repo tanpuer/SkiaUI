@@ -38,4 +38,9 @@ void ImageView::draw(SkCanvas *canvas) {
     View::draw(canvas);
 }
 
+void ImageView::layout(float l, float t, float r, float b) {
+    ALOGD("imageView layout: %f %f %f %f", l, t, r, b)
+    View::layout(l, t, r, b);
+}
+
 

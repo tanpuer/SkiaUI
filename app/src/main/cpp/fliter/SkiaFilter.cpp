@@ -72,12 +72,13 @@ void SkiaFilter::doFrame() {
 
     {
         auto vp1 = new LinearLayout();
-        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
+//        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
+        vp1->setLayoutParams(LayoutParams::makeExactlyLayoutParams(f_width, 300));
         vp1->setFlexWrap(YGWrapWrap);
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
         //todo 设置YGAlignCenter 感觉偏上
-        vp1->setAlignItems(YGAlignFlexStart);
+        vp1->setAlignItems(YGAlignCenter);
         auto view = new View();
         view->setLayoutParams(LayoutParams::makeExactlyLayoutParams(300, 200));
         view->setBackgroundColor(SK_ColorRED);
@@ -120,7 +121,6 @@ void SkiaFilter::doFrame() {
         view->setBackgroundColor(SK_ColorGREEN);
         view->setStyle(SkPaint::kStroke_Style);
         view->setStrokeWidth(10);
-        view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
         view->setCornerRadius(30);
         vp1->addView(view);
 

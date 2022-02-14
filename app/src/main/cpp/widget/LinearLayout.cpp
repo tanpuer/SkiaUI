@@ -22,9 +22,8 @@ LinearLayout::Orientation LinearLayout::getOrientation() {
     return orientation;
 }
 
-void LinearLayout::measure(float _width, YGMeasureMode widthMode, float _height,
-                           YGMeasureMode heightMode) {
-    ViewGroup::measure(_width, widthMode, _height, heightMode);
+void LinearLayout::measure(float _w, YGMeasureMode _wMode, float _h, YGMeasureMode _hMode) {
+    ViewGroup::measure(_w, _wMode, _h, _hMode);
 }
 
 void LinearLayout::layout(float l, float t, float r, float b) {

@@ -68,15 +68,14 @@ void ViewGroup::removeAllViews() {
     }
 }
 
-void
-ViewGroup::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
+void ViewGroup::measure(float _w, YGMeasureMode widthMode, float _h, YGMeasureMode heightMode) {
     //默认不支持rtl
     for (auto child: children) {
         //todo
         child->measure(child->getWidth(), YGMeasureModeExactly, child->getHeight(),
                        YGMeasureModeExactly);
     }
-    YGNodeCalculateLayout(root, _width, _height, YGDirectionLTR);
+    YGNodeCalculateLayout(root, _w, _h, YGDirectionLTR);
 }
 
 void ViewGroup::layout(float l, float t, float r, float b) {

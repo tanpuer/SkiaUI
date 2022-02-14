@@ -19,6 +19,8 @@ public:
     virtual void measure(float _width, YGMeasureMode widthMode, float _height,
                          YGMeasureMode heightMode) override;
 
+    void layout(float l, float t, float r, float b) override;
+
     virtual void draw(SkCanvas *canvas) override;
 
 #pragma mark ImageView api
