@@ -23,6 +23,8 @@ public:
 
     virtual ~LinearLayout();
 
+    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
+
     virtual void layout(float l, float t, float r, float b) override;
 
 #pragma mark LinearLayoyt api

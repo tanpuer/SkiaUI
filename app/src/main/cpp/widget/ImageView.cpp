@@ -28,8 +28,8 @@ void ImageView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasur
         return;
     }
     ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
-    YGNodeStyleSetWidth(node, static_cast<float >(skImage->width()));
-    YGNodeStyleSetHeight(node, static_cast<float >(skImage->height()));
+    setMeasuredDimension(static_cast<float >(skImage->width()),
+                         static_cast<float >(skImage->height()));
 }
 
 void ImageView::draw(SkCanvas *canvas) {

@@ -28,6 +28,11 @@ public:
 
 #pragma mark yoga 设置相关
 
+    /**
+     * 任何组件都可以复写，计算完宽高后必须调用setMeasuredDimension，包括ViewGroup及其子类
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
     virtual void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec);
 
     virtual void setMeasuredDimension(float _measuredWidth, float _measuredHeight);

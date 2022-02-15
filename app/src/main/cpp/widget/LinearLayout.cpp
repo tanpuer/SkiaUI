@@ -9,6 +9,8 @@ LinearLayout::LinearLayout() : ViewGroup() {
 
 }
 
+LinearLayout::~LinearLayout() = default;
+
 void LinearLayout::setOrientation(LinearLayout::Orientation _orientation) {
     this->orientation = _orientation;
     if (orientation == Orientation::HORIZONTAL) {
@@ -22,12 +24,25 @@ LinearLayout::Orientation LinearLayout::getOrientation() {
     return orientation;
 }
 
+void LinearLayout::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+    ViewGroup::measure(widthMeasureSpec, heightMeasureSpec);
+    if (orientation == Orientation::VERTICAL) {
+//        ALOGD("linearlayout vertical %d %f %f", YGNodeGetChildCount(root), YGNodeLayoutGetWidth(YGNodeGetChild(root, 0)), YGNodeLayoutGetHeight(YGNodeGetChild(root, 1)))
+    } else {
+        ALOGD("linearlayout horizontal %d %f %f %f %f", YGNodeGetChildCount(root),
+              YGNodeLayoutGetHeight(YGNodeGetChild(root, 0)),
+              YGNodeLayoutGetHeight(YGNodeGetChild(root, 1)),
+              YGNodeLayoutGetHeight(YGNodeGetChild(root, 2)), getHeight())
+//        YGNodeStyleSetHeight(root, getHeight());
+    }
+}
+
 void LinearLayout::layout(float l, float t, float r, float b) {
     if (orientation == Orientation::HORIZONTAL) {
-        ALOGD("LinearLayout layout horizontal %f %f %f %f", l, t, r, b)
+//        ALOGD("LinearLayout layout horizontal %f %f %f %f", l, t, r, b)
         layoutHorizontal(l, t, r, b);
     } else {
-        ALOGD("LinearLayout layout vertical %f %f %f %f", l, t, r, b)
+//        ALOGD("LinearLayout layout vertical %f %f %f %f", l, t, r, b)
         layoutVertical(l, t, r, b);
     }
 }
@@ -56,10 +71,9 @@ void LinearLayout::layoutVertical(float l, float t, float r, float b) {
         auto height = YGNodeLayoutGetHeight(child->node);
         tmpTop += child->layoutParams->_marginTop;
         child->layout(left + l, tmpTop, left + l + width, tmpTop + height);
-//        ALOGD("LinearLayout layout vertical tmpTop: %f %f %f %f", tmpTop, height, getHeight(), child->marginTop)
+        ALOGD("LinearLayout layout vertical tmpTop: %f %f %f %f", tmpTop, height, getHeight(),
+              child->layoutParams->_marginTop)
         tmpTop += getHeight();
         tmpTop += child->layoutParams->_marginTop;
     }
 }
-
-LinearLayout::~LinearLayout() = default;

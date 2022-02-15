@@ -26,7 +26,10 @@ public:
     MeasureSpec *
     getChildMeasureSpec(MeasureSpec *parentMeasureSpec, float padding, float childDimension);
 
-    virtual void layout(float l, float t, float r, float b) override;
+    /**
+     * 子类ViewGroup必须复写
+     */
+    virtual void layout(float l, float t, float r, float b) override = 0;
 
     virtual void draw(SkCanvas *canvas) override;
 

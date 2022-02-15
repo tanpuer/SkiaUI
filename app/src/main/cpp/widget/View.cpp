@@ -33,6 +33,8 @@ void View::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec
 }
 
 void View::setMeasuredDimension(float _measuredWidth, float _measuredHeight) {
+    width = _measuredWidth;
+    height = _measuredHeight;
     YGNodeStyleSetWidth(node, _measuredWidth);
     YGNodeStyleSetHeight(node, _measuredHeight);
 }

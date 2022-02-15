@@ -76,7 +76,7 @@ void SkiaFilter::doFrame() {
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
         //todo 设置YGAlignCenter 感觉偏上
-//        vp1->setAlignItems(YGAlignCenter);
+        vp1->setAlignItems(YGAlignCenter);
         auto view = new View();
         view->setBackgroundColor(SK_ColorRED);
         view->setStyle(SkPaint::kFill_Style);

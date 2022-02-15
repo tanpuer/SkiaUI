@@ -62,12 +62,13 @@ void ViewGroup::removeAllViews() {
 }
 
 void ViewGroup::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
-    View::measure(widthMeasureSpec, heightMeasureSpec);
     for (auto &child: children) {
         measureChild(child, widthMeasureSpec, heightMeasureSpec);
     }
     YGNodeCalculateLayout(root, widthMeasureSpec->getSize(), heightMeasureSpec->getSize(),
                           YGDirectionLTR);
+    //todo ViewGroup的measure方法不对
+    View::measure(widthMeasureSpec, heightMeasureSpec);
 }
 
 void ViewGroup::measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
@@ -146,16 +147,6 @@ MeasureSpec *ViewGroup::getChildMeasureSpec(MeasureSpec *parentMeasureSpec, floa
         }
     }
     return MeasureSpec::makeMeasureSpec(resultSize, resultMode);
-}
-
-void ViewGroup::layout(float l, float t, float r, float b) {
-    for (auto child: children) {
-        auto left = YGNodeLayoutGetLeft(child->node);
-        auto top = YGNodeLayoutGetTop(child->node);
-        auto width = YGNodeLayoutGetWidth(child->node);
-        auto height = YGNodeLayoutGetHeight(child->node);
-        child->layout(left + l, top + t, left + width, top + height);
-    }
 }
 
 void ViewGroup::draw(SkCanvas *canvas) {

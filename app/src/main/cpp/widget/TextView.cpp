@@ -36,10 +36,10 @@ void TextView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasure
     auto height = font.getSize();
     YGNodeStyleSetWidth(node, length);
     //todo 测量出来文字的高度感觉一直偏小
-    YGNodeStyleSetHeight(node, rect.height() * 1.3f);
     //    ALOGD("TextView measure %f %f %f %f %f %f %f %f", length, height, YGNodeLayoutGetLeft(node),
 //          YGNodeLayoutGetTop(node), YGNodeLayoutGetWidth(node), YGNodeLayoutGetHeight(node),
 //          rect.width(), rect.height())
+    setMeasuredDimension(length, rect.height() * 1.3f);
 }
 
 void TextView::draw(SkCanvas *canvas) {
