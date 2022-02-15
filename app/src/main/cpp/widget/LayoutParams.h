@@ -54,7 +54,7 @@ public:
 
     YGMeasureMode _widthMode, _heightMode;
 
-    float _marginStart, _marginEnd, _marginTop, _marginBottom;
+    float _marginLeft, _marginRight, _marginTop, _marginBottom;
 
     float _paddingStart, _paddingEnd, _paddingTop, _paddingBottom;
 

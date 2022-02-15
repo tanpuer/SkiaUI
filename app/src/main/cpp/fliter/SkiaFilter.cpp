@@ -72,29 +72,29 @@ void SkiaFilter::doFrame() {
 
     {
         auto vp1 = new LinearLayout();
-        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
         vp1->setFlexWrap(YGWrapWrap);
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
         //todo 设置YGAlignCenter 感觉偏上
-        vp1->setAlignItems(YGAlignCenter);
+//        vp1->setAlignItems(YGAlignCenter);
         auto view = new View();
-        view->setLayoutParams(LayoutParams::makeExactlyLayoutParams(300, 200));
         view->setBackgroundColor(SK_ColorRED);
         view->setStyle(SkPaint::kFill_Style);
-        view->setMargins({static_cast<float >(drawCount), 0, 0, 0});
         view->setCornerRadius(30);
-        vp1->addView(view);
+        auto viewLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 200);
+        viewLayoutParams->setMargin({0, static_cast<float >(drawCount), 0, 0});
+        vp1->addView(view, viewLayoutParams);
 
         auto textView = new TextView();
         textView->setText(SkString("Hello World"));
         textView->setTextColor(SK_ColorBLACK);
         textView->setTextSize(60);
-        textView->setMargins(50);
         textView->setBackgroundColor(SK_ColorRED);
         textView->setStyle(SkPaint::kStroke_Style);
 //    textView->setAlignSelf(YGAlignFlexEnd);
-        vp1->addView(textView);
+        auto tvLayoutParams = LayoutParams::makeWrapContent(true, true);
+        tvLayoutParams->setMargin(50);
+        vp1->addView(textView, tvLayoutParams);
 
         auto imageView = new ImageView();
         imageView->setSource("/sdcard/cowboy.png");
@@ -102,36 +102,34 @@ void SkiaFilter::doFrame() {
         imageView->setStyle(SkPaint::kStroke_Style);
         imageView->setBackgroundColor(SK_ColorRED);
         imageView->setStrokeWidth(10);
-        vp1->addView(imageView);
-
-        _root.addView(vp1);
+        vp1->addView(imageView, LayoutParams::makeWrapContent(true, true));
+        _root.addView(vp1, LayoutParams::makeExactlyWidth(f_width));
     }
 
     {
         auto vp1 = new LinearLayout();
-        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
         vp1->setFlexWrap(YGWrapWrap);
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
         //todo 设置YGAlignCenter 感觉偏上
         vp1->setAlignItems(YGAlignFlexStart);
         auto view = new View();
-        view->setLayoutParams(LayoutParams::makeExactlyLayoutParams(300, 200));
         view->setBackgroundColor(SK_ColorGREEN);
         view->setStyle(SkPaint::kStroke_Style);
         view->setStrokeWidth(10);
         view->setCornerRadius(30);
-        vp1->addView(view);
+        vp1->addView(view, LayoutParams::makeExactlyLayoutParams(300, 200));
 
         auto textView = new TextView();
         textView->setText(SkString("Hello World"));
         textView->setTextColor(SK_ColorBLACK);
         textView->setTextSize(60);
-        textView->setMargins(50);
         textView->setBackgroundColor(SK_ColorGREEN);
         textView->setStyle(SkPaint::kStroke_Style);
 //    textView->setAlignSelf(YGAlignFlexEnd);
-        vp1->addView(textView);
+        auto tvLayoutParams = LayoutParams::makeWrapContent(true, true);
+        tvLayoutParams->setMargin({50, 0, 50, 50});
+        vp1->addView(textView, tvLayoutParams);
 
         auto imageView = new ImageView();
         imageView->setSource("/sdcard/cowboy.png");
@@ -139,9 +137,9 @@ void SkiaFilter::doFrame() {
         imageView->setStyle(SkPaint::kStroke_Style);
         imageView->setBackgroundColor(SK_ColorGREEN);
         imageView->setStrokeWidth(10);
-        vp1->addView(imageView);
+        vp1->addView(imageView, LayoutParams::makeWrapContent(true, true));
 
-        _root.addView(vp1);
+        _root.addView(vp1, LayoutParams::makeExactlyWidth(f_width));
     }
 
     _root.measure(MeasureSpec::makeMeasureSpec(f_width, YGMeasureModeExactly),

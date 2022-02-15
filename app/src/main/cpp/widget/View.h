@@ -36,10 +36,6 @@ public:
 
     virtual void draw(SkCanvas *canvas);
 
-    virtual void setMargins(std::array<float, 4> margins);
-
-    virtual void setMargins(float margin);
-
     virtual bool isViewGroup();
 
     /**
@@ -54,15 +50,11 @@ protected:
 
     float width, height;
 
-    YGMeasureMode widthMeasureMode, heightMeasureMode;
-
-    float measuredWidth, measuredHeight;
-
     float minWidth, minHeight;
 
 private:
 
-    static float getDefaultSize(float _width, YGMeasureMode mode, float minSize);
+    static float getDefaultSize(float minSize, MeasureSpec *measureSpec);
 
 #pragma mark LayoutParams相关
 public:
@@ -80,8 +72,6 @@ public:
     virtual float getHeight();
 
     virtual float getWidth();
-
-    float marginLeft, marginTop, marginRight, marginBottom;
 
 #pragma mark skia
 

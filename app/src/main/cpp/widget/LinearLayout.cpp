@@ -33,32 +33,32 @@ void LinearLayout::layout(float l, float t, float r, float b) {
 }
 
 void LinearLayout::layoutHorizontal(float l, float t, float r, float b) {
-    auto tmpLeft = marginLeft + l;
+    auto tmpLeft = layoutParams->_marginLeft + l;
     for (auto child: children) {
         auto left = YGNodeLayoutGetLeft(child->node);
         auto top = YGNodeLayoutGetTop(child->node);
         auto width = YGNodeLayoutGetWidth(child->node);
         auto height = YGNodeLayoutGetHeight(child->node);
-        tmpLeft += child->marginLeft;
+        tmpLeft += child->layoutParams->_marginLeft;
 //        ALOGD("LinearLayout layout horizontal tmpLeft: %f %f", tmpLeft, width)
         child->layout(tmpLeft, top + t, tmpLeft + width, top + t + height);
-        tmpLeft += width;
-        tmpLeft += child->marginRight;
+        tmpLeft += getWidth();
+        tmpLeft += child->layoutParams->_marginRight;
     }
 }
 
 void LinearLayout::layoutVertical(float l, float t, float r, float b) {
-    auto tmpTop = marginTop + t;
+    auto tmpTop = layoutParams->_marginTop + t;
     for (auto child: children) {
         auto left = YGNodeLayoutGetLeft(child->node);
         auto top = YGNodeLayoutGetTop(child->node);
         auto width = YGNodeLayoutGetWidth(child->node);
         auto height = YGNodeLayoutGetHeight(child->node);
-        tmpTop += child->marginTop;
+        tmpTop += child->layoutParams->_marginTop;
         child->layout(left + l, tmpTop, left + l + width, tmpTop + height);
 //        ALOGD("LinearLayout layout vertical tmpTop: %f %f %f %f", tmpTop, height, getHeight(), child->marginTop)
         tmpTop += getHeight();
-        tmpTop += marginBottom;
+        tmpTop += child->layoutParams->_marginTop;
     }
 }
 

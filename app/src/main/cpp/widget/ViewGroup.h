@@ -42,8 +42,6 @@ public:
 
 #pragma mark ViewGroup api
 
-    virtual bool addView(View *view);
-
     virtual bool addView(View *view, LayoutParams *layoutParams);
 
     virtual bool removeView(View *view);

@@ -8,10 +8,8 @@
 #include "effects/SkCornerPathEffect.h"
 
 View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
-               marginLeft(0.0), marginTop(0.0), marginRight(0.0), marginBottom(0.0),
                skRectWithBorder(SkRect::MakeEmpty()),
-               widthMeasureMode(YGMeasureModeUndefined), heightMeasureMode(YGMeasureModeUndefined),
-               measuredWidth(0), measuredHeight(0), minWidth(0), minHeight(0) {
+               minWidth(0), minHeight(0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -29,28 +27,26 @@ View::~View() {
 #pragma mark yoga
 
 void View::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
-    setMeasuredDimension(
-            getDefaultSize(widthMeasureSpec->getSize(), widthMeasureSpec->getMode(), minWidth),
-            getDefaultSize(heightMeasureSpec->getSize(), heightMeasureSpec->getMode(), minHeight));
+    //todo 目前每次都是forceLayout Android子类只能override onMeasure方法，精简处理
+    setMeasuredDimension(getDefaultSize(minWidth, widthMeasureSpec),
+                         getDefaultSize(minHeight, heightMeasureSpec));
 }
 
 void View::setMeasuredDimension(float _measuredWidth, float _measuredHeight) {
-    this->measuredWidth = _measuredWidth;
-    this->measuredHeight = _measuredHeight;
     YGNodeStyleSetWidth(node, _measuredWidth);
     YGNodeStyleSetHeight(node, _measuredHeight);
 }
 
-float View::getDefaultSize(float _width, YGMeasureMode mode, float minSize) {
+float View::getDefaultSize(float minSize, MeasureSpec *measureSpec) {
     float result = minSize;
-    switch (mode) {
+    switch (measureSpec->getMode()) {
         case YGMeasureModeUndefined: {
             result = minSize;
             break;
         }
         case YGMeasureModeAtMost:
         case YGMeasureModeExactly: {
-            result = _width;
+            result = measureSpec->getSize();
             break;
         }
         default: {
@@ -61,12 +57,14 @@ float View::getDefaultSize(float _width, YGMeasureMode mode, float minSize) {
 }
 
 void View::layout(float l, float t, float r, float b) {
+    //todo 默认设置boarder位置 Android layout默认啥都不做
     skRect.setLTRB(l, t, r, b);
     width = r - l;
     height = b - t;
 }
 
 void View::draw(SkCanvas *canvas) {
+    //todo 默认画boarder，Android的onDraw默认啥都不做
     if (YGFloatsEqual(paint->getStrokeWidth(), 0.0f)) {
         canvas->drawRect(skRect, *paint);
     } else {
@@ -76,32 +74,6 @@ void View::draw(SkCanvas *canvas) {
                                  skRect.bottom() - diff);
         canvas->drawRect(skRectWithBorder, *paint);
     }
-}
-
-void View::setMargins(std::array<float, 4> margins) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        ALOGE("YGNodeRef not initialized, pls check!")
-        return;
-    }
-    YGNodeStyleSetMargin(node, YGEdgeLeft, margins[0]);
-    YGNodeStyleSetMargin(node, YGEdgeTop, margins[1]);
-    YGNodeStyleSetMargin(node, YGEdgeRight, margins[2]);
-    YGNodeStyleSetMargin(node, YGEdgeBottom, margins[3]);
-    marginLeft = margins[0];
-    marginTop = margins[1];
-    marginRight = margins[2];
-    marginBottom = margins[3];
-}
-
-
-void View::setMargins(float margin) {
-    YGAssert(node, "view is null, pls check");
-    if (node == nullptr) {
-        return;
-    }
-    YGNodeStyleSetMargin(node, YGEdgeAll, margin);
-    marginLeft = marginTop = marginRight = marginBottom = margin;
 }
 
 void View::setAlignSelf(YGAlign align) {
@@ -165,38 +137,10 @@ void View::setStrokeWidth(SkScalar _width) {
 
 void View::setLayoutParams(LayoutParams *_layoutParams) {
     layoutParams = std::unique_ptr<LayoutParams>(_layoutParams);
-    //update width
-    switch (_layoutParams->_widthMode) {
-        case YGMeasureModeExactly: {
-            width = _layoutParams->_width;
-            YGNodeStyleSetWidth(node, _layoutParams->_width);
-            break;
-        }
-        case YGMeasureModeAtMost: {
-            break;
-        }
-        case YGMeasureModeUndefined: {
-            break;
-        }
-        default:
-            break;
-    }
-    //update height
-    switch (_layoutParams->_heightMode) {
-        case YGMeasureModeExactly: {
-            height = _layoutParams->_height;
-            YGNodeStyleSetHeight(node, _layoutParams->_height);
-            break;
-        }
-        case YGMeasureModeAtMost: {
-            break;
-        }
-        case YGMeasureModeUndefined: {
-            break;
-        }
-        default:
-            break;
-    }
+    YGNodeStyleSetMargin(node, YGEdgeLeft, layoutParams->_marginLeft);
+    YGNodeStyleSetMargin(node, YGEdgeTop, layoutParams->_marginTop);
+    YGNodeStyleSetMargin(node, YGEdgeRight, layoutParams->_marginRight);
+    YGNodeStyleSetMargin(node, YGEdgeBottom, layoutParams->_marginBottom);
 }
 
 LayoutParams *View::getLayoutParams() {

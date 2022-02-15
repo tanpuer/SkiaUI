@@ -8,7 +8,7 @@ LayoutParams::LayoutParams() : _width(0), _height(0),
                                _heightMode(YGMeasureModeUndefined),
                                _widthMode(YGMeasureModeUndefined),
                                _minWidth(0), _minHeight(0),
-                               _marginStart(0), _marginEnd(0), _marginTop(0), _marginBottom(0),
+                               _marginLeft(0), _marginRight(0), _marginTop(0), _marginBottom(0),
                                _paddingStart(0), _paddingEnd(0), _paddingTop(0), _paddingBottom(0) {
 
 }
@@ -64,16 +64,16 @@ LayoutParams *LayoutParams::makeMatchParent(bool w, bool h) {
 }
 
 void LayoutParams::setMargin(float margin) {
-    _marginStart = margin;
-    _marginEnd = margin;
+    _marginLeft = margin;
+    _marginRight = margin;
     _marginTop = margin;
     _marginBottom = margin;
 }
 
 void LayoutParams::setMargin(std::array<float, 4> margins) {
-    _marginStart = margins[0];
+    _marginLeft = margins[0];
     _marginTop = margins[1];
-    _marginEnd = margins[2];
+    _marginRight = margins[2];
     _marginBottom = margins[3];
 }
 

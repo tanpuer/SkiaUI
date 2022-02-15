@@ -22,7 +22,7 @@ ViewGroup::~ViewGroup() {
     YGNodeFree(root);
 }
 
-bool ViewGroup::addView(View *view) {
+bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
     if (view == nullptr || view->node == nullptr) {
         ALOGE("add null view, pls check view!")
         return false;
@@ -30,15 +30,8 @@ bool ViewGroup::addView(View *view) {
     auto childCount = YGNodeGetChildCount(root);
     YGNodeInsertChild(root, view->node, childCount);
     children.emplace_back(view);
+    view->setLayoutParams(layoutParams);
     return true;
-}
-
-bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
-    if (addView(view)) {
-        view->layoutParams = std::unique_ptr<LayoutParams>(layoutParams);
-        return true;
-    }
-    return false;
 }
 
 bool ViewGroup::removeView(View *view) {
@@ -81,10 +74,10 @@ void ViewGroup::measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
                              MeasureSpec *parentHeightMeasureSpec) {
     auto lp = layoutParams.get();
     auto childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
-                                                     lp->_paddingStart + lp->_paddingEnd,
+                                                     lp->_marginLeft + lp->_marginLeft,
                                                      child->layoutParams->_width);
     auto childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
-                                                      lp->_paddingTop + lp->_paddingBottom,
+                                                      lp->_marginTop + lp->_marginBottom,
                                                       child->layoutParams->_height);
     child->measure(childWidthMeasureSpec, childHeightMeasureSpec);
 }
@@ -131,6 +124,7 @@ MeasureSpec *ViewGroup::getChildMeasureSpec(MeasureSpec *parentMeasureSpec, floa
                 resultSize = size;
                 resultMode = YGMeasureModeAtMost;
             }
+            break;
         }
 
             // Parent asked to see how big we want to be
@@ -148,6 +142,7 @@ MeasureSpec *ViewGroup::getChildMeasureSpec(MeasureSpec *parentMeasureSpec, floa
                 resultSize = size;
                 resultMode = YGMeasureModeUndefined;
             }
+            break;
         }
     }
     return MeasureSpec::makeMeasureSpec(resultSize, resultMode);
