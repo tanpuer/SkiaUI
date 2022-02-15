@@ -16,8 +16,7 @@ public:
 
     virtual ~ImageView();
 
-    virtual void measure(float _width, YGMeasureMode widthMode, float _height,
-                         YGMeasureMode heightMode) override;
+    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
 
     void layout(float l, float t, float r, float b) override;
 

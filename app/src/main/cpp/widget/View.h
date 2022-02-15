@@ -28,7 +28,7 @@ public:
 
 #pragma mark yoga 设置相关
 
-    virtual void measure(float _w, YGMeasureMode widthMode, float _h, YGMeasureMode heightMode);
+    virtual void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec);
 
     virtual void setMeasuredDimension(float _measuredWidth, float _measuredHeight);
 

@@ -23,8 +23,6 @@ public:
 
     virtual ~LinearLayout();
 
-    virtual void measure(float _w, YGMeasureMode _wMode, float _h, YGMeasureMode _hMode) override;
-
     virtual void layout(float l, float t, float r, float b) override;
 
 #pragma mark LinearLayoyt api

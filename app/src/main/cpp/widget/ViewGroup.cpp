@@ -68,14 +68,89 @@ void ViewGroup::removeAllViews() {
     }
 }
 
-void ViewGroup::measure(float _w, YGMeasureMode widthMode, float _h, YGMeasureMode heightMode) {
-    //默认不支持rtl
-    for (auto child: children) {
-        //todo
-        child->measure(child->getWidth(), YGMeasureModeExactly, child->getHeight(),
-                       YGMeasureModeExactly);
+void ViewGroup::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+    View::measure(widthMeasureSpec, heightMeasureSpec);
+    for (auto &child: children) {
+        measureChild(child, widthMeasureSpec, heightMeasureSpec);
     }
-    YGNodeCalculateLayout(root, _w, _h, YGDirectionLTR);
+    YGNodeCalculateLayout(root, widthMeasureSpec->getSize(), heightMeasureSpec->getSize(),
+                          YGDirectionLTR);
+}
+
+void ViewGroup::measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
+                             MeasureSpec *parentHeightMeasureSpec) {
+    auto lp = layoutParams.get();
+    auto childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
+                                                     lp->_paddingStart + lp->_paddingEnd,
+                                                     child->layoutParams->_width);
+    auto childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
+                                                      lp->_paddingTop + lp->_paddingBottom,
+                                                      child->layoutParams->_height);
+    child->measure(childWidthMeasureSpec, childHeightMeasureSpec);
+}
+
+MeasureSpec *ViewGroup::getChildMeasureSpec(MeasureSpec *parentMeasureSpec, float padding,
+                                            float childDimension) {
+    auto specMode = parentMeasureSpec->getMode();
+    auto specSize = parentMeasureSpec->getSize();
+    auto size = std::max(0.0f, specSize - padding);
+    auto resultSize = .0f;
+    auto resultMode = YGMeasureModeUndefined;
+    switch (specMode) {
+        // Parent has imposed an exact size on us
+        case YGMeasureModeExactly: {
+            if (childDimension >= 0) {
+                resultSize = childDimension;
+                resultMode = YGMeasureModeExactly;
+            } else if (MeasureSpec::isMatchParent(childDimension)) {
+                // Child wants to be our size. So be it.
+                resultSize = size;
+                resultMode = YGMeasureModeExactly;
+            } else {
+                // Child wants to determine its own size. It can't be
+                // bigger than us.
+                resultSize = size;
+                resultMode = YGMeasureModeAtMost;
+            }
+            break;
+        }
+            // Parent has imposed a maximum size on us
+        case YGMeasureModeAtMost: {
+            if (childDimension >= 0) {
+                // Child wants a specific size... so be it
+                resultSize = childDimension;
+                resultMode = YGMeasureModeExactly;
+            } else if (MeasureSpec::isMatchParent(childDimension)) {
+                // Child wants to be our size, but our size is not fixed.
+                // Constrain child to not be bigger than us.
+                resultSize = size;
+                resultMode = YGMeasureModeAtMost;
+            } else {
+                // Child wants to determine its own size. It can't be
+                // bigger than us.
+                resultSize = size;
+                resultMode = YGMeasureModeAtMost;
+            }
+        }
+
+            // Parent asked to see how big we want to be
+        case YGMeasureModeUndefined: {
+            if (childDimension >= 0) {
+                // Child wants a specific size... let him have it
+                resultSize = childDimension;
+                resultMode = YGMeasureModeExactly;
+            } else if (MeasureSpec::isMatchParent(childDimension)) {
+                // Child wants to be our size... find out how big it should be
+                resultSize = size;
+                resultMode = YGMeasureModeUndefined;
+            } else {
+                // Child wants to determine its own size.... find out how big it should be
+                resultSize = size;
+                resultMode = YGMeasureModeUndefined;
+            }
+        }
+    }
+    return MeasureSpec::makeMeasureSpec(resultSize, resultMode);
 }
 
 void ViewGroup::layout(float l, float t, float r, float b) {

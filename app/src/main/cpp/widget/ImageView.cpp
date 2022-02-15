@@ -21,8 +21,7 @@ void ImageView::setSource(const char *path) {
     skImage = SkImage::MakeFromEncoded(data);
 }
 
-void
-ImageView::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
+void ImageView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
     if (skImage == nullptr) {
         YGNodeStyleSetWidth(node, 0);
         YGNodeStyleSetHeight(node, 0);

@@ -28,10 +28,10 @@ View::~View() {
 
 #pragma mark yoga
 
-void View::measure(float _w, YGMeasureMode widthMode, float _h, YGMeasureMode heightMode) {
-    //todo 类似于Android的measure方法，由parent的measureMode和自身的measureMode共同决定
-    setMeasuredDimension(getDefaultSize(_w, widthMode, minWidth),
-                         getDefaultSize(_h, heightMode, minHeight));
+void View::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+    setMeasuredDimension(
+            getDefaultSize(widthMeasureSpec->getSize(), widthMeasureSpec->getMode(), minWidth),
+            getDefaultSize(heightMeasureSpec->getSize(), heightMeasureSpec->getMode(), minHeight));
 }
 
 void View::setMeasuredDimension(float _measuredWidth, float _measuredHeight) {

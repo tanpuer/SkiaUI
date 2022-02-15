@@ -72,8 +72,7 @@ void SkiaFilter::doFrame() {
 
     {
         auto vp1 = new LinearLayout();
-//        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
-        vp1->setLayoutParams(LayoutParams::makeExactlyLayoutParams(f_width, 300));
+        vp1->setLayoutParams(LayoutParams::makeExactlyWidth(f_width));
         vp1->setFlexWrap(YGWrapWrap);
         vp1->setOrientation(LinearLayout::Orientation::HORIZONTAL);
         vp1->setJustifyContent(YGJustifyCenter);
@@ -145,7 +144,9 @@ void SkiaFilter::doFrame() {
         _root.addView(vp1);
     }
 
-    _root.measure(f_width, YGMeasureModeExactly, f_height, YGMeasureModeExactly);
+    _root.measure(MeasureSpec::makeMeasureSpec(f_width, YGMeasureModeExactly),
+                  MeasureSpec::makeMeasureSpec(f_height, YGMeasureModeExactly));
+//    _root.measure(f_width, YGMeasureModeExactly, f_height, YGMeasureModeExactly);
     _root.layout(0, 0, f_width, f_height);
     _root.draw(skCanvas);
 

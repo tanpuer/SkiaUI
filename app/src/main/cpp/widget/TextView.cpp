@@ -29,7 +29,7 @@ void TextView::setTextColor(SkColor color) {
     textPaint->setColor(color);
 }
 
-void TextView::measure(float _width, YGMeasureMode widthMode, float _height, YGMeasureMode heightMode) {
+void TextView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
     auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
                                    SkTextEncoding::kUTF8,
                                    &rect, textPaint);
@@ -37,7 +37,7 @@ void TextView::measure(float _width, YGMeasureMode widthMode, float _height, YGM
     YGNodeStyleSetWidth(node, length);
     //todo 测量出来文字的高度感觉一直偏小
     YGNodeStyleSetHeight(node, rect.height() * 1.3f);
-//    ALOGD("TextView measure %f %f %f %f %f %f %f %f", length, height, YGNodeLayoutGetLeft(node),
+    //    ALOGD("TextView measure %f %f %f %f %f %f %f %f", length, height, YGNodeLayoutGetLeft(node),
 //          YGNodeLayoutGetTop(node), YGNodeLayoutGetWidth(node), YGNodeLayoutGetHeight(node),
 //          rect.width(), rect.height())
 }

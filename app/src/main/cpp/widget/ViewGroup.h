@@ -18,7 +18,13 @@ public:
 
     virtual ~ViewGroup();
 
-    virtual void measure(float _w, YGMeasureMode widthMode, float _h, YGMeasureMode heightMode) override;
+    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
+
+    void measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
+                      MeasureSpec *parentHeightMeasureSpec);
+
+    MeasureSpec *
+    getChildMeasureSpec(MeasureSpec *parentMeasureSpec, float padding, float childDimension);
 
     virtual void layout(float l, float t, float r, float b) override;
 

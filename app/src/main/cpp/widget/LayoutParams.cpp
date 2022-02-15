@@ -8,7 +8,8 @@ LayoutParams::LayoutParams() : _width(0), _height(0),
                                _heightMode(YGMeasureModeUndefined),
                                _widthMode(YGMeasureModeUndefined),
                                _minWidth(0), _minHeight(0),
-                               _margin(), _padding() {
+                               _marginStart(0), _marginEnd(0), _marginTop(0), _marginBottom(0),
+                               _paddingStart(0), _paddingEnd(0), _paddingTop(0), _paddingBottom(0) {
 
 }
 
@@ -50,4 +51,42 @@ LayoutParams *LayoutParams::makeExactlyHeight(float h) {
     layoutParams->_widthMode = YGMeasureModeUndefined;
     layoutParams->_heightMode = YGMeasureModeExactly;
     return layoutParams;
+}
+
+LayoutParams *LayoutParams::makeWrapContent(bool w, bool h) {
+    auto layoutParams = new LayoutParams();
+    return layoutParams;
+}
+
+LayoutParams *LayoutParams::makeMatchParent(bool w, bool h) {
+    auto layoutParams = new LayoutParams();
+    return layoutParams;
+}
+
+void LayoutParams::setMargin(float margin) {
+    _marginStart = margin;
+    _marginEnd = margin;
+    _marginTop = margin;
+    _marginBottom = margin;
+}
+
+void LayoutParams::setMargin(std::array<float, 4> margins) {
+    _marginStart = margins[0];
+    _marginTop = margins[1];
+    _marginEnd = margins[2];
+    _marginBottom = margins[3];
+}
+
+void LayoutParams::setPadding(float padding) {
+    _paddingStart = padding;
+    _paddingEnd = padding;
+    _paddingTop = padding;
+    _paddingBottom = padding;
+}
+
+void LayoutParams::setPadding(std::array<float, 4> paddings) {
+    _paddingStart = paddings[0];
+    _paddingTop = paddings[1];
+    _paddingEnd = paddings[2];
+    _paddingBottom = paddings[3];
 }

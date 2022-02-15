@@ -7,6 +7,7 @@
 
 #include <yoga/YGEnums.h>
 #include "array"
+#include "MeasureSpec.h"
 
 /**
  * 布局相关参数尽量都放在LayoutParams中
@@ -35,6 +36,10 @@ public:
 
     static LayoutParams *makeExactlyHeight(float h);
 
+    static LayoutParams *makeWrapContent(bool w = true, bool h = true);
+
+    static LayoutParams *makeMatchParent(bool w = true, bool h = true);
+
     /**
      * 可以理解为wrap
      * @return
@@ -49,9 +54,17 @@ public:
 
     YGMeasureMode _widthMode, _heightMode;
 
-    std::array<float, 4> _margin;
+    float _marginStart, _marginEnd, _marginTop, _marginBottom;
 
-    std::array<float, 4> _padding;
+    float _paddingStart, _paddingEnd, _paddingTop, _paddingBottom;
+
+    void setMargin(float margin);
+
+    void setMargin(std::array<float, 4> margins);
+
+    void setPadding(float padding);
+
+    void setPadding(std::array<float, 4> paddings);
 
 };
 
