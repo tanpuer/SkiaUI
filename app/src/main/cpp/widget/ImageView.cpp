@@ -17,8 +17,10 @@ ImageView::~ImageView() {
 
 void ImageView::setSource(const char *path) {
     auto data = SkData::MakeFromFileName(path);
-    assert(data);
     skImage = SkImage::MakeFromEncoded(data);
+    if (skImage == nullptr) {
+        ALOGE("skImage is null, pls check %s", path)
+    }
 }
 
 void ImageView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
