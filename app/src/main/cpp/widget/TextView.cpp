@@ -6,6 +6,7 @@
 
 #include <utility>
 #include <base/native_log.h>
+#include "core/SkFont.h"
 
 TextView::TextView() : View() {
     textPaint = new SkPaint();
