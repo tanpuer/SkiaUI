@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "29.0.0"
+    compileSdkVersion 32
+    buildToolsVersion "32.1.0-rc1"
 
     defaultConfig {
         applicationId "com.temple.skiaui"
         minSdkVersion 23
-        targetSdkVersion 28
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -26,6 +26,10 @@ android {
         }
     }
 
+    ndkVersion '23.1.7779620'
+
+    ndkPath "/Users/bytedance/Library/Android/sdk/ndk/23.1.7779620"
+
     buildTypes {
         release {
             minifyEnabled false
@@ -39,11 +43,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "11"
+        useIR = true
     }
 }
 
