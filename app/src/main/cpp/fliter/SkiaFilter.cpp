@@ -142,11 +142,15 @@ void SkiaFilter::doFrame() {
         _root.addView(vp1, LayoutParams::makeExactlyWidth(f_width));
     }
 
-    _root.measure(MeasureSpec::makeMeasureSpec(f_width, YGMeasureModeExactly),
-                  MeasureSpec::makeMeasureSpec(f_height, YGMeasureModeExactly));
+    auto rootWidthSpec = MeasureSpec::makeMeasureSpec(f_width, YGMeasureModeExactly);
+    auto rootHeightSpec = MeasureSpec::makeMeasureSpec(f_height, YGMeasureModeExactly);
+    _root.measure(rootWidthSpec,rootHeightSpec);
 //    _root.measure(f_width, YGMeasureModeExactly, f_height, YGMeasureModeExactly);
     _root.layout(0, 0, f_width, f_height);
     _root.draw(skCanvas);
 
     skCanvas->flush();
+
+    delete rootHeightSpec;
+    delete rootWidthSpec;
 }
