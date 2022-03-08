@@ -61,18 +61,36 @@ void ViewGroup::removeAllViews() {
     }
 }
 
-void ViewGroup::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
+    //todo ViewGroup的measure方法不对
+//    setMeasuredDimension(getDefaultSize(getMaxWidthInChildren(), widthMeasureSpec),
+//                         getDefaultSize(getMaxHeightInChildren(), heightMeasureSpec));
     for (auto &child: children) {
         measureChild(child, widthMeasureSpec, heightMeasureSpec);
     }
-    YGNodeCalculateLayout(root, widthMeasureSpec->getSize(), heightMeasureSpec->getSize(),
+    ALOGD("55555 %d %d %d", MeasureSpec::getSize(widthMeasureSpec),
+          MeasureSpec::getSize(heightMeasureSpec), getMaxHeightInChildren())
+    YGNodeCalculateLayout(root, MeasureSpec::getSize(widthMeasureSpec),
+                          MeasureSpec::getSize(heightMeasureSpec),
                           YGDirectionLTR);
-    //todo ViewGroup的measure方法不对
-    View::measure(widthMeasureSpec, heightMeasureSpec);
+    for (auto &child: children) {
+        auto height = YGNodeLayoutGetHeight(root);
+        auto top = YGNodeLayoutGetTop(child->node);
+        ALOGD("55555 %f %f %d %d", top, height, getMaxWidthInChildren(), getMaxHeightInChildren())
+    }
+//    YGNodeCalculateLayout(root, widthMeasureSpec->getSize(), heightMeasureSpec->getSize(),
+//                          YGDirectionLTR);
 }
 
-void ViewGroup::measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
-                             MeasureSpec *parentHeightMeasureSpec) {
+void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
+    width = _measuredWidth;
+    height = _measuredHeight;
+    YGNodeStyleSetWidth(root, _measuredWidth);
+    YGNodeStyleSetHeight(root, _measuredHeight);
+}
+
+void ViewGroup::measureChild(View *child, int parentWidthMeasureSpec,
+                             int parentHeightMeasureSpec) {
     auto lp = layoutParams.get();
     auto childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
                                                      lp->_marginLeft + lp->_marginLeft,
@@ -83,67 +101,70 @@ void ViewGroup::measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
     child->measure(childWidthMeasureSpec, childHeightMeasureSpec);
 }
 
-MeasureSpec *ViewGroup::getChildMeasureSpec(MeasureSpec *parentMeasureSpec, float padding,
-                                            float childDimension) {
-    auto specMode = parentMeasureSpec->getMode();
-    auto specSize = parentMeasureSpec->getSize();
-    auto size = std::max(0.0f, specSize - padding);
-    auto resultSize = .0f;
-    auto resultMode = YGMeasureModeUndefined;
+int ViewGroup::getChildMeasureSpec(int parentMeasureSpec, int padding, int childDimension) {
+    auto specMode = MeasureSpec::getMode(parentMeasureSpec);
+    auto specSize = MeasureSpec::getSize(parentMeasureSpec);
+    auto size = std::max(0, specSize - padding);
+    auto resultSize = 0;
+    auto resultMode = UNSPECIFIED;
     switch (specMode) {
         // Parent has imposed an exact size on us
-        case YGMeasureModeExactly: {
+        case EXACTLY: {
             if (childDimension >= 0) {
                 resultSize = childDimension;
-                resultMode = YGMeasureModeExactly;
+                resultMode = EXACTLY;
             } else if (MeasureSpec::isMatchParent(childDimension)) {
                 // Child wants to be our size. So be it.
                 resultSize = size;
-                resultMode = YGMeasureModeExactly;
+                resultMode = EXACTLY;
             } else {
                 // Child wants to determine its own size. It can't be
                 // bigger than us.
                 resultSize = size;
-                resultMode = YGMeasureModeAtMost;
+                resultMode = AT_MOST;
             }
             break;
         }
             // Parent has imposed a maximum size on us
-        case YGMeasureModeAtMost: {
+        case AT_MOST: {
             if (childDimension >= 0) {
                 // Child wants a specific size... so be it
                 resultSize = childDimension;
-                resultMode = YGMeasureModeExactly;
+                resultMode = EXACTLY;
             } else if (MeasureSpec::isMatchParent(childDimension)) {
                 // Child wants to be our size, but our size is not fixed.
                 // Constrain child to not be bigger than us.
                 resultSize = size;
-                resultMode = YGMeasureModeAtMost;
+                resultMode = AT_MOST;
             } else {
                 // Child wants to determine its own size. It can't be
                 // bigger than us.
                 resultSize = size;
-                resultMode = YGMeasureModeAtMost;
+                resultMode = AT_MOST;
             }
             break;
         }
 
             // Parent asked to see how big we want to be
-        case YGMeasureModeUndefined: {
+        case UNSPECIFIED: {
             if (childDimension >= 0) {
                 // Child wants a specific size... let him have it
                 resultSize = childDimension;
-                resultMode = YGMeasureModeExactly;
+                resultMode = EXACTLY;
             } else if (MeasureSpec::isMatchParent(childDimension)) {
                 // Child wants to be our size... find out how big it should be
                 resultSize = size;
-                resultMode = YGMeasureModeUndefined;
+                resultMode = UNSPECIFIED;
             } else {
                 // Child wants to determine its own size.... find out how big it should be
                 resultSize = size;
-                resultMode = YGMeasureModeUndefined;
+                resultMode = UNSPECIFIED;
             }
             break;
+        }
+        default: {
+            ALOGD("illegal specMode")
+            assert(nullptr);
         }
     }
     return MeasureSpec::makeMeasureSpec(resultSize, resultMode);
@@ -196,7 +217,7 @@ void ViewGroup::setFlexDirection(YGFlexDirection direction) {
     YGNodeStyleSetFlexDirection(root, direction);
 }
 
-float ViewGroup::getWidth() {
+int ViewGroup::getWidth() {
     if (YGNodeStyleGetWidth(root).unit == YGUnitAuto) {
         return getMaxWidthInChildren();
     } else {
@@ -205,7 +226,7 @@ float ViewGroup::getWidth() {
     }
 }
 
-float ViewGroup::getHeight() {
+int ViewGroup::getHeight() {
     if (YGNodeStyleGetHeight(root).unit == YGUnitAuto) {
         return getMaxHeightInChildren();
     } else {
@@ -214,16 +235,16 @@ float ViewGroup::getHeight() {
     }
 }
 
-float ViewGroup::getMaxHeightInChildren() {
-    float maxHeight = 0.0f;
+int ViewGroup::getMaxHeightInChildren() {
+    int maxHeight = 0;
     for (auto &child: children) {
         maxHeight = std::max(maxHeight, child->getHeight());
     }
     return maxHeight;
 }
 
-float ViewGroup::getMaxWidthInChildren() {
-    float maxWidth = 0.0f;
+int ViewGroup::getMaxWidthInChildren() {
+    int maxWidth = 0;
     for (auto &child: children) {
         maxWidth = std::max(maxWidth, child->getWidth());
     }

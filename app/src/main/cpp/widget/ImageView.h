@@ -16,11 +16,13 @@ public:
 
     virtual ~ImageView();
 
-    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
-    void layout(float l, float t, float r, float b) override;
+    void layout(int l, int t, int r, int b) override;
 
     virtual void draw(SkCanvas *canvas) override;
+
+    virtual const char * name() override;
 
 #pragma mark ImageView api
 

@@ -7,8 +7,8 @@
 #include "View.h"
 #include "effects/SkCornerPathEffect.h"
 
-View::View() : width(0.0), height(0.0), skRect(SkRect::MakeEmpty()), cornerRadius(),
-               skRectWithBorder(SkRect::MakeEmpty()),
+View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadius(),
+               skRectWithBorder(SkIRect::MakeEmpty()),
                minWidth(0), minHeight(0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
@@ -26,29 +26,36 @@ View::~View() {
 
 #pragma mark yoga
 
-void View::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+/**
+ * This is called to find out how big a view should be. The parent supplies constraint information in the width and height parameters.
+The actual measurement work of a view is performed in onMeasure(int, int), called by this method. Therefore, only onMeasure(int, int) can and must be overridden by subclasses.
+ * @param widthMeasureSpec
+ * @param heightMeasureSpec
+ */
+void View::measure(int widthMeasureSpec, int heightMeasureSpec) {
     //todo 目前每次都是forceLayout Android子类只能override onMeasure方法，精简处理
     setMeasuredDimension(getDefaultSize(minWidth, widthMeasureSpec),
                          getDefaultSize(minHeight, heightMeasureSpec));
 }
 
-void View::setMeasuredDimension(float _measuredWidth, float _measuredHeight) {
+void View::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
+    ALOGD("View::setMeasuredDimension %d %d", width, height)
     YGNodeStyleSetWidth(node, _measuredWidth);
     YGNodeStyleSetHeight(node, _measuredHeight);
 }
 
-float View::getDefaultSize(float minSize, MeasureSpec *measureSpec) {
-    float result = minSize;
-    switch (measureSpec->getMode()) {
-        case YGMeasureModeUndefined: {
+int View::getDefaultSize(int minSize, int measureSpec) {
+    int result = minSize;
+    switch (MeasureSpec::getMode(measureSpec)) {
+        case UNSPECIFIED: {
             result = minSize;
             break;
         }
-        case YGMeasureModeAtMost:
-        case YGMeasureModeExactly: {
-            result = measureSpec->getSize();
+        case AT_MOST:
+        case EXACTLY: {
+            result = MeasureSpec::getSize(measureSpec);
             break;
         }
         default: {
@@ -58,23 +65,24 @@ float View::getDefaultSize(float minSize, MeasureSpec *measureSpec) {
     return result;
 }
 
-void View::layout(float l, float t, float r, float b) {
+void View::layout(int l, int t, int r, int b) {
     //todo 默认设置boarder位置 Android layout默认啥都不做
     skRect.setLTRB(l, t, r, b);
     width = r - l;
     height = b - t;
+    ALOGD("%s layout %d %d", name(), width, height)
 }
 
 void View::draw(SkCanvas *canvas) {
     //todo 默认画boarder，Android的onDraw默认啥都不做
     if (YGFloatsEqual(paint->getStrokeWidth(), 0.0f)) {
-        canvas->drawRect(skRect, *paint);
+        canvas->drawIRect(skRect, *paint);
     } else {
         //todo 如果有strokeWidth，就会有一半画在rect外面，简单考虑，默认全部都算内边框
         auto diff = (paint->getStrokeWidth()) / 2;
         skRectWithBorder.setLTRB(skRect.left() + diff, skRect.top() + diff, skRect.right() - diff,
                                  skRect.bottom() - diff);
-        canvas->drawRect(skRectWithBorder, *paint);
+        canvas->drawIRect(skRectWithBorder, *paint);
     }
 }
 
@@ -92,11 +100,11 @@ bool View::isViewGroup() {
 
 #pragma mark yoga 获取相关
 
-float View::getHeight() {
+int View::getHeight() {
     return height;
 }
 
-float View::getWidth() {
+int View::getWidth() {
     return width;
 }
 
@@ -117,13 +125,13 @@ void View::setStyle(SkPaint::Style style) {
     paint->setStyle(style);
 }
 
-void View::setCornerRadius(float radius) {
+void View::setCornerRadius(int radius) {
     SkASSERT(paint);
-    if (radius <= 0.0) {
-        ALOGE("radius must > 0.0")
+    if (radius <= 0) {
+        ALOGE("radius must > 0")
         return;
     }
-    paint->setPathEffect(SkCornerPathEffect::Make(radius));
+    paint->setPathEffect(SkCornerPathEffect::Make(static_cast<SkScalar>(radius)));
 }
 
 void View::setStrokeWidth(SkScalar _width) {
@@ -151,7 +159,7 @@ LayoutParams *View::getLayoutParams() {
 
 #pragma mark 后续才支持的
 
-void View::setPadding(std::array<float, 4> paddings) {
+void View::setPadding(std::array<int, 4> paddings) {
     YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         ALOGE("YGNodeRef not initialized, pls check!")
@@ -163,7 +171,7 @@ void View::setPadding(std::array<float, 4> paddings) {
     YGNodeStyleSetPadding(node, YGEdgeBottom, paddings[3]);
 }
 
-void View::setPadding(float padding) {
+void View::setPadding(int padding) {
     YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         return;

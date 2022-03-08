@@ -30,41 +30,33 @@ public:
 
     static LayoutParams *makeEmpty();
 
-    static LayoutParams *makeExactlyLayoutParams(float w, float h);
+    static LayoutParams *makeExactlyLayoutParams(int w, int h);
 
-    static LayoutParams *makeExactlyWidth(float w);
+    static LayoutParams *makeExactlyWidth(int w);
 
-    static LayoutParams *makeExactlyHeight(float h);
+    static LayoutParams *makeExactlyHeight(int h);
 
     static LayoutParams *makeWrapContent(bool w = true, bool h = true);
 
     static LayoutParams *makeMatchParent(bool w = true, bool h = true);
 
-    /**
-     * 可以理解为wrap
-     * @return
-     */
-    static LayoutParams *makeUndefinedLayoutPrams();
-
 public:
 
-    float _width, _height;
+    int _width, _height;
 
-    float _minWidth, _minHeight; //todo 降低复杂度，暂时不考虑这个，默认是0f
+    int _widthMode, _heightMode;
 
-    YGMeasureMode _widthMode, _heightMode;
+    int _marginLeft, _marginRight, _marginTop, _marginBottom;
 
-    float _marginLeft, _marginRight, _marginTop, _marginBottom;
+    int _paddingStart, _paddingEnd, _paddingTop, _paddingBottom;
 
-    float _paddingStart, _paddingEnd, _paddingTop, _paddingBottom;
+    void setMargin(int margin);
 
-    void setMargin(float margin);
+    void setMargin(std::array<int, 4> margins);
 
-    void setMargin(std::array<float, 4> margins);
+    void setPadding(int padding);
 
-    void setPadding(float padding);
-
-    void setPadding(std::array<float, 4> paddings);
+    void setPadding(std::array<int, 4> paddings);
 
 };
 

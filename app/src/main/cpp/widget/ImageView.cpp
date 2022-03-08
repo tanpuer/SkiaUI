@@ -23,15 +23,14 @@ void ImageView::setSource(const char *path) {
     }
 }
 
-void ImageView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     if (skImage == nullptr) {
         YGNodeStyleSetWidth(node, 0);
         YGNodeStyleSetHeight(node, 0);
         return;
     }
     ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
-    setMeasuredDimension(static_cast<float >(skImage->width()),
-                         static_cast<float >(skImage->height()));
+    setMeasuredDimension(skImage->width(), skImage->height());
 }
 
 void ImageView::draw(SkCanvas *canvas) {
@@ -39,9 +38,13 @@ void ImageView::draw(SkCanvas *canvas) {
     View::draw(canvas);
 }
 
-void ImageView::layout(float l, float t, float r, float b) {
-    ALOGD("imageView layout: %f %f %f %f", l, t, r, b)
+void ImageView::layout(int l, int t, int r, int b) {
+    ALOGD("imageView layout: %d %d %d %d", l, t, r, b)
     View::layout(l, t, r, b);
+}
+
+const char *ImageView::name() {
+    return "ImageView";
 }
 
 

@@ -12,7 +12,7 @@ class FrameLayout : public ViewGroup {
 
 public:
 
-    void layout(float l, float t, float r, float b) override;
+    void layout(int l, int t, int r, int b) override;
 
 };
 

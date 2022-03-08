@@ -18,7 +18,7 @@ public:
 
     virtual ~TextView();
 
-    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
     virtual void draw(SkCanvas *canvas) override;
 

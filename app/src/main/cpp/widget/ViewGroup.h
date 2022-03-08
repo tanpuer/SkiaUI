@@ -18,30 +18,30 @@ public:
 
     virtual ~ViewGroup();
 
-    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
-    void measureChild(View *child, MeasureSpec *parentWidthMeasureSpec,
-                      MeasureSpec *parentHeightMeasureSpec);
+    void measureChild(View *child, int parentWidthMeasureSpec, int parentHeightMeasureSpec);
 
-    MeasureSpec *
-    getChildMeasureSpec(MeasureSpec *parentMeasureSpec, float padding, float childDimension);
+    int getChildMeasureSpec(int parentMeasureSpec, int padding, int childDimension);
+
+    void setMeasuredDimension(int _measuredWidth, int _measuredHeight) override;
 
     /**
      * 子类ViewGroup必须复写
      */
-    virtual void layout(float l, float t, float r, float b) override = 0;
+    virtual void layout(int l, int t, int r, int b) override = 0;
 
     virtual void draw(SkCanvas *canvas) override;
 
     bool isViewGroup() override;
 
-    virtual float getWidth() override;
+    virtual int getWidth() override;
 
-    virtual float getHeight() override;
+    virtual int getHeight() override;
 
-    float getMaxHeightInChildren();
+    int getMaxHeightInChildren();
 
-    float getMaxWidthInChildren();
+    int getMaxWidthInChildren();
 
 #pragma mark ViewGroup api
 
@@ -81,6 +81,9 @@ public:
      */
     virtual void setFlexDirection(YGFlexDirection direction);
 
+    /**
+     * 注意不能搞混，View实用node，ViewGroup实用root
+     */
     YGNodeRef root;
 
     YGConfigRef config;

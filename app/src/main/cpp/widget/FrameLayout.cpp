@@ -4,7 +4,7 @@
 
 #include "FrameLayout.h"
 
-void FrameLayout::layout(float l, float t, float r, float b) {
+void FrameLayout::layout(int l, int t, int r, int b) {
     for (auto child: children) {
         auto left = YGNodeLayoutGetLeft(child->node);
         auto top = YGNodeLayoutGetTop(child->node);

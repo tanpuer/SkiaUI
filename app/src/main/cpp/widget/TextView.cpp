@@ -30,7 +30,7 @@ void TextView::setTextColor(SkColor color) {
     textPaint->setColor(color);
 }
 
-void TextView::measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) {
+void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
                                    SkTextEncoding::kUTF8,
                                    &rect, textPaint);

@@ -23,9 +23,9 @@ public:
 
     virtual ~LinearLayout();
 
-    void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec) override;
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
-    virtual void layout(float l, float t, float r, float b) override;
+    virtual void layout(int l, int t, int r, int b) override;
 
 #pragma mark LinearLayoyt api
 
@@ -37,9 +37,9 @@ public:
 
     virtual Orientation getOrientation();
 
-    virtual void layoutHorizontal(float l, float t, float r, float b);
+    virtual void layoutHorizontal(int l, int t, int r, int b);
 
-    virtual void layoutVertical(float l, float t, float r, float b);
+    virtual void layoutVertical(int l, int t, int r, int b);
 
 private:
 

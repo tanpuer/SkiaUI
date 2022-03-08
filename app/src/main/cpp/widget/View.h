@@ -24,6 +24,10 @@ public:
 
     virtual ~View();
 
+    virtual const char *name() {
+        return "view";
+    }
+
     int64_t viewId;
 
 #pragma mark yoga 设置相关
@@ -33,11 +37,11 @@ public:
      * @param widthMeasureSpec
      * @param heightMeasureSpec
      */
-    virtual void measure(MeasureSpec *widthMeasureSpec, MeasureSpec *heightMeasureSpec);
+    virtual void measure(int widthMeasureSpec, int heightMeasureSpec);
 
-    virtual void setMeasuredDimension(float _measuredWidth, float _measuredHeight);
+    virtual void setMeasuredDimension(int _measuredWidth, int _measuredHeight);
 
-    virtual void layout(float l, float t, float r, float b);
+    virtual void layout(int l, int t, int r, int b);
 
     virtual void draw(SkCanvas *canvas);
 
@@ -53,13 +57,13 @@ public:
 
 protected:
 
-    float width, height;
+    int width, height;
 
-    float minWidth, minHeight;
+    int minWidth, minHeight;
 
-private:
+protected:
 
-    static float getDefaultSize(float minSize, MeasureSpec *measureSpec);
+    static int getDefaultSize(int minSize, int measureSpec);
 
 #pragma mark LayoutParams相关
 public:
@@ -74,9 +78,9 @@ public:
 
 public:
 
-    virtual float getHeight();
+    virtual int getHeight();
 
-    virtual float getWidth();
+    virtual int getWidth();
 
 #pragma mark skia
 
@@ -88,23 +92,22 @@ public:
 
     virtual void setStrokeWidth(SkScalar _width);
 
-    virtual void setCornerRadius(float radius);
+    virtual void setCornerRadius(int radius);
 
     SkPaint *paint;
 
     std::array<int, 4> cornerRadius;
 
 protected:
-    SkRect skRect;
+    SkIRect skRect;
 
-    SkRect skRectWithBorder;
-
+    SkIRect skRectWithBorder;
 
 public:
     //todo 后续才支持的
-    virtual void setPadding(std::array<float, 4> paddings);
+    virtual void setPadding(std::array<int, 4> paddings);
 
-    virtual void setPadding(float padding);
+    virtual void setPadding(int padding);
 
     virtual void setSizePercent(float widthPercent, float heightPercent);
 
