@@ -73,13 +73,6 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
     YGNodeCalculateLayout(root, MeasureSpec::getSize(widthMeasureSpec),
                           MeasureSpec::getSize(heightMeasureSpec),
                           YGDirectionLTR);
-    for (auto &child: children) {
-        auto height = YGNodeLayoutGetHeight(root);
-        auto top = YGNodeLayoutGetTop(child->node);
-        ALOGD("55555 %f %f %d %d", top, height, getMaxWidthInChildren(), getMaxHeightInChildren())
-    }
-//    YGNodeCalculateLayout(root, widthMeasureSpec->getSize(), heightMeasureSpec->getSize(),
-//                          YGDirectionLTR);
 }
 
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
@@ -93,15 +86,16 @@ void ViewGroup::measureChild(View *child, int parentWidthMeasureSpec,
                              int parentHeightMeasureSpec) {
     auto lp = layoutParams.get();
     auto childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
-                                                     lp->_marginLeft + lp->_marginLeft,
+                                                     lp->_paddingStart + lp->_paddingEnd,
                                                      child->layoutParams->_width);
     auto childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
-                                                      lp->_marginTop + lp->_marginBottom,
+                                                      lp->_paddingTop + lp->_paddingBottom,
                                                       child->layoutParams->_height);
     child->measure(childWidthMeasureSpec, childHeightMeasureSpec);
 }
 
 int ViewGroup::getChildMeasureSpec(int parentMeasureSpec, int padding, int childDimension) {
+    MeasureSpec::toString(parentMeasureSpec);
     auto specMode = MeasureSpec::getMode(parentMeasureSpec);
     auto specSize = MeasureSpec::getSize(parentMeasureSpec);
     auto size = std::max(0, specSize - padding);
