@@ -62,13 +62,6 @@ void LayoutParams::setMargin(int margin) {
     _marginBottom = margin;
 }
 
-void LayoutParams::setMargin(std::array<int, 4> margins) {
-    _marginLeft = margins[0];
-    _marginTop = margins[1];
-    _marginRight = margins[2];
-    _marginBottom = margins[3];
-}
-
 void LayoutParams::setPadding(int padding) {
     _paddingStart = padding;
     _paddingEnd = padding;
@@ -76,7 +69,14 @@ void LayoutParams::setPadding(int padding) {
     _paddingBottom = padding;
 }
 
-void LayoutParams::setPadding(std::array<int, 4> paddings) {
+void LayoutParams::setMargin(const std::array<int, 4> &margins) {
+    _marginLeft = margins[0];
+    _marginTop = margins[1];
+    _marginRight = margins[2];
+    _marginBottom = margins[3];
+}
+
+void LayoutParams::setPadding(const std::array<int, 4> &paddings) {
     _paddingStart = paddings[0];
     _paddingTop = paddings[1];
     _paddingEnd = paddings[2];

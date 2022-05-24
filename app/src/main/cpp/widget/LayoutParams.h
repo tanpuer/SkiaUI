@@ -52,11 +52,11 @@ public:
 
     void setMargin(int margin);
 
-    void setMargin(std::array<int, 4> margins);
+    void setMargin(const std::array<int, 4> &margins);
 
     void setPadding(int padding);
 
-    void setPadding(std::array<int, 4> paddings);
+    void setPadding(const std::array<int, 4> &paddings);
 
 };
 
