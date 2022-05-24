@@ -2,24 +2,21 @@
 // Created by cw on 2022/5/24.
 //
 
-#include "ITestDraw.h"
-#include "FlexboxLayout.h"
-#include "TextView.h"
-#include "ImageView.h"
+#include "VerticalDrawTest.h"
 
-ITestDraw::ITestDraw() {
+VerticalDrawTest::VerticalDrawTest() {
 
 }
 
-ITestDraw::~ITestDraw() {
+VerticalDrawTest::~VerticalDrawTest() {
 
 }
 
-void ITestDraw::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
+void VerticalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
     FlexboxLayout _root;
     _root.setLayoutParams(LayoutParams::makeExactlyWidth(width));
     _root.setFlexWrap(YGWrapWrap);
-    _root.setFlexDirection(YGFlexDirectionRow);
+    _root.setFlexDirection(YGFlexDirectionColumn);
     _root.setJustifyContent(YGJustifyCenter);
     _root.setAlignItems(YGAlignCenter);
 

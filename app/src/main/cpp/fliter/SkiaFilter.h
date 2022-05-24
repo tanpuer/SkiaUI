@@ -20,9 +20,9 @@ public:
 
     ~SkiaFilter();
 
-    virtual void setWindowSize(int width, int height);
+    virtual void setWindowSize(int width, int height) override;
 
-    virtual void doFrame();
+    virtual void doFrame() override;
 
 private:
 

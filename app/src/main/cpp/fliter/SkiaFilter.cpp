@@ -7,7 +7,8 @@
 #include <yoga/Yoga.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
-#include "ITestDraw.h"
+#include <test/HorizontalDrawTest.h>
+#include <test/VerticalDrawTest.h>
 
 SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
@@ -58,7 +59,8 @@ void SkiaFilter::doFrame() {
     skCanvas->clear(SK_ColorWHITE);
 
     //todo test code
-    ITestDraw testDraw;
+    HorizontalDrawTest testDraw;
+//    VerticalDrawTest testDraw;
     testDraw.doDrawTest(drawCount, skCanvas, width, height);
 
     skCanvas->flush();
