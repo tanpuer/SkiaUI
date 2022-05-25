@@ -7,8 +7,8 @@
 #include <yoga/Yoga.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
-#include <test/HorizontalDrawTest.h>
-#include <test/VerticalDrawTest.h>
+#include "HorizontalDrawTest.h"
+#include "VerticalDrawTest.h"
 
 SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
