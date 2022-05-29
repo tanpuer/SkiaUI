@@ -22,6 +22,8 @@ public:
 
     virtual void draw(SkCanvas *canvas) override;
 
+    const char * name() override;
+
 #pragma mark TextView api
 
     virtual void setText(SkString text);
@@ -40,7 +42,7 @@ private:
 
     SkFont font;
 
-    SkRect rect;
+    SkRect textRect;
 
 };
 

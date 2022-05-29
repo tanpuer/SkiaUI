@@ -30,7 +30,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
         _root.addView(view, viewLayoutParams);
 
         auto textView = new TextView();
-        textView->setText(SkString("Hello World"));
+        textView->setText(SkString("Code Boy"));
         textView->setTextColor(SK_ColorBLACK);
         textView->setTextSize(60);
         textView->setBackgroundColor(SK_ColorRED);

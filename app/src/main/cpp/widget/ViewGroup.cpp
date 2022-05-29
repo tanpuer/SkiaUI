@@ -248,3 +248,7 @@ int ViewGroup::getMaxWidthInChildren() {
 bool ViewGroup::isViewGroup() {
     return true;
 }
+
+const char *ViewGroup::name() {
+    return "ViewGroup";
+}

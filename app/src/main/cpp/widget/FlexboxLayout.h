@@ -19,6 +19,8 @@ public:
 
     ~FlexboxLayout();
 
+    const char * name() override;
+
     virtual void setFlexDirection(YGFlexDirection direction) override;
 
     virtual void layout(int l, int t, int r, int b) override;

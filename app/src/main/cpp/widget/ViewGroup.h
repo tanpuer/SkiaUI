@@ -18,6 +18,8 @@ public:
 
     virtual ~ViewGroup();
 
+    const char * name() override;
+
     void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
     void measureChild(View *child, int parentWidthMeasureSpec, int parentHeightMeasureSpec);

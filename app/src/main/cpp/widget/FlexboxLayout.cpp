@@ -13,6 +13,10 @@ FlexboxLayout::~FlexboxLayout() {
 
 }
 
+const char *FlexboxLayout::name() {
+    return "FlexboxLayout";
+}
+
 void FlexboxLayout::setFlexDirection(YGFlexDirection direction) {
     assert(direction == YGFlexDirectionRow || direction == YGFlexDirectionColumn);
     this->_direction = direction;
