@@ -78,8 +78,8 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-    YGNodeStyleSetWidth(root, _measuredWidth);
-    YGNodeStyleSetHeight(root, _measuredHeight);
+    YGNodeStyleSetWidth(root, static_cast<float>(_measuredWidth));
+    YGNodeStyleSetHeight(root, static_cast<float>(_measuredHeight));
 }
 
 void ViewGroup::measureChild(View *child, int parentWidthMeasureSpec,

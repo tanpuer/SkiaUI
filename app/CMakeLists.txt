@@ -20,6 +20,7 @@ include_directories(
         src/main/cpp/yoga/internal
         src/main/cpp/widget
         src/main/cpp/test
+        src/main/cpp/scroll
 )
 
 link_directories(
@@ -40,6 +41,7 @@ aux_source_directory(src/main/cpp/yoga/event srcs)
 aux_source_directory(src/main/cpp/yoga/internal srcs)
 aux_source_directory(src/main/cpp/widget srcs)
 aux_source_directory(src/main/cpp/test srcs)
+aux_source_directory(src/main/cpp/scroll srcs)
 
 add_library(native-lib SHARED ${srcs})
 
