@@ -19,6 +19,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
     _root.setFlexDirection(YGFlexDirectionRow);
     _root.setJustifyContent(YGJustifyCenter);
     _root.setAlignItems(YGAlignCenter);
+    _root.setAlignContent(YGAlignCenter);
     _root.setStrokeWidth(10);
     _root.setStyle(SkPaint::kStroke_Style);
     _root.setBackgroundColor(SK_ColorBLUE);
@@ -28,7 +29,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
         view->setBackgroundColor(SK_ColorRED);
         view->setStyle(SkPaint::kFill_Style);
         view->setCornerRadius(30);
-        auto viewLayoutParams = LayoutParams::makeExactlyLayoutParams(200, 200);
+        auto viewLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 200);
         viewLayoutParams->setMargin({0, 0, 0, 0});
         _root.addView(view, viewLayoutParams);
 

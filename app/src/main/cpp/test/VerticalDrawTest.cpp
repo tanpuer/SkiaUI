@@ -19,6 +19,7 @@ void VerticalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, in
     _root.setFlexDirection(YGFlexDirectionColumn);
     _root.setJustifyContent(YGJustifyCenter);
     _root.setAlignItems(YGAlignCenter);
+    _root.setAlignContent(YGAlignCenter);
     _root.setStrokeWidth(10);
     _root.setStyle(SkPaint::kStroke_Style);
     _root.setBackgroundColor(SK_ColorBLUE);
@@ -34,7 +35,7 @@ void VerticalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, in
 
         auto textView = new TextView();
         textView->setConfig(_root.config);
-        textView->setText(SkString("Hello World"));
+        textView->setText(SkString("Hello Code Boy"));
         textView->setTextColor(SK_ColorBLACK);
         textView->setTextSize(60);
         textView->setBackgroundColor(SK_ColorRED);
