@@ -13,8 +13,6 @@ View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadi
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
-    node = YGNodeNew();
-    layoutParams = std::make_unique<LayoutParams>();
 }
 
 View::~View() {
@@ -204,3 +202,6 @@ void View::setHeightAuto() {
     YGNodeStyleSetHeightAuto(node);
 }
 
+void View::setConfig(YGConfigRef config) {
+    node = YGNodeNewWithConfig(config);
+}

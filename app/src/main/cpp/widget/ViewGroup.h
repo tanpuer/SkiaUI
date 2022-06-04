@@ -45,6 +45,8 @@ public:
 
     int getMaxWidthInChildren();
 
+    virtual YGConfigRef getConfig();
+
 #pragma mark ViewGroup api
 
     virtual bool addView(View *view, LayoutParams *layoutParams);
@@ -84,10 +86,8 @@ public:
     virtual void setFlexDirection(YGFlexDirection direction);
 
     /**
-     * 注意不能搞混，View实用node，ViewGroup实用root
+     * 只有ViewGroup才能有config
      */
-    YGNodeRef root;
-
     YGConfigRef config;
 
     std::vector<View *> children;

@@ -8,18 +8,17 @@
 
 ViewGroup::ViewGroup() : View(), maxChildWidth(0.0f), maxChildHeight(0.0f) {
     config = YGConfigNew();
-    root = YGNodeNewWithConfig(config);
+    setConfig(config);
 }
 
 ViewGroup::~ViewGroup() {
-    if (root == nullptr) {
+    if (node == nullptr) {
         return;
     }
+    YGConfigFree(config);
     for (auto view: children) {
         delete view;
     }
-    YGConfigFree(config);
-    YGNodeFree(root);
 }
 
 bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
@@ -27,8 +26,9 @@ bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
         ALOGE("add null view, pls check view!")
         return false;
     }
-    auto childCount = YGNodeGetChildCount(root);
-    YGNodeInsertChild(root, view->node, childCount);
+    auto childCount = YGNodeGetChildCount(node);
+    ALOGD("addChildView %s at index %d", view->name(), childCount);
+    YGNodeInsertChild(node, view->node, childCount);
     children.emplace_back(view);
     view->setLayoutParams(layoutParams);
     return true;
@@ -39,7 +39,7 @@ bool ViewGroup::removeView(View *view) {
         ALOGE("remove null view, pls check view!")
         return false;
     }
-    YGNodeRemoveChild(root, view->node);
+    YGNodeRemoveChild(node, view->node);
     for (auto ite = children.begin(); ite < children.end(); ++ite) {
         if ((*ite)->viewId == view->viewId) {
             children.erase(ite);
@@ -51,11 +51,11 @@ bool ViewGroup::removeView(View *view) {
 }
 
 void ViewGroup::removeAllViews() {
-    if (root == nullptr) {
+    if (node == nullptr) {
         ALOGE("remove null view, pls check view!")
         return;
     }
-    YGNodeRemoveAllChildren(root);
+    YGNodeRemoveAllChildren(node);
     for (auto view: children) {
         delete view;
     }
@@ -63,14 +63,15 @@ void ViewGroup::removeAllViews() {
 
 void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
     //todo ViewGroup的measure方法不对
-//    setMeasuredDimension(getDefaultSize(getMaxWidthInChildren(), widthMeasureSpec),
-//                         getDefaultSize(getMaxHeightInChildren(), heightMeasureSpec));
     for (auto &child: children) {
         measureChild(child, widthMeasureSpec, heightMeasureSpec);
     }
-    ALOGD("55555 %d %d %d", MeasureSpec::getSize(widthMeasureSpec),
-          MeasureSpec::getSize(heightMeasureSpec), getMaxHeightInChildren())
-    YGNodeCalculateLayout(root, MeasureSpec::getSize(widthMeasureSpec),
+//    setMeasuredDimension(getDefaultSize(getMaxWidthInChildren(), widthMeasureSpec),
+//                         getDefaultSize(getMaxHeightInChildren(), heightMeasureSpec));
+    auto justify = YGNodeStyleGetJustifyContent(node);
+    ALOGD("55555 %d %d %d %d", MeasureSpec::getSize(widthMeasureSpec),
+          MeasureSpec::getSize(heightMeasureSpec), getMaxHeightInChildren(), justify)
+    YGNodeCalculateLayout(node, MeasureSpec::getSize(widthMeasureSpec),
                           MeasureSpec::getSize(heightMeasureSpec),
                           YGDirectionLTR);
 }
@@ -78,8 +79,9 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-    YGNodeStyleSetWidth(root, static_cast<float>(_measuredWidth));
-    YGNodeStyleSetHeight(root, static_cast<float>(_measuredHeight));
+    ALOGD("ViewGroup setMeasuredDimension %d %d", _measuredWidth, _measuredHeight)
+    YGNodeStyleSetWidth(node, static_cast<float>(_measuredWidth));
+    YGNodeStyleSetHeight(node, static_cast<float>(_measuredHeight));
 }
 
 void ViewGroup::measureChild(View *child, int parentWidthMeasureSpec,
@@ -172,47 +174,47 @@ void ViewGroup::draw(SkCanvas *canvas) {
 }
 
 void ViewGroup::setAlignItems(YGAlign align) {
-    SkASSERT(root);
-    if (root == nullptr) {
+    SkASSERT(node);
+    if (node == nullptr) {
         return;
     }
-    YGNodeStyleSetAlignItems(root, align);
+    YGNodeStyleSetAlignItems(node, align);
 }
 
 void ViewGroup::setJustifyContent(YGJustify justify) {
-    SkASSERT(root);
-    if (root == nullptr) {
+    SkASSERT(node);
+    if (node == nullptr) {
         return;
     }
-    YGNodeStyleSetJustifyContent(root, justify);
+    YGNodeStyleSetJustifyContent(node, justify);
 }
 
 void ViewGroup::setAlignContent(YGAlign align) {
-    SkASSERT(root);
-    if (root == nullptr) {
+    SkASSERT(node);
+    if (node == nullptr) {
         return;
     }
-    YGNodeStyleSetAlignContent(root, align);
+    YGNodeStyleSetAlignContent(node, align);
 }
 
 void ViewGroup::setFlexWrap(YGWrap wrap) {
-    SkASSERT(root);
-    if (root == nullptr) {
+    SkASSERT(node);
+    if (node == nullptr) {
         return;
     }
     YGNodeStyleSetFlexWrap(node, wrap);
 }
 
 void ViewGroup::setFlexDirection(YGFlexDirection direction) {
-    SkASSERT(root);
-    if (root == nullptr) {
+    SkASSERT(node);
+    if (node == nullptr) {
         return;
     }
-    YGNodeStyleSetFlexDirection(root, direction);
+    YGNodeStyleSetFlexDirection(node, direction);
 }
 
 int ViewGroup::getWidth() {
-    if (YGNodeStyleGetWidth(root).unit == YGUnitAuto) {
+    if (YGNodeStyleGetWidth(node).unit == YGUnitAuto) {
         return getMaxWidthInChildren();
     } else {
         //exactly todo percent
@@ -221,7 +223,7 @@ int ViewGroup::getWidth() {
 }
 
 int ViewGroup::getHeight() {
-    if (YGNodeStyleGetHeight(root).unit == YGUnitAuto) {
+    if (YGNodeStyleGetHeight(node).unit == YGUnitAuto) {
         return getMaxHeightInChildren();
     } else {
         //exactly todo percent
@@ -251,4 +253,8 @@ bool ViewGroup::isViewGroup() {
 
 const char *ViewGroup::name() {
     return "ViewGroup";
+}
+
+YGConfigRef ViewGroup::getConfig() {
+    return config;
 }

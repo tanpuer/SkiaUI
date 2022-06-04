@@ -54,7 +54,7 @@ void SkiaFilter::setWindowSize(int width, int height) {
 }
 
 void SkiaFilter::doFrame() {
-//    IFilter::doFrame();
+    IFilter::doFrame();
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 

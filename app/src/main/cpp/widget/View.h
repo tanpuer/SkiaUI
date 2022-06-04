@@ -47,6 +47,8 @@ public:
 
     virtual bool isViewGroup();
 
+    void setConfig(YGConfigRef config);
+
     /**
      * 在AlignItems的基础上自定义每个子视图的对齐方式
      * @param align
