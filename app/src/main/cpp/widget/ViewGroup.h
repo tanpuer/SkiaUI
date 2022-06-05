@@ -18,13 +18,13 @@ public:
 
     virtual ~ViewGroup();
 
-    const char * name() override;
+    const char *name() override;
 
     void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
     void measureChild(View *child, int parentWidthMeasureSpec, int parentHeightMeasureSpec);
 
-    int getChildMeasureSpec(int parentMeasureSpec, int padding, int childDimension);
+    int getChildMeasureSpec(View *child, int parentMeasureSpec, int padding, int childDimension);
 
     void setMeasuredDimension(int _measuredWidth, int _measuredHeight) override;
 
@@ -75,7 +75,9 @@ public:
 
     /**
      * wrap类型
-     * @param wrap
+     * @param wrap 所有的子视图都会排列在一行之中
+     * no_wrap 所有的子视图会从左到右，从上到下排列
+     * wrap_reverse 从左到右，从下到上进行排列
      */
     virtual void setFlexWrap(YGWrap wrap);
 
@@ -84,11 +86,6 @@ public:
      * @param direction
      */
     virtual void setFlexDirection(YGFlexDirection direction);
-
-    /**
-     * 只有ViewGroup才能有config
-     */
-    YGConfigRef config;
 
     std::vector<View *> children;
 

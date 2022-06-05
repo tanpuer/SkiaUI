@@ -7,15 +7,13 @@
 #include "ViewGroup.h"
 
 ViewGroup::ViewGroup() : View(), maxChildWidth(0.0f), maxChildHeight(0.0f) {
-    config = YGConfigNew();
-    setConfig(config);
+
 }
 
 ViewGroup::~ViewGroup() {
     if (node == nullptr) {
         return;
     }
-    YGConfigFree(config);
     for (auto view: children) {
         delete view;
     }
@@ -66,20 +64,26 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
     for (auto &child: children) {
         measureChild(child, widthMeasureSpec, heightMeasureSpec);
     }
-//    setMeasuredDimension(getDefaultSize(getMaxWidthInChildren(), widthMeasureSpec),
-//                         getDefaultSize(getMaxHeightInChildren(), heightMeasureSpec));
-    auto justify = YGNodeStyleGetJustifyContent(node);
-    ALOGD("55555 %d %d %d %d", MeasureSpec::getSize(widthMeasureSpec),
-          MeasureSpec::getSize(heightMeasureSpec), getMaxHeightInChildren(), justify)
     YGNodeCalculateLayout(node, MeasureSpec::getSize(widthMeasureSpec),
                           MeasureSpec::getSize(heightMeasureSpec),
                           YGDirectionLTR);
+    if (isViewGroup()) {
+        if (strcmp(this->name(), "FlexboxLayout") == 0) {
+            ALOGD("777777 %d %d", layoutParams->_widthMode == EXACTLY, layoutParams->_heightMode == EXACTLY)
+        }
+        if (layoutParams->_widthMode == EXACTLY) {
+            YGNodeStyleSetWidth(node, static_cast<float>(layoutParams->_width));
+        }
+        if (layoutParams->_heightMode == EXACTLY) {
+            YGNodeStyleSetHeight(node, static_cast<float>(layoutParams->_height));
+        }
+    }
 }
 
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-    ALOGD("ViewGroup setMeasuredDimension %d %d", _measuredWidth, _measuredHeight)
+    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
     YGNodeStyleSetWidth(node, static_cast<float>(_measuredWidth));
     YGNodeStyleSetHeight(node, static_cast<float>(_measuredHeight));
 }
@@ -87,16 +91,19 @@ void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
 void ViewGroup::measureChild(View *child, int parentWidthMeasureSpec,
                              int parentHeightMeasureSpec) {
     auto lp = layoutParams.get();
-    auto childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
+    auto childWidthMeasureSpec = getChildMeasureSpec(child, parentWidthMeasureSpec,
                                                      lp->_paddingStart + lp->_paddingEnd,
                                                      child->layoutParams->_width);
-    auto childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
+    auto childHeightMeasureSpec = getChildMeasureSpec(child, parentHeightMeasureSpec,
                                                       lp->_paddingTop + lp->_paddingBottom,
                                                       child->layoutParams->_height);
+    ALOGD("measureChild %s %d %d", child->name(), MeasureSpec::getSize(childWidthMeasureSpec),
+          MeasureSpec::getSize(childHeightMeasureSpec));
     child->measure(childWidthMeasureSpec, childHeightMeasureSpec);
 }
 
-int ViewGroup::getChildMeasureSpec(int parentMeasureSpec, int padding, int childDimension) {
+int ViewGroup::getChildMeasureSpec(View *child, int parentMeasureSpec, int padding,
+                                   int childDimension) {
     MeasureSpec::toString(parentMeasureSpec);
     auto specMode = MeasureSpec::getMode(parentMeasureSpec);
     auto specSize = MeasureSpec::getSize(parentMeasureSpec);
@@ -106,6 +113,7 @@ int ViewGroup::getChildMeasureSpec(int parentMeasureSpec, int padding, int child
     switch (specMode) {
         // Parent has imposed an exact size on us
         case EXACTLY: {
+            ALOGD("getChildMeasureSpec exactly %s %d", child->name(), childDimension)
             if (childDimension >= 0) {
                 resultSize = childDimension;
                 resultMode = EXACTLY;

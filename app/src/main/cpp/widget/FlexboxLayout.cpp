@@ -6,7 +6,6 @@
 
 FlexboxLayout::FlexboxLayout() {
 
-
 }
 
 FlexboxLayout::~FlexboxLayout() {
@@ -38,15 +37,19 @@ void FlexboxLayout::layoutVertical(int l, int t, int r, int b) {
     for (auto &child: children) {
         auto left = static_cast<int>(YGNodeLayoutGetLeft(child->node));
         auto top = static_cast<int>(YGNodeLayoutGetTop(child->node));
+        auto right = static_cast<int>(YGNodeLayoutGetRight(child->node));
+        auto bottom = static_cast<int>(YGNodeLayoutGetBottom(child->node));
         auto width = static_cast<int>(YGNodeLayoutGetWidth(child->node));
         auto height = static_cast<int>(YGNodeLayoutGetHeight(child->node));
         //todo 需要考虑padding
-        ALOGD("layoutVertical %s %d %d %d %d", child->name(), left, top, width, height)
-        child->layout(left, top, left + width, top + height);
+        ALOGD("FlexboxLayout: layout %s %d %d %d %d %d %d", child->name(), left, top, right, bottom,
+              width, height)
+        child->layout(left + l, top + t, left + l + width, top + t + height);
     }
 }
 
 void FlexboxLayout::layoutHorizontal(int l, int t, int r, int b) {
+    auto tempLeft = l;
     for (auto &child: children) {
         auto left = static_cast<int>(YGNodeLayoutGetLeft(child->node));
         auto top = static_cast<int>(YGNodeLayoutGetTop(child->node));
@@ -54,10 +57,10 @@ void FlexboxLayout::layoutHorizontal(int l, int t, int r, int b) {
         auto bottom = static_cast<int>(YGNodeLayoutGetBottom(child->node));
         auto width = static_cast<int>(YGNodeLayoutGetWidth(child->node));
         auto height = static_cast<int>(YGNodeLayoutGetHeight(child->node));
-        //todo 处理ViewGroup嵌套
-        ALOGD("layoutHorizontal %s %d %d %d %d %d %d ", child->name(), left, top, right, bottom,
+        ALOGD("FlexboxLayout: layout %s %d %d %d %d %d %d ", child->name(), left, top, right,
+              bottom,
               width, height)
         //todo 需要考虑padding
-        child->layout(left, top, left + width, top + height);
+        child->layout(left + l, top + t, left + l + width, top + t + height);
     }
 }

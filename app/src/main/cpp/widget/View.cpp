@@ -32,14 +32,15 @@ The actual measurement work of a view is performed in onMeasure(int, int), calle
  */
 void View::measure(int widthMeasureSpec, int heightMeasureSpec) {
     //todo 目前每次都是forceLayout Android子类只能override onMeasure方法，精简处理
-    setMeasuredDimension(getDefaultSize(minWidth, widthMeasureSpec),
-                         getDefaultSize(minHeight, heightMeasureSpec));
+    auto measuredWidth = getDefaultSize(minWidth, widthMeasureSpec);
+    auto measuredHeight = getDefaultSize(minHeight, heightMeasureSpec);
+    setMeasuredDimension(measuredWidth, measuredHeight);
+    ALOGD("setMeasuredDimension %s %d %d", name(), measuredWidth, measuredHeight)
 }
 
 void View::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-    ALOGD("View::setMeasuredDimension %d %d", width, height)
     YGNodeStyleSetWidth(node, _measuredWidth);
     YGNodeStyleSetHeight(node, _measuredHeight);
 }
@@ -203,5 +204,6 @@ void View::setHeightAuto() {
 }
 
 void View::setConfig(YGConfigRef config) {
+    this->config = config;
     node = YGNodeNewWithConfig(config);
 }

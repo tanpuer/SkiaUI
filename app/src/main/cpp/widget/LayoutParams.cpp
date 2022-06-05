@@ -22,8 +22,8 @@ LayoutParams *LayoutParams::makeExactlyLayoutParams(int w, int h) {
     auto layoutParams = new LayoutParams();
     layoutParams->_width = w;
     layoutParams->_height = h;
-    layoutParams->_widthMode = MeasureSpec::makeMeasureSpec(w, EXACTLY);
-    layoutParams->_heightMode = MeasureSpec::makeMeasureSpec(h, EXACTLY);
+    layoutParams->_widthMode = EXACTLY;
+    layoutParams->_heightMode = EXACTLY;
     return layoutParams;
 }
 
@@ -31,8 +31,8 @@ LayoutParams *LayoutParams::makeExactlyWidth(int w) {
     auto layoutParams = new LayoutParams();
     layoutParams->_width = w;
     layoutParams->_height = 0;
-    layoutParams->_widthMode = MeasureSpec::makeMeasureSpec(w, EXACTLY);
-    layoutParams->_heightMode = MeasureSpec::makeMeasureSpec(0, UNSPECIFIED);
+    layoutParams->_widthMode = EXACTLY;
+    layoutParams->_heightMode = UNSPECIFIED;
     return layoutParams;
 }
 
@@ -40,8 +40,8 @@ LayoutParams *LayoutParams::makeExactlyHeight(int h) {
     auto layoutParams = new LayoutParams();
     layoutParams->_width = 0;
     layoutParams->_height = h;
-    layoutParams->_widthMode = MeasureSpec::makeMeasureSpec(0, UNSPECIFIED);
-    layoutParams->_heightMode = MeasureSpec::makeMeasureSpec(h, EXACTLY);
+    layoutParams->_widthMode = UNSPECIFIED;
+    layoutParams->_heightMode = EXACTLY;
     return layoutParams;
 }
 

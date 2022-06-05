@@ -16,7 +16,7 @@ public:
 
     ~PercentViewTest();
 
-    void doDrawTest(int drawCount, int *canvas, int width, int height) override;
+    void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) override;
 
 };
 

@@ -57,6 +57,8 @@ public:
 
     YGNodeRef node;
 
+    YGConfigRef config;
+
 protected:
 
     int width, height;

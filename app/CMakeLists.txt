@@ -21,6 +21,7 @@ include_directories(
         src/main/cpp/widget
         src/main/cpp/test
         src/main/cpp/scroll
+        src/main/cpp/touch
 )
 
 link_directories(
@@ -42,6 +43,7 @@ aux_source_directory(src/main/cpp/yoga/internal srcs)
 aux_source_directory(src/main/cpp/widget srcs)
 aux_source_directory(src/main/cpp/test srcs)
 aux_source_directory(src/main/cpp/scroll srcs)
+aux_source_directory(src/main/cpp/touch srcs)
 
 add_library(native-lib SHARED ${srcs})
 

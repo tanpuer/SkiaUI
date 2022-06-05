@@ -12,6 +12,6 @@ PercentViewTest::~PercentViewTest() {
 
 }
 
-void PercentViewTest::doDrawTest(int drawCount, int *canvas, int width, int height) {
+void PercentViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
 
 }
