@@ -84,7 +84,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
                 view->setConfig(_root2->config);
                 view->setBackgroundColor(SK_ColorYELLOW);
                 view->setStyle(SkPaint::kFill_Style);
-                view->setCornerRadius(30);
+                view->setCornerRadius(10);
                 auto viewLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 200);
                 viewLayoutParams->setMargin({0, 0, 0, 0});
                 _root2->addView(view, viewLayoutParams);

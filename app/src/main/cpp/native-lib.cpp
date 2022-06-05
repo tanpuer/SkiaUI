@@ -45,11 +45,22 @@ native_SurfaceDoFrame(JNIEnv *env, jobject instance, jlong nativePtr) {
     skiaContext->doFrame();
 }
 
+extern "C" JNIEXPORT void JNICALL
+native_TouchEvent(JNIEnv *env, jobject instance, jlong nativePtr, jint action, jfloat x, jfloat y) {
+    auto skiaContext = reinterpret_cast<SkiaViewContext *>(nativePtr);
+    if (skiaContext == nullptr) {
+        ALOGE("native_TouchEvent reinterpret_cast error")
+        return;
+    }
+    ALOGD("native_TouchEvent %d %f %f", action, x, y)
+}
+
 static JNINativeMethod g_RenderMethods[] = {
         {"nativeSurfaceCreated",   "(Landroid/view/Surface;)J", (void *) native_SurfaceCreated},
         {"nativeSurfaceChanged",   "(JII)V",                    (void *) native_SurfaceChanged},
         {"nativeSurfaceDestroyed", "(J)V",                      (void *) native_SurfaceDestroyed},
-        {"nativeSurfaceDoFrame",   "(J)V",                      (void *) native_SurfaceDoFrame}
+        {"nativeSurfaceDoFrame",   "(J)V",                      (void *) native_SurfaceDoFrame},
+        {"nativeTouchEvent",       "(JIFF)Z",                   (void *) native_TouchEvent}
 };
 
 static int RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *nativeMethods,
