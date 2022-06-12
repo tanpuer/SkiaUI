@@ -18,8 +18,14 @@ public:
         ACTION_CANCEL = 3
     };
 
-public:
+    TouchEvent(MotionEvent action, float x, float y): action(action), x(x), y(y) {
 
+    }
+
+    ~TouchEvent() {}
+
+public:
+    MotionEvent action;
     float x, y;
 
 };

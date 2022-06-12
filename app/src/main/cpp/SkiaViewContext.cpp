@@ -27,3 +27,9 @@ void SkiaViewContext::doFrame() {
         glContext->sendMessage(glContext->kMsgDoFrame);
     }
 }
+
+void SkiaViewContext::dispatchTouchEvent(TouchEvent *touchEvent) {
+    if (glContext != nullptr) {
+        glContext->sendMessage(glContext->kMsgTouchEvent, touchEvent);
+    }
+}

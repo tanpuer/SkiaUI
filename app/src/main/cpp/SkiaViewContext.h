@@ -8,6 +8,7 @@
 #include <memory>
 #include <gl/HYEGLContext.h>
 #include "android/native_window_jni.h"
+#include "TouchEvent.h"
 
 class SkiaViewContext {
 
@@ -20,6 +21,8 @@ public:
     void sizeChanged(int width, int height);
 
     void doFrame();
+
+    void dispatchTouchEvent(TouchEvent *touchEvent);
 
 private:
 

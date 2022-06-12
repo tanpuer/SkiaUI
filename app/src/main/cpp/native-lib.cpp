@@ -52,6 +52,8 @@ native_TouchEvent(JNIEnv *env, jobject instance, jlong nativePtr, jint action, j
         ALOGE("native_TouchEvent reinterpret_cast error")
         return;
     }
+    auto touchEvent = new TouchEvent(static_cast<TouchEvent::MotionEvent>(action), x, y);
+    skiaContext->dispatchTouchEvent(touchEvent);
     ALOGD("native_TouchEvent %d %f %f", action, x, y)
 }
 

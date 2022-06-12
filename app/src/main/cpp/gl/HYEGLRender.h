@@ -10,6 +10,7 @@
 #include "HYEGLCore.h"
 #include "HYAssetsHolder.h"
 #include "SkiaFilter.h"
+#include "TouchEvent.h"
 
 class HYEGLRender {
 
@@ -28,6 +29,8 @@ public:
     void OnSurfaceDestroyed();
 
     void OnDoFrame(long frameTimeNanos);
+
+    void DispatchTouchEvent(TouchEvent *touchEvent);
 
 private:
 

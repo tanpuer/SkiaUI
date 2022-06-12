@@ -39,6 +39,13 @@ void HYEGLContext::handleMessage(Looper::LooperMessage *msg) {
             render->OnSurfaceDestroyed();
             break;
         }
+        case kMsgTouchEvent: {
+            render->DispatchTouchEvent(static_cast<TouchEvent *>(msg->obj));
+            break;
+        }
+        default: {
+            ALOGE("Unknown msg type, pls check %d", msg->what)
+        }
     }
 }
 

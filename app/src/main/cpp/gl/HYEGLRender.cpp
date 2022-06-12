@@ -58,3 +58,10 @@ void HYEGLRender::OnDoFrame(long frameTimeNanos) {
 void HYEGLRender::initFilter() {
     mFilter = std::make_unique<SkiaFilter>();
 }
+
+void HYEGLRender::DispatchTouchEvent(TouchEvent *touchEvent) {
+    if (mFilter != nullptr) {
+
+    }
+    delete touchEvent;
+}
