@@ -5,8 +5,6 @@
 #ifndef SKIAUI_TOUCHEVENT_H
 #define SKIAUI_TOUCHEVENT_H
 
-#endif //SKIAUI_TOUCHEVENT_H
-
 class TouchEvent {
 
 public:
@@ -29,3 +27,5 @@ public:
     float x, y;
 
 };
+
+#endif //SKIAUI_TOUCHEVENT_H
