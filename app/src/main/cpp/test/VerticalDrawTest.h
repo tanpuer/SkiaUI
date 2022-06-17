@@ -18,6 +18,8 @@ public:
 
     virtual void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) override;
 
+    View *getRootView() override;
+
 };
 
 

@@ -43,6 +43,7 @@ private:
     void initFilter();
 
     std::unique_ptr<SkiaFilter> mFilter;
+
 };
 
 

@@ -91,6 +91,16 @@ public:
 
     float maxChildWidth, maxChildHeight;
 
+#pragma mark TouchEvent
+
+    virtual bool dispatchTouchEvent(TouchEvent *touchEvent);
+
+    virtual bool onInterceptTouchEvent(TouchEvent *touchEvent) override;
+
+    virtual bool onTouchEvent(TouchEvent *touchEvent) override;
+
+    void requestDisallowInterceptTouchEvent(bool disallowIntercept) override;
+
 };
 
 

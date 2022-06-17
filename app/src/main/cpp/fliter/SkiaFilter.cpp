@@ -12,6 +12,7 @@
 
 SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
+    testDraw = new HorizontalDrawTest();
 }
 
 SkiaFilter::~SkiaFilter() {
@@ -21,6 +22,7 @@ SkiaFilter::~SkiaFilter() {
     if (skiaContext != nullptr) {
         skiaContext->unref();
     }
+    delete testDraw;
 }
 
 void SkiaFilter::setWindowSize(int width, int height) {
@@ -58,10 +60,17 @@ void SkiaFilter::doFrame() {
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 
-    //todo test code
-    HorizontalDrawTest testDraw;
-//    VerticalDrawTest testDraw;
-    testDraw.doDrawTest(drawCount, skCanvas, width, height);
+    //todo test code,目前每次都渲染，后续要改成脏区渲染
+    testDraw->doDrawTest(drawCount, skCanvas, width, height);
 
     skCanvas->flush();
+}
+
+void SkiaFilter::dispatchTouchEvent(TouchEvent *touchEvent) {
+    mTouchEvent = std::unique_ptr<TouchEvent>(touchEvent);
+    auto root = testDraw->getRootView();
+    if (root == nullptr) {
+        return;
+    }
+    dynamic_cast<ViewGroup *>(root)->dispatchTouchEvent(touchEvent);
 }

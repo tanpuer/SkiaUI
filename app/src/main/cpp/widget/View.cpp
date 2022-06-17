@@ -13,6 +13,8 @@ View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadi
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
+    touchEventDispatcher = std::make_unique<TouchEventDispatcher>();
+    touchEventDispatcher->setWeakView(this);
 }
 
 View::~View() {
@@ -206,4 +208,21 @@ void View::setHeightAuto() {
 void View::setConfig(YGConfigRef config) {
     this->config = config;
     node = YGNodeNewWithConfig(config);
+}
+
+bool View::onInterceptTouchEvent(TouchEvent *touchEvent) {
+    return touchEventDispatcher->onInterceptTouchEvent(touchEvent);
+}
+
+bool View::onTouchEvent(TouchEvent *touchEvent) {
+    return touchEventDispatcher->onTouchEvent(touchEvent);
+}
+
+void View::requestDisallowInterceptTouchEvent(bool disallowIntercept) {
+    touchEventDispatcher->requestDisallowInterceptTouchEvent(disallowIntercept);
+}
+
+void View::setCustomTouchEventDispatcher(TouchEventDispatcher *touchEventDispatcher) {
+    ALOGD("setCustomTouchEventDispatcher")
+    this->touchEventDispatcher = std::unique_ptr<TouchEventDispatcher>(touchEventDispatcher);
 }

@@ -61,7 +61,9 @@ void HYEGLRender::initFilter() {
 
 void HYEGLRender::DispatchTouchEvent(TouchEvent *touchEvent) {
     if (mFilter != nullptr) {
-
+        mFilter->dispatchTouchEvent(touchEvent);
+    } else {
+        //todo 以后拆成render和layout线程的时候，重新处理析构
+        delete touchEvent;
     }
-    delete touchEvent;
 }

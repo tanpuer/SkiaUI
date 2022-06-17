@@ -5,6 +5,8 @@
 #ifndef SKIAUI_TOUCHEVENT_H
 #define SKIAUI_TOUCHEVENT_H
 
+#include "native_log.h"
+
 class TouchEvent {
 
 public:
@@ -20,7 +22,9 @@ public:
 
     }
 
-    ~TouchEvent() {}
+    ~TouchEvent() {
+        ALOGD("TouchEvent %s", "~TouchEvent")
+    }
 
 public:
     MotionEvent action;

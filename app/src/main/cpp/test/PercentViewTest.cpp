@@ -15,3 +15,7 @@ PercentViewTest::~PercentViewTest() {
 void PercentViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
 
 }
+
+View *PercentViewTest::getRootView() {
+    return nullptr;
+}

@@ -6,6 +6,7 @@
 #define SKIAUI_SKIAFILTER_H
 
 
+#include <ITestDraw.h>
 #include "IFilter.h"
 #include "gpu/gl/GrGLInterface.h"
 #include "gpu/GrDirectContext.h"
@@ -24,6 +25,8 @@ public:
 
     virtual void doFrame() override;
 
+    void dispatchTouchEvent(TouchEvent *touchEvent) override;
+
 private:
 
     sk_sp<SkSurface> skiaSurface;
@@ -31,6 +34,10 @@ private:
     sk_sp<GrDirectContext> skiaContext;
 
     SkCanvas *skCanvas;
+
+    std::unique_ptr<TouchEvent> mTouchEvent;
+
+    ITestDraw *testDraw;
 };
 
 

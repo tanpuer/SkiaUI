@@ -23,6 +23,8 @@ public:
 
     virtual void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) = 0;
 
+    virtual View *getRootView() = 0;
+
 };
 
 

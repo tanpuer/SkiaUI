@@ -7,12 +7,14 @@
 
 #include <cstdint>
 #include <yoga/Yoga.h>
+#include <memory>
 #include "array"
 #include "memory"
 #include "core/SkPaint.h"
 #include "core/SkCanvas.h"
 #include "core/SkRRect.h"
 #include "LayoutParams.h"
+#include "TouchEventDispatcher.h"
 
 static int64_t VIEW_ID = 0;
 
@@ -118,6 +120,22 @@ public:
     virtual void setWidthAuto();
 
     virtual void setHeightAuto();
+
+#pragma mark TouchEvent
+
+public:
+
+    virtual bool onInterceptTouchEvent(TouchEvent *touchEvent);
+
+    virtual bool onTouchEvent(TouchEvent *touchEvent);
+
+    virtual void requestDisallowInterceptTouchEvent(bool disallowIntercept);
+
+    virtual void setCustomTouchEventDispatcher(TouchEventDispatcher *touchEventDispatcher);
+
+protected:
+
+    std::unique_ptr<TouchEventDispatcher> touchEventDispatcher;
 
 };
 

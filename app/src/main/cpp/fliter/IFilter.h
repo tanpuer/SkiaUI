@@ -6,6 +6,8 @@
 #define SKIAUI_IFILTER_H
 
 
+#include <TouchEvent.h>
+
 class IFilter {
 
 public:
@@ -22,6 +24,8 @@ public:
             drawCount = 0;
         }
     };
+
+    virtual void dispatchTouchEvent(TouchEvent *touchEvent) {}
 
 protected:
 

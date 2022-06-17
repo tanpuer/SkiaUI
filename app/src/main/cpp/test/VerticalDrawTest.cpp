@@ -61,3 +61,7 @@ void VerticalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, in
     _root.layout(0, 0, width, height);
     _root.draw(canvas);
 }
+
+View *VerticalDrawTest::getRootView() {
+    return nullptr;
+}

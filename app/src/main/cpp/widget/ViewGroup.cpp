@@ -69,7 +69,8 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
                           YGDirectionLTR);
     if (isViewGroup()) {
         if (strcmp(this->name(), "FlexboxLayout") == 0) {
-            ALOGD("777777 %d %d", layoutParams->_widthMode == EXACTLY, layoutParams->_heightMode == EXACTLY)
+            ALOGD("777777 %d %d", layoutParams->_widthMode == EXACTLY,
+                  layoutParams->_heightMode == EXACTLY)
         }
         if (layoutParams->_widthMode == EXACTLY) {
             YGNodeStyleSetWidth(node, static_cast<float>(layoutParams->_width));
@@ -266,3 +267,20 @@ const char *ViewGroup::name() {
 YGConfigRef ViewGroup::getConfig() {
     return config;
 }
+
+bool ViewGroup::dispatchTouchEvent(TouchEvent *touchEvent) {
+    return touchEventDispatcher->dispatchTouchEvent(touchEvent);
+}
+
+bool ViewGroup::onInterceptTouchEvent(TouchEvent *touchEvent) {
+    return touchEventDispatcher->onInterceptTouchEvent(touchEvent);
+}
+
+bool ViewGroup::onTouchEvent(TouchEvent *touchEvent) {
+    return touchEventDispatcher->onTouchEvent(touchEvent);
+}
+
+void ViewGroup::requestDisallowInterceptTouchEvent(bool disallowIntercept) {
+    touchEventDispatcher->requestDisallowInterceptTouchEvent(disallowIntercept);
+}
+

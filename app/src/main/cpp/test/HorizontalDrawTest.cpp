@@ -125,3 +125,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
 
     YGConfigFree(config);
 }
+
+View *HorizontalDrawTest::getRootView() {
+    return nullptr;
+}
