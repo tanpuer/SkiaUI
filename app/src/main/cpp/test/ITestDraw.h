@@ -19,11 +19,19 @@ public:
 
     ITestDraw() {};
 
-    virtual ~ITestDraw() {};
+    virtual ~ITestDraw() {
+        delete root;
+    };
 
     virtual void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) = 0;
 
-    virtual View *getRootView() = 0;
+    virtual View *getRootView() {
+        return root;
+    };
+
+protected:
+
+    ViewGroup *root;
 
 };
 

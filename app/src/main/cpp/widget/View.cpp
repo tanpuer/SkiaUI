@@ -13,8 +13,7 @@ View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadi
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
-    touchEventDispatcher = std::make_unique<TouchEventDispatcher>();
-    touchEventDispatcher->setWeakView(this);
+    touchEventDispatcher = std::make_unique<TouchEventDispatcher>(this);
 }
 
 View::~View() {
@@ -225,4 +224,5 @@ void View::requestDisallowInterceptTouchEvent(bool disallowIntercept) {
 void View::setCustomTouchEventDispatcher(TouchEventDispatcher *touchEventDispatcher) {
     ALOGD("setCustomTouchEventDispatcher")
     this->touchEventDispatcher = std::unique_ptr<TouchEventDispatcher>(touchEventDispatcher);
+    this->touchEventDispatcher->setWeakView(this);
 }

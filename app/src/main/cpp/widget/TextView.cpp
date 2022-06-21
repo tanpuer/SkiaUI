@@ -15,6 +15,7 @@ TextView::TextView() : View() {
 
 TextView::~TextView() {
     delete textPaint;
+    ALOGD("~View TextView")
 }
 
 const char *TextView::name() {

@@ -9,7 +9,7 @@ FlexboxLayout::FlexboxLayout() {
 }
 
 FlexboxLayout::~FlexboxLayout() {
-
+    ALOGD("~View FlexboxLayout")
 }
 
 const char *FlexboxLayout::name() {

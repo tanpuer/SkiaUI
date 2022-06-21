@@ -5,15 +5,18 @@
 #ifndef SKIAUI_TOUCHEVENTDISPATCHER_H
 #define SKIAUI_TOUCHEVENTDISPATCHER_H
 
-#include <View.h>
 #include "TouchEvent.h"
 #include "memory"
+
+class View;
+
+class ViewGroup;
 
 class TouchEventDispatcher {
 
 public:
 
-    TouchEventDispatcher();
+    TouchEventDispatcher(View *view);
 
     ~TouchEventDispatcher();
 
@@ -25,11 +28,23 @@ public:
 
     virtual void requestDisallowInterceptTouchEvent(bool disallowIntercept);
 
-    virtual void setWeakView(View* view);
+    virtual void setWeakView(View *view);
 
 private:
 
-    std::weak_ptr<View> weakRefView;
+    void findTargetView();
+
+    void dispatchToTargetView(TouchEvent *touchEvent);
+
+    void clearTargetView();
+
+    View *findTargetViewTraversal(ViewGroup *viewGroup);
+
+private:
+
+    View *view;
+
+    std::weak_ptr<View> weakTargetView;
 
 };
 

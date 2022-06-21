@@ -5,7 +5,7 @@
 #include "HorizontalDrawTest.h"
 
 HorizontalDrawTest::HorizontalDrawTest() {
-
+    root = new FlexboxLayout();
 }
 
 HorizontalDrawTest::~HorizontalDrawTest() {
@@ -13,18 +13,18 @@ HorizontalDrawTest::~HorizontalDrawTest() {
 }
 
 void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
-    FlexboxLayout _root;
+    root->removeAllViews();
     auto config = YGConfigNew();
-    _root.setConfig(config);
-    _root.setLayoutParams(LayoutParams::makeExactlyLayoutParams(width, height));
-    _root.setFlexWrap(YGWrapWrap);
-    _root.setFlexDirection(YGFlexDirectionColumn);
-    _root.setJustifyContent(YGJustifyCenter);
-    _root.setAlignItems(YGAlignCenter);
-    _root.setAlignContent(YGAlignCenter);
-    _root.setStrokeWidth(10);
-    _root.setStyle(SkPaint::kStroke_Style);
-    _root.setBackgroundColor(SK_ColorBLUE);
+    root->setConfig(config);
+    root->setLayoutParams(LayoutParams::makeExactlyLayoutParams(width, height));
+    root->setFlexWrap(YGWrapWrap);
+    root->setFlexDirection(YGFlexDirectionColumn);
+    root->setJustifyContent(YGJustifyCenter);
+    root->setAlignItems(YGAlignCenter);
+    root->setAlignContent(YGAlignCenter);
+    root->setStrokeWidth(10);
+    root->setStyle(SkPaint::kStroke_Style);
+    root->setBackgroundColor(SK_ColorBLUE);
     {
         auto _root1 = new FlexboxLayout();
         _root1->setConfig(config);
@@ -66,7 +66,8 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
             imageView->setBackgroundColor(SK_ColorRED);
             imageView->setStrokeWidth(10);
             _root1->addView(imageView, LayoutParams::makeWrapContent(true, true));
-            _root.addView(_root1, LayoutParams::makeExactlyWidth(width));
+
+            root->addView(_root1, LayoutParams::makeExactlyWidth(width));
         }
         {
             auto _root2 = new FlexboxLayout();
@@ -111,7 +112,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
                 _root2->addView(imageView, LayoutParams::makeWrapContent(true, true));
                 auto root2LayoutParams = LayoutParams::makeWrapContent();
                 root2LayoutParams->setMargin({0, 400, 0, 0});
-                _root.addView(_root2, root2LayoutParams);
+                root->addView(_root2, root2LayoutParams);
             }
         }
 
@@ -119,13 +120,9 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
 
     auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
     auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
-    _root.measure(rootWidthSpec, rootHeightSpec);
-    _root.layout(0, 0, width, height);
-    _root.draw(canvas);
+    root->measure(rootWidthSpec, rootHeightSpec);
+    root->layout(0, 0, width, height);
+    root->draw(canvas);
 
     YGConfigFree(config);
-}
-
-View *HorizontalDrawTest::getRootView() {
-    return nullptr;
 }

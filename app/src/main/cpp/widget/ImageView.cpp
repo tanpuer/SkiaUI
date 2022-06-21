@@ -12,7 +12,7 @@ ImageView::ImageView() : View() {
 }
 
 ImageView::~ImageView() {
-
+    ALOGD("~View ImageView")
 }
 
 void ImageView::setSource(const char *path) {

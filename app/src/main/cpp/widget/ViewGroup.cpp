@@ -14,6 +14,7 @@ ViewGroup::~ViewGroup() {
     if (node == nullptr) {
         return;
     }
+    YGNodeRemoveAllChildren(node);
     for (auto view: children) {
         delete view;
     }
@@ -26,6 +27,10 @@ bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
     }
     auto childCount = YGNodeGetChildCount(node);
     ALOGD("addChildView %s at index %d", view->name(), childCount);
+//    if (view->node->getOwner() != nullptr) {
+//        ALOGE("addChildView error node->getOwner() != null, pls check")
+//        view->node->setOwner(nullptr);
+//    }
     YGNodeInsertChild(node, view->node, childCount);
     children.emplace_back(view);
     view->setLayoutParams(layoutParams);
@@ -53,7 +58,6 @@ void ViewGroup::removeAllViews() {
         ALOGE("remove null view, pls check view!")
         return;
     }
-    YGNodeRemoveAllChildren(node);
     for (auto view: children) {
         delete view;
     }
