@@ -35,6 +35,11 @@ void TextView::setTextColor(SkColor color) {
     textPaint->setColor(color);
 }
 
+void TextView::setAlpha(float alpha) {
+    View::setAlpha(alpha);
+    textPaint->setAlphaf(alpha);
+}
+
 void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     if (text.isEmpty()) {
         setMeasuredDimension(0, 0);

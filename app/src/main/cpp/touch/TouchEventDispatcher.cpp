@@ -24,17 +24,15 @@ bool TouchEventDispatcher::dispatchTouchEvent(TouchEvent *touchEvent) {
     switch (touchEvent->action) {
         case TouchEvent::ACTION_DOWN: {
             findTargetView(touchEvent);
+            dispatchToTargetView(touchEvent);
             break;
         }
         case TouchEvent::ACTION_MOVE: {
             dispatchToTargetView(touchEvent);
             break;
         }
-        case TouchEvent::ACTION_UP: {
-            clearTargetView();
-            break;
-        }
-        case TouchEvent::ACTION_CANCEL : {
+        case TouchEvent::ACTION_UP | TouchEvent::ACTION_CANCEL: {
+            dispatchToTargetView(touchEvent);
             clearTargetView();
             break;
         }
@@ -84,14 +82,22 @@ void TouchEventDispatcher::findTargetView(TouchEvent *touchEvent) {
         return;
     }
     weakTargetView = findTargetViewTraversal(viewGroup, touchEvent, 0.0, 0.0);
+    if (weakTargetView != nullptr) {
+        weakTargetView->setAlpha(0.3f);
+    }
 }
 
 void TouchEventDispatcher::dispatchToTargetView(TouchEvent *touchEvent) {
-
+    if (weakTargetView != nullptr) {
+        weakTargetView->onTouchEvent(touchEvent);
+    }
 }
 
 void TouchEventDispatcher::clearTargetView() {
-    weakTargetView = nullptr;
+    if (weakTargetView != nullptr) {
+        weakTargetView->setAlpha(1.0f);
+        weakTargetView = nullptr;
+    }
 }
 
 View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent *touchEvent,
@@ -118,5 +124,5 @@ View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchE
         }
     }
     ALOGD("findTargetViewTraversal null")
-    return nullptr;
+    return viewGroup;
 }

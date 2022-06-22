@@ -15,6 +15,10 @@ ImageView::~ImageView() {
 //    ALOGD("~View ImageView")
 }
 
+void ImageView::setAlpha(float alpha) {
+    View::setAlpha(alpha);
+}
+
 void ImageView::setSource(const char *path) {
     auto data = SkData::MakeFromFileName(path);
     skImage = SkImage::MakeFromEncoded(data);
@@ -34,7 +38,8 @@ void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
 }
 
 void ImageView::draw(SkCanvas *canvas) {
-    canvas->drawImage(skImage, skRect.left(), skRect.top(), SkSamplingOptions(), nullptr);
+    //todo
+    canvas->drawImage(skImage, skRect.left(), skRect.top(), SkSamplingOptions(), paint);
     View::draw(canvas);
 }
 

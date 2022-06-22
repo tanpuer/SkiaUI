@@ -143,6 +143,9 @@ protected:
 
     std::unique_ptr<TouchEventDispatcher> touchEventDispatcher;
 
+    float translateX;
+    float translateY;
+
 };
 
 #endif //SKIAUI_VIEW_H

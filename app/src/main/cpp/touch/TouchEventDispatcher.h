@@ -45,6 +45,7 @@ private:
 
     View *view;
 
+    //todo 改用weak_ptr
     View *weakTargetView;
 
 };

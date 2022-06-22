@@ -36,6 +36,8 @@ public:
 
     SkPaint *textPaint;
 
+    virtual void setAlpha(float alpha) override;
+
 private:
 
     SkString text;

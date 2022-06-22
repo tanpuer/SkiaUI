@@ -24,6 +24,8 @@ public:
 
     virtual const char * name() override;
 
+    virtual void setAlpha(float alpha) override;
+
 #pragma mark ImageView api
 
     void setSource(const char *path);
