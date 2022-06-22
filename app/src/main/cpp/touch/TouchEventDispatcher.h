@@ -32,19 +32,20 @@ public:
 
 private:
 
-    void findTargetView();
+    void findTargetView(TouchEvent *touchEvent);
 
     void dispatchToTargetView(TouchEvent *touchEvent);
 
     void clearTargetView();
 
-    View *findTargetViewTraversal(ViewGroup *viewGroup);
+    View *findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent *touchEvent, float tempLeft,
+                                  float tempTop);
 
 private:
 
     View *view;
 
-    std::weak_ptr<View> weakTargetView;
+    View *weakTargetView;
 
 };
 

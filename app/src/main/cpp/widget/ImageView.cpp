@@ -12,7 +12,7 @@ ImageView::ImageView() : View() {
 }
 
 ImageView::~ImageView() {
-    ALOGD("~View ImageView")
+//    ALOGD("~View ImageView")
 }
 
 void ImageView::setSource(const char *path) {
@@ -29,7 +29,7 @@ void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         YGNodeStyleSetHeight(node, 0);
         return;
     }
-    ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
+//    ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
     setMeasuredDimension(skImage->width(), skImage->height());
 }
 
@@ -39,7 +39,7 @@ void ImageView::draw(SkCanvas *canvas) {
 }
 
 void ImageView::layout(int l, int t, int r, int b) {
-    ALOGD("imageView layout: %d %d %d %d", l, t, r, b)
+//    ALOGD("imageView layout: %d %d %d %d", l, t, r, b)
     View::layout(l, t, r, b);
 }
 

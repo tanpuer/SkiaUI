@@ -9,7 +9,8 @@
 
 View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadius(),
                skRectWithBorder(SkIRect::MakeEmpty()),
-               minWidth(0), minHeight(0) {
+               minWidth(0), minHeight(0),
+               parentId(0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -36,7 +37,7 @@ void View::measure(int widthMeasureSpec, int heightMeasureSpec) {
     auto measuredWidth = getDefaultSize(minWidth, widthMeasureSpec);
     auto measuredHeight = getDefaultSize(minHeight, heightMeasureSpec);
     setMeasuredDimension(measuredWidth, measuredHeight);
-    ALOGD("setMeasuredDimension %s %d %d", name(), measuredWidth, measuredHeight)
+//    ALOGD("setMeasuredDimension %s %d %d", name(), measuredWidth, measuredHeight)
 }
 
 void View::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
@@ -70,7 +71,7 @@ void View::layout(int l, int t, int r, int b) {
     skRect.setLTRB(l, t, r, b);
     width = r - l;
     height = b - t;
-    ALOGD("%s layout %d %d", name(), width, height)
+//    ALOGD("%s layout %d %d", name(), width, height)
 }
 
 void View::draw(SkCanvas *canvas) {
@@ -141,6 +142,11 @@ void View::setStrokeWidth(SkScalar _width) {
         return;
     }
     paint->setStrokeWidth(_width);
+}
+
+void View::setAlpha(float alpha) {
+    SkASSERT(paint);
+    paint->setAlphaf(alpha);
 }
 
 #pragma LayoutParams相关

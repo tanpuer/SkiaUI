@@ -14,7 +14,6 @@ ViewGroup::~ViewGroup() {
     if (node == nullptr) {
         return;
     }
-    YGNodeRemoveAllChildren(node);
     for (auto view: children) {
         delete view;
     }
@@ -26,12 +25,13 @@ bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
         return false;
     }
     auto childCount = YGNodeGetChildCount(node);
-    ALOGD("addChildView %s at index %d", view->name(), childCount);
+//    ALOGD("%s%lld addChildView %s%lld at index %d", name(), viewId, view->name(), view->viewId, childCount)
 //    if (view->node->getOwner() != nullptr) {
-//        ALOGE("addChildView error node->getOwner() != null, pls check")
-//        view->node->setOwner(nullptr);
+//        ALOGE("addChildView error node->getOwner() != null %s %lld %lld", view->parentName, view->parentId, viewId)
 //    }
     YGNodeInsertChild(node, view->node, childCount);
+    view->parentName = name();
+    view->parentId = viewId;
     children.emplace_back(view);
     view->setLayoutParams(layoutParams);
     return true;
@@ -58,9 +58,7 @@ void ViewGroup::removeAllViews() {
         ALOGE("remove null view, pls check view!")
         return;
     }
-    for (auto view: children) {
-        delete view;
-    }
+    YGNodeRemoveAllChildren(node);
 }
 
 void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -72,10 +70,6 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
                           MeasureSpec::getSize(heightMeasureSpec),
                           YGDirectionLTR);
     if (isViewGroup()) {
-        if (strcmp(this->name(), "FlexboxLayout") == 0) {
-            ALOGD("777777 %d %d", layoutParams->_widthMode == EXACTLY,
-                  layoutParams->_heightMode == EXACTLY)
-        }
         if (layoutParams->_widthMode == EXACTLY) {
             YGNodeStyleSetWidth(node, static_cast<float>(layoutParams->_width));
         }
@@ -88,7 +82,7 @@ void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
+//    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
     YGNodeStyleSetWidth(node, static_cast<float>(_measuredWidth));
     YGNodeStyleSetHeight(node, static_cast<float>(_measuredHeight));
 }
@@ -102,8 +96,8 @@ void ViewGroup::measureChild(View *child, int parentWidthMeasureSpec,
     auto childHeightMeasureSpec = getChildMeasureSpec(child, parentHeightMeasureSpec,
                                                       lp->_paddingTop + lp->_paddingBottom,
                                                       child->layoutParams->_height);
-    ALOGD("measureChild %s %d %d", child->name(), MeasureSpec::getSize(childWidthMeasureSpec),
-          MeasureSpec::getSize(childHeightMeasureSpec));
+//    ALOGD("measureChild %s %d %d", child->name(), MeasureSpec::getSize(childWidthMeasureSpec),
+//          MeasureSpec::getSize(childHeightMeasureSpec));
     child->measure(childWidthMeasureSpec, childHeightMeasureSpec);
 }
 
@@ -118,7 +112,7 @@ int ViewGroup::getChildMeasureSpec(View *child, int parentMeasureSpec, int paddi
     switch (specMode) {
         // Parent has imposed an exact size on us
         case EXACTLY: {
-            ALOGD("getChildMeasureSpec exactly %s %d", child->name(), childDimension)
+//            ALOGD("getChildMeasureSpec exactly %s %d", child->name(), childDimension)
             if (childDimension >= 0) {
                 resultSize = childDimension;
                 resultMode = EXACTLY;

@@ -13,7 +13,11 @@ HorizontalDrawTest::~HorizontalDrawTest() {
 }
 
 void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
-    root->removeAllViews();
+    if (root != nullptr) {
+//        root->removeAllViews();
+        delete root;
+    }
+    root = new FlexboxLayout();
     auto config = YGConfigNew();
     root->setConfig(config);
     root->setLayoutParams(LayoutParams::makeExactlyLayoutParams(width, height));

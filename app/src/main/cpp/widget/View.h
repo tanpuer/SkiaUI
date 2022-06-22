@@ -32,6 +32,10 @@ public:
 
     int64_t viewId;
 
+    const char *parentName;
+
+    int64_t parentId;
+
 #pragma mark yoga 设置相关
 
     /**
@@ -99,6 +103,8 @@ public:
     virtual void setStrokeWidth(SkScalar _width);
 
     virtual void setCornerRadius(int radius);
+
+    virtual void setAlpha(float alpha);
 
     SkPaint *paint;
 

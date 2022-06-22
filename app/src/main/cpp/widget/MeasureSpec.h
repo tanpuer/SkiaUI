@@ -72,7 +72,7 @@ public:
                 break;
             }
         }
-        ALOGD("MeasureSpec size: %d, mode: %s", size, modeString.c_str())
+//        ALOGD("MeasureSpec size: %d, mode: %s", size, modeString.c_str())
     }
 
 };

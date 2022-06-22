@@ -13,6 +13,7 @@ TouchEventDispatcher::TouchEventDispatcher(View *view) {
 TouchEventDispatcher::~TouchEventDispatcher() = default;
 
 bool TouchEventDispatcher::dispatchTouchEvent(TouchEvent *touchEvent) {
+    ALOGD("dispatchTouchEvent type is %d", touchEvent->action)
     if (view == nullptr) {
         ALOGE("dispatchTouchEvent weakRefView is null, pls check")
         return false;
@@ -22,17 +23,19 @@ bool TouchEventDispatcher::dispatchTouchEvent(TouchEvent *touchEvent) {
     }
     switch (touchEvent->action) {
         case TouchEvent::ACTION_DOWN: {
-            findTargetView();
+            findTargetView(touchEvent);
             break;
         }
         case TouchEvent::ACTION_MOVE: {
-
+            dispatchToTargetView(touchEvent);
             break;
         }
         case TouchEvent::ACTION_UP: {
+            clearTargetView();
             break;
         }
         case TouchEvent::ACTION_CANCEL : {
+            clearTargetView();
             break;
         }
         default: {
@@ -66,9 +69,8 @@ void TouchEventDispatcher::setWeakView(View *view) {
 
 }
 
-void TouchEventDispatcher::findTargetView() {
-    auto targetView = weakTargetView.lock().get();
-    if (targetView != nullptr) {
+void TouchEventDispatcher::findTargetView(TouchEvent *touchEvent) {
+    if (weakTargetView != nullptr) {
         ALOGE("findTargetView error: weakRefView is not null")
         clearTargetView();
     }
@@ -81,7 +83,7 @@ void TouchEventDispatcher::findTargetView() {
         ALOGE("dispatchTouchEvent weakRefView is not ViewGroup, pls check")
         return;
     }
-    findTargetViewTraversal(viewGroup);
+    weakTargetView = findTargetViewTraversal(viewGroup, touchEvent, 0.0, 0.0);
 }
 
 void TouchEventDispatcher::dispatchToTargetView(TouchEvent *touchEvent) {
@@ -89,19 +91,32 @@ void TouchEventDispatcher::dispatchToTargetView(TouchEvent *touchEvent) {
 }
 
 void TouchEventDispatcher::clearTargetView() {
-    weakTargetView.reset();
+    weakTargetView = nullptr;
 }
 
-View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup) {
-    for (auto child:viewGroup->children) {
-        if (dynamic_cast<ViewGroup *>(child) != nullptr) {
-            return findTargetViewTraversal(dynamic_cast<ViewGroup *>(child));
-        } else {
-            //View
-            auto left = YGNodeStyleGetPosition(child->node, YGEdgeLeft);
-            auto top = YGNodeStyleGetPosition(child->node, YGEdgeTop);
-            ALOGD("findTargetViewTraversal %s %d %d", child->name(), left, top)
+View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent *touchEvent,
+                                                    float tempLeft, float tempTop) {
+    ALOGD("findTargetViewTraversal %s %d", viewGroup->name(), viewGroup->children.size())
+    for (auto i = viewGroup->children.rbegin(); i != viewGroup->children.rend(); ++i) {
+        auto child = *i;
+        auto left = YGNodeLayoutGetLeft(child->node) + tempLeft;
+        auto top = YGNodeLayoutGetTop(child->node) + tempTop;
+        auto width = YGNodeLayoutGetWidth(child->node);
+        auto height = YGNodeLayoutGetHeight(child->node);
+        ALOGD("findTargetViewTraversal %f %f %f %f %f %f", left, top, width, height, touchEvent->x,
+              touchEvent->y)
+        if (touchEvent->x >= left && touchEvent->x <= left + width &&
+            touchEvent->y >= top && touchEvent->y <= top + height) {
+            if (child->isViewGroup()) {
+                ALOGD("findTargetViewTraversal in ViewGroup %s %lld", child->name(), child->viewId)
+                return findTargetViewTraversal(dynamic_cast<ViewGroup *>(child), touchEvent, left,
+                                               top);
+            } else {
+                ALOGD("findTargetViewTraversal result %s %lld", child->name(), child->viewId)
+                return child;
+            }
         }
     }
+    ALOGD("findTargetViewTraversal null")
     return nullptr;
 }
