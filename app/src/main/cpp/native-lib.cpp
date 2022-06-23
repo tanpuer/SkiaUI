@@ -36,13 +36,13 @@ native_SurfaceDestroyed(JNIEnv *env, jobject instance, jlong nativePtr) {
 }
 
 extern "C" JNIEXPORT void JNICALL
-native_SurfaceDoFrame(JNIEnv *env, jobject instance, jlong nativePtr) {
+native_SurfaceDoFrame(JNIEnv *env, jobject instance, jlong nativePtr, jlong time) {
     auto skiaContext = reinterpret_cast<SkiaViewContext *>(nativePtr);
     if (skiaContext == nullptr) {
         ALOGE("native_SurfaceDestroyed reinterpret_cast error")
         return;
     }
-    skiaContext->doFrame();
+    skiaContext->doFrame(time);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -61,7 +61,7 @@ static JNINativeMethod g_RenderMethods[] = {
         {"nativeSurfaceCreated",   "(Landroid/view/Surface;)J", (void *) native_SurfaceCreated},
         {"nativeSurfaceChanged",   "(JII)V",                    (void *) native_SurfaceChanged},
         {"nativeSurfaceDestroyed", "(J)V",                      (void *) native_SurfaceDestroyed},
-        {"nativeSurfaceDoFrame",   "(J)V",                      (void *) native_SurfaceDoFrame},
+        {"nativeSurfaceDoFrame",   "(JJ)V",                     (void *) native_SurfaceDoFrame},
         {"nativeTouchEvent",       "(JIFF)Z",                   (void *) native_TouchEvent}
 };
 

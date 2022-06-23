@@ -23,7 +23,7 @@ public:
 
     virtual void setWindowSize(int width, int height) override;
 
-    virtual void doFrame() override;
+    virtual void doFrame(long time) override;
 
     void dispatchTouchEvent(TouchEvent *touchEvent) override;
 

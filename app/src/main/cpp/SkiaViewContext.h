@@ -20,7 +20,7 @@ public:
 
     void sizeChanged(int width, int height);
 
-    void doFrame();
+    void doFrame(long time);
 
     void dispatchTouchEvent(TouchEvent *touchEvent);
 

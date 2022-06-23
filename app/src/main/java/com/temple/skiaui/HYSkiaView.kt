@@ -30,7 +30,7 @@ class HYSkiaView @JvmOverloads constructor(
     }
 
     override fun doFrame(time: Long) {
-        nativeSurfaceDoFrame(nativePtr)
+        nativeSurfaceDoFrame(nativePtr, time)
         Choreographer.getInstance().postFrameCallback(this)
     }
 
@@ -44,7 +44,7 @@ class HYSkiaView @JvmOverloads constructor(
     private external fun nativeSurfaceCreated(surface: Surface): Long
     private external fun nativeSurfaceChanged(nativePtr: Long, width: Int, height: Int)
     private external fun nativeSurfaceDestroyed(nativePtr: Long)
-    private external fun nativeSurfaceDoFrame(nativePtr: Long)
+    private external fun nativeSurfaceDoFrame(nativePtr: Long, time: Long)
     private external fun nativeTouchEvent(nativePtr: Long, action: Int, x: Float, y: Float): Boolean
 
     companion object {

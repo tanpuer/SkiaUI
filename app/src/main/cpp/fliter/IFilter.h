@@ -18,7 +18,8 @@ public:
 
     virtual void setWindowSize(int width, int height) = 0;
 
-    virtual void doFrame() {
+    virtual void doFrame(long time) {
+        this->time = time;
         drawCount++;
         if (drawCount > width) {
             drawCount = 0;
@@ -33,6 +34,8 @@ protected:
     int height = 0;
 
     int drawCount = 0;
+
+    long time;
 
 };
 

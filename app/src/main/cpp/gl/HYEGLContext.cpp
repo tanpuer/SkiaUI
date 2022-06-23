@@ -32,7 +32,7 @@ void HYEGLContext::handleMessage(Looper::LooperMessage *msg) {
             break;
         }
         case kMsgDoFrame: {
-            render->OnDoFrame(0L);
+            render->OnDoFrame(reinterpret_cast<long>(msg->obj));
             break;
         }
         case kMsgSurfaceOnDestroy: {

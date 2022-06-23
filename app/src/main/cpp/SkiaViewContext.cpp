@@ -22,9 +22,9 @@ void SkiaViewContext::sizeChanged(int width, int height) {
     }
 }
 
-void SkiaViewContext::doFrame() {
+void SkiaViewContext::doFrame(long time) {
     if (glContext != nullptr) {
-        glContext->sendMessage(glContext->kMsgDoFrame);
+        glContext->sendMessage(glContext->kMsgDoFrame, (void *) time);
     }
 }
 

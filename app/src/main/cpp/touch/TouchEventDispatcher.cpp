@@ -73,13 +73,13 @@ void TouchEventDispatcher::setWeakView(View *view) {
 }
 
 void TouchEventDispatcher::findTargetView(TouchEvent *touchEvent) {
-    if (weakTargetView != nullptr) {
-        ALOGE("dispatchTouchEvent error: weakRefView is not null")
-        clearTargetView();
-    }
     if (view == nullptr) {
         ALOGE("dispatchTouchEvent weakRefView is null, pls check")
         return;
+    }
+    if (weakTargetView != nullptr) {
+        ALOGE("dispatchTouchEvent error: weakRefView is not null")
+        clearTargetView();
     }
     auto viewGroup = dynamic_cast<ViewGroup *>(view);
     if (viewGroup == nullptr) {

@@ -50,7 +50,7 @@ void HYEGLRender::OnSurfaceDestroyed() {
 
 void HYEGLRender::OnDoFrame(long frameTimeNanos) {
     if (mFilter != nullptr) {
-        mFilter->doFrame();
+        mFilter->doFrame(frameTimeNanos);
     }
     mEGLCore->swapBuffer();
 }

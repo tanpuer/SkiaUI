@@ -57,8 +57,8 @@ void SkiaFilter::setWindowSize(int width, int height) {
     skCanvas = skiaSurface->getCanvas();
 }
 
-void SkiaFilter::doFrame() {
-    IFilter::doFrame();
+void SkiaFilter::doFrame(long time) {
+    IFilter::doFrame(time);
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 
