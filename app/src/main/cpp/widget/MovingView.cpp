@@ -43,9 +43,7 @@ MovingView::MovingView() : View() {
     lastY = 0.0f;
 }
 
-MovingView::~MovingView() {
-
-}
+MovingView::~MovingView() = default;
 
 const char *MovingView::name() {
     return "MovingView";

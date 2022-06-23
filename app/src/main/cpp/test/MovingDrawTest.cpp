@@ -37,11 +37,10 @@ void MovingDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
         viewLayoutParams->setMargin({0, 0, 0, 0});
         root->addView(view, viewLayoutParams);
 
-        auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
-        auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
-        root->measure(rootWidthSpec, rootHeightSpec);
-        root->layout(0, 0, width, height);
     }
-
+    auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
+    auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
+    root->measure(rootWidthSpec, rootHeightSpec);
+    root->layout(0, 0, width, height);
     root->draw(canvas);
 }

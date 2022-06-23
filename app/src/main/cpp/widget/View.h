@@ -143,6 +143,10 @@ protected:
 
     std::unique_ptr<TouchEventDispatcher> touchEventDispatcher;
 
+#pragma mark moving
+
+protected:
+
     float translateX;
     float translateY;
 

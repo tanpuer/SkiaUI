@@ -7,13 +7,16 @@
 
 #include "ITestDraw.h"
 
+/**
+ * 跟手移动测试
+ */
 class MovingDrawTest : public ITestDraw {
 
 public:
 
     MovingDrawTest();
 
-    ~MovingDrawTest();
+    virtual ~MovingDrawTest();
 
     virtual void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) override;
 

@@ -31,7 +31,12 @@ bool TouchEventDispatcher::dispatchTouchEvent(TouchEvent *touchEvent) {
             dispatchToTargetView(touchEvent);
             break;
         }
-        case TouchEvent::ACTION_UP | TouchEvent::ACTION_CANCEL: {
+        case TouchEvent::ACTION_UP: {
+            dispatchToTargetView(touchEvent);
+            clearTargetView();
+            break;
+        }
+        case TouchEvent::ACTION_CANCEL: {
             dispatchToTargetView(touchEvent);
             clearTargetView();
             break;
@@ -69,7 +74,7 @@ void TouchEventDispatcher::setWeakView(View *view) {
 
 void TouchEventDispatcher::findTargetView(TouchEvent *touchEvent) {
     if (weakTargetView != nullptr) {
-        ALOGE("findTargetView error: weakRefView is not null")
+        ALOGE("dispatchTouchEvent error: weakRefView is not null")
         clearTargetView();
     }
     if (view == nullptr) {
@@ -96,6 +101,7 @@ void TouchEventDispatcher::dispatchToTargetView(TouchEvent *touchEvent) {
 void TouchEventDispatcher::clearTargetView() {
     if (weakTargetView != nullptr) {
         weakTargetView->setAlpha(1.0f);
+        ALOGD("dispatchTouchEvent, clearTargetView success")
         weakTargetView = nullptr;
     }
 }

@@ -118,11 +118,11 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
             }
 
         }
-        auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
-        auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
-        root->measure(rootWidthSpec, rootHeightSpec);
-        root->layout(0, 0, width, height);
     }
+    auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
+    auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
+    root->measure(rootWidthSpec, rootHeightSpec);
+    root->layout(0, 0, width, height);
     //todo 只draw一次的时候有问题
     root->draw(canvas);
 
