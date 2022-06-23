@@ -5,31 +5,25 @@
 #ifndef SKIAUI_IANIMATOR_H
 #define SKIAUI_IANIMATOR_H
 
-#include <cstdint>
-
 class IAnimator {
 
 public:
 
-    IAnimator() {}
+    IAnimator();
 
-    virtual ~IAnimator() = 0;
+    virtual ~IAnimator();
 
     virtual float getInterpolation(float factor) = 0;
 
-    virtual void setDuration(long duration) {
-        this->duration = duration;
-    };
+    virtual void setDuration(long duration);
 
-    virtual void start() {
-
-    }
+    virtual void start();
 
 protected:
 
     long duration;
 
-    int64_t startTime;
+    long startTime;
 
 };
 

@@ -16,7 +16,7 @@ public:
 
     virtual ~LinearAnimator();
 
-    float getInterpolation(float factor) override;
+    virtual float getInterpolation(float factor) override;
 
 private:
 
