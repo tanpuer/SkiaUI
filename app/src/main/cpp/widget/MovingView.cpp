@@ -20,6 +20,9 @@ bool MovingView::onTouchEvent(TouchEvent *touchEvent) {
             lastY = touchEvent->y;
             break;
         }
+        case TouchEvent::ACTION_UP: {
+
+        }
         default: {
             translateX = 0.0f;
             translateY = 0.0f;

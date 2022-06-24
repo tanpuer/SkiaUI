@@ -8,6 +8,7 @@
 
 TouchEventDispatcher::TouchEventDispatcher(View *view) {
     this->view = view;
+    weakTargetView = nullptr;
 }
 
 TouchEventDispatcher::~TouchEventDispatcher() = default;
