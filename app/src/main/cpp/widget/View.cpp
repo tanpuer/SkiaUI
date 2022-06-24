@@ -15,6 +15,7 @@ View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadi
     paint = new SkPaint();
     paint->setAntiAlias(true);
     touchEventDispatcher = std::make_unique<TouchEventDispatcher>(this);
+    animator = std::unique_ptr<IAnimator>(nullptr);
 }
 
 View::~View() {
@@ -231,4 +232,10 @@ void View::setCustomTouchEventDispatcher(TouchEventDispatcher *touchEventDispatc
     ALOGD("setCustomTouchEventDispatcher")
     this->touchEventDispatcher = std::unique_ptr<TouchEventDispatcher>(touchEventDispatcher);
     this->touchEventDispatcher->setWeakView(this);
+}
+
+void View::handleAnimation() {
+    if (animator != nullptr) {
+
+    }
 }

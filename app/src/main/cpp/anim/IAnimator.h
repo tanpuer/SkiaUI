@@ -5,7 +5,14 @@
 #ifndef SKIAUI_IANIMATOR_H
 #define SKIAUI_IANIMATOR_H
 
+#include "functional"
+#include "core/SkRect.h"
+
 class IAnimator {
+
+public:
+
+    static long currTime;
 
 public:
 
@@ -19,11 +26,19 @@ public:
 
     virtual void start();
 
+    virtual bool isEnd();
+
+    virtual void update(SkIRect &rect) = 0;
+
 protected:
 
     long duration;
 
-    long startTime;
+    long startTime, endTime;
+
+    bool end;
+
+    std::function<void(const SkIRect &)> animatorCallback;
 
 };
 

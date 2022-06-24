@@ -12,15 +12,25 @@ class LinearAnimator : public IAnimator {
 
 public:
 
-    LinearAnimator(float start, float end);
+    enum class AnimatorType {
+        Scale,
+        Rotate,
+        Translate,
+    };
+
+public:
+
+    LinearAnimator(float translateX, float translateY);
 
     virtual ~LinearAnimator();
 
     virtual float getInterpolation(float factor) override;
 
+    void update(SkIRect &rect) override;
+
 private:
 
-    float start, end;
+    float translateX, translateY;
 
 };
 

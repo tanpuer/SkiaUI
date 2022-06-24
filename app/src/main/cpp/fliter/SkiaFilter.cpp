@@ -10,6 +10,7 @@
 #include "HorizontalDrawTest.h"
 #include "VerticalDrawTest.h"
 #include "MovingDrawTest.h"
+#include "IAnimator.h"
 
 SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
@@ -59,6 +60,7 @@ void SkiaFilter::setWindowSize(int width, int height) {
 
 void SkiaFilter::doFrame(long time) {
     IFilter::doFrame(time);
+    IAnimator::currTime = time;
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 

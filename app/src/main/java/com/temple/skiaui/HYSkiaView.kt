@@ -30,7 +30,7 @@ class HYSkiaView @JvmOverloads constructor(
     }
 
     override fun doFrame(time: Long) {
-        nativeSurfaceDoFrame(nativePtr, time)
+        nativeSurfaceDoFrame(nativePtr, time / 1000000)
         Choreographer.getInstance().postFrameCallback(this)
     }
 

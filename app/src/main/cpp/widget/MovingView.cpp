@@ -3,6 +3,7 @@
 //
 
 #include "MovingView.h"
+#include "LinearAnimator.h"
 
 bool MovingView::onTouchEvent(TouchEvent *touchEvent) {
     switch (touchEvent->action) {
@@ -21,7 +22,10 @@ bool MovingView::onTouchEvent(TouchEvent *touchEvent) {
             break;
         }
         case TouchEvent::ACTION_UP: {
-
+            //松手后做个动画回到原处
+            animator = std::make_unique<LinearAnimator>(translateX, translateY);
+            animator->setDuration(500L);
+            animator->start();
         }
         default: {
             translateX = 0.0f;
@@ -43,6 +47,13 @@ void MovingView::layout(int l, int t, int r, int b) {
         width = r - l;
         height = b - t;
     }
+    if (animator != nullptr) {
+        if (animator->isEnd()) {
+            animator.reset();
+        } else {
+            animator->update(skRect);
+        }
+    }
 }
 
 MovingView::MovingView() : View() {
@@ -50,7 +61,11 @@ MovingView::MovingView() : View() {
     lastY = 0.0f;
 }
 
-MovingView::~MovingView() = default;
+MovingView::~MovingView() {
+    if (animator != nullptr) {
+        animator.reset();
+    }
+}
 
 const char *MovingView::name() {
     return "MovingView";

@@ -15,6 +15,7 @@
 #include "core/SkRRect.h"
 #include "LayoutParams.h"
 #include "TouchEventDispatcher.h"
+#include "IAnimator.h"
 
 static int64_t VIEW_ID = 0;
 
@@ -149,6 +150,14 @@ protected:
 
     float translateX;
     float translateY;
+
+#pragma mark Animator
+
+protected:
+
+    std::unique_ptr<IAnimator> animator;
+
+    virtual void handleAnimation();
 
 };
 

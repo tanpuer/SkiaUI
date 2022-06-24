@@ -28,7 +28,7 @@ public:
 
     void OnSurfaceDestroyed();
 
-    void OnDoFrame(long frameTimeNanos);
+    void OnDoFrame(long timeMills);
 
     void DispatchTouchEvent(TouchEvent *touchEvent);
 

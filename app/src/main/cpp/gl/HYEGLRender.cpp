@@ -48,9 +48,9 @@ void HYEGLRender::OnSurfaceDestroyed() {
     ReleaseGLEnv();
 }
 
-void HYEGLRender::OnDoFrame(long frameTimeNanos) {
+void HYEGLRender::OnDoFrame(long timeMills) {
     if (mFilter != nullptr) {
-        mFilter->doFrame(frameTimeNanos);
+        mFilter->doFrame(timeMills);
     }
     mEGLCore->swapBuffer();
 }
