@@ -37,6 +37,16 @@ void MovingDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
         viewLayoutParams->setMargin({0, 0, 0, 0});
         root->addView(view, viewLayoutParams);
 
+        {
+            auto view = new MovingView();
+            view->setConfig(root->config);
+            view->setBackgroundColor(SK_ColorBLUE);
+            view->setStyle(SkPaint::kFill_Style);
+            view->setCornerRadius(30);
+            auto viewLayoutParams = LayoutParams::makeExactlyLayoutParams(200, 200);
+            viewLayoutParams->setMargin({0, 30, 0, 0});
+            root->addView(view, viewLayoutParams);
+        }
     }
     auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
     auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
