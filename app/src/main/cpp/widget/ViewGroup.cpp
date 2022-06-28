@@ -61,28 +61,10 @@ void ViewGroup::removeAllViews() {
     YGNodeRemoveAllChildren(node);
 }
 
-void ViewGroup::measure(int widthMeasureSpec, int heightMeasureSpec) {
-    //todo ViewGroup的measure方法不对
-    for (auto &child: children) {
-        measureChild(child, widthMeasureSpec, heightMeasureSpec);
-    }
-    YGNodeCalculateLayout(node, MeasureSpec::getSize(widthMeasureSpec),
-                          MeasureSpec::getSize(heightMeasureSpec),
-                          YGDirectionLTR);
-    if (isViewGroup()) {
-        if (layoutParams->_widthMode == EXACTLY) {
-            YGNodeStyleSetWidth(node, static_cast<float>(layoutParams->_width));
-        }
-        if (layoutParams->_heightMode == EXACTLY) {
-            YGNodeStyleSetHeight(node, static_cast<float>(layoutParams->_height));
-        }
-    }
-}
-
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-//    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
+    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
     YGNodeStyleSetWidth(node, static_cast<float>(_measuredWidth));
     YGNodeStyleSetHeight(node, static_cast<float>(_measuredHeight));
 }
@@ -252,6 +234,22 @@ int ViewGroup::getMaxWidthInChildren() {
         maxWidth = std::max(maxWidth, child->getWidth());
     }
     return maxWidth;
+}
+
+int ViewGroup::getChildHeightSum() {
+    int sum = 0;
+    for (auto &child: children) {
+        sum += child->getHeight() + child->marginTop + child->marginBottom;
+    }
+    return sum;
+}
+
+int ViewGroup::getChildWidthSum() {
+    int sum = 0;
+    for (auto &child: children) {
+        sum += child->getWidth() + child->marginLeft + child->marginRight;
+    }
+    return sum;
 }
 
 bool ViewGroup::isViewGroup() {

@@ -7,6 +7,7 @@
 
 
 #include "IAnimator.h"
+#include "core/SkMatrix.h"
 
 class LinearAnimator : public IAnimator {
 
@@ -31,6 +32,12 @@ public:
 private:
 
     float translateX, translateY;
+
+    float startRotate, endRotate;
+
+    SkRect dst, src;
+
+    SkMatrix m, translateMatrix, rotateMatrix, scaleMatrix;
 
 };
 

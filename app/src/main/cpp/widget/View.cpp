@@ -10,7 +10,8 @@
 View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadius(),
                skRectWithBorder(SkIRect::MakeEmpty()),
                minWidth(0), minHeight(0),
-               parentId(0) {
+               parentId(0),
+               marginLeft(0), marginTop(0), marginRight(0), marginBottom(0) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -153,6 +154,10 @@ void View::setAlpha(float alpha) {
 #pragma LayoutParams相关
 
 void View::setLayoutParams(LayoutParams *_layoutParams) {
+    this->marginLeft = _layoutParams->_marginLeft;
+    this->marginTop = _layoutParams->_marginTop;
+    this->marginRight = _layoutParams->_marginRight;
+    this->marginBottom = _layoutParams->_marginBottom;
     layoutParams = std::unique_ptr<LayoutParams>(_layoutParams);
     YGNodeStyleSetMargin(node, YGEdgeLeft, layoutParams->_marginLeft);
     YGNodeStyleSetMargin(node, YGEdgeTop, layoutParams->_marginTop);

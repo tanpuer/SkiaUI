@@ -14,8 +14,8 @@
 
 SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
-//    testDraw = new HorizontalDrawTest();
-    testDraw = new MovingDrawTest();
+    testDraw = new HorizontalDrawTest();
+//    testDraw = new MovingDrawTest();
 }
 
 SkiaFilter::~SkiaFilter() {

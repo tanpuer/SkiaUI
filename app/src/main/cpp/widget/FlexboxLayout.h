@@ -23,6 +23,8 @@ public:
 
     virtual void setFlexDirection(YGFlexDirection direction) override;
 
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
+
     virtual void layout(int l, int t, int r, int b) override;
 
 private:

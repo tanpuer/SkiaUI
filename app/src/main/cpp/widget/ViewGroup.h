@@ -20,8 +20,6 @@ public:
 
     const char *name() override;
 
-    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
-
     void measureChild(View *child, int parentWidthMeasureSpec, int parentHeightMeasureSpec);
 
     int getChildMeasureSpec(View *child, int parentMeasureSpec, int padding, int childDimension);
@@ -44,6 +42,10 @@ public:
     int getMaxHeightInChildren();
 
     int getMaxWidthInChildren();
+
+    int getChildHeightSum();
+
+    int getChildWidthSum();
 
     virtual YGConfigRef getConfig();
 

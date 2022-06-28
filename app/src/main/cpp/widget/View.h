@@ -46,6 +46,11 @@ public:
      */
     virtual void measure(int widthMeasureSpec, int heightMeasureSpec);
 
+    /**
+     * 作为View/TextView/ImageView 这种组件必须明确指出自己的宽高，ViewGroup根据子View的宽高和parent-ViewGroup的限制来设置自己的宽高
+     * @param _measuredWidth
+     * @param _measuredHeight
+     */
     virtual void setMeasuredDimension(int _measuredWidth, int _measuredHeight);
 
     virtual void layout(int l, int t, int r, int b);
@@ -110,6 +115,8 @@ public:
     SkPaint *paint;
 
     std::array<int, 4> cornerRadius;
+
+    int marginLeft, marginTop, marginRight, marginBottom;
 
 protected:
     SkIRect skRect;
