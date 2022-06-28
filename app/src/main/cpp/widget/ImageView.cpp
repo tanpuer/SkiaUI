@@ -38,6 +38,10 @@ void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
 }
 
 void ImageView::draw(SkCanvas *canvas) {
+    if (width == 0 || height == 0) {
+        ALOGE("ignore ImageView draw, pls check width and height %d %d", width, height)
+        return;
+    }
     //todo
     canvas->drawImage(skImage, skRect.left(), skRect.top(), SkSamplingOptions(), paint);
     View::draw(canvas);
