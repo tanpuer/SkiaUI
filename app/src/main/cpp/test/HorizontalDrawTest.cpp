@@ -66,7 +66,7 @@ void HorizontalDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, 
                 imageView->setStyle(SkPaint::kStroke_Style);
                 imageView->setBackgroundColor(SK_ColorRED);
                 imageView->setStrokeWidth(10);
-                _root1->addView(imageView, LayoutParams::makeWrapContent(true, true));
+                _root1->addView(imageView, LayoutParams::makeExactlyLayoutParams(300, 500));
 
                 root->addView(_root1, LayoutParams::makeExactlyWidth(width));
             }

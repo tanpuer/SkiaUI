@@ -29,8 +29,14 @@ void ImageView::setSource(const char *path) {
 
 void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     if (skImage == nullptr) {
-        YGNodeStyleSetWidth(node, 0);
-        YGNodeStyleSetHeight(node, 0);
+        setMeasuredDimension(0, 0);
+        return;
+    }
+    if (MeasureSpec::getMode(widthMeasureSpec) == EXACTLY &&
+        MeasureSpec::getMode(heightMeasureSpec) == EXACTLY) {
+        auto width = MeasureSpec::getSize(widthMeasureSpec);
+        auto height = MeasureSpec::getSize(heightMeasureSpec);
+        setMeasuredDimension(width, height);
         return;
     }
 //    ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
