@@ -85,6 +85,7 @@ void View::draw(SkCanvas *canvas) {
         auto diff = (paint->getStrokeWidth()) / 2;
         skRectWithBorder.setLTRB(skRect.left() + diff, skRect.top() + diff, skRect.right() - diff,
                                  skRect.bottom() - diff);
+        //todo debug边框
         canvas->drawIRect(skRectWithBorder, *paint);
     }
 }

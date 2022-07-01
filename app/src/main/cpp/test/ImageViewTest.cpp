@@ -20,7 +20,7 @@ void ImageViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int h
         root->setJustifyContent(YGJustifyCenter);
         root->setAlignItems(YGAlignCenter);
         root->setAlignContent(YGAlignCenter);
-        root->setStrokeWidth(10);
+        root->setStrokeWidth(2);
         root->setStyle(SkPaint::kStroke_Style);
         root->setBackgroundColor(SK_ColorBLUE);
 
@@ -29,10 +29,53 @@ void ImageViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int h
             imageView->setConfig(root->config);
             imageView->setSource("/sdcard/cowboy.png");
             imageView->setCornerRadius(30);
+            imageView->setScaleType(ImageView::ScaleType::FitCenter);
             imageView->setStyle(SkPaint::kStroke_Style);
             imageView->setBackgroundColor(SK_ColorRED);
-            imageView->setStrokeWidth(10);
-            auto lp = LayoutParams::makeExactlyLayoutParams(150, 100);
+            imageView->setStrokeWidth(2);
+            auto lp = LayoutParams::makeExactlyLayoutParams(300, 200);
+            root->addView(imageView, lp);
+        }
+
+        {
+            auto imageView = new ImageView();
+            imageView->setConfig(root->config);
+            imageView->setSource("/sdcard/cowboy.png");
+            imageView->setCornerRadius(30);
+            imageView->setScaleType(ImageView::ScaleType::CenterCrop);
+            imageView->setStyle(SkPaint::kStroke_Style);
+            imageView->setBackgroundColor(SK_ColorRED);
+            imageView->setStrokeWidth(2);
+            auto lp = LayoutParams::makeExactlyLayoutParams(300, 200);
+            lp->setMargin({0, 100, 0, 0});
+            root->addView(imageView, lp);
+        }
+
+        {
+            auto imageView = new ImageView();
+            imageView->setConfig(root->config);
+            imageView->setSource("/sdcard/cowboy.png");
+            imageView->setCornerRadius(30);
+            imageView->setScaleType(ImageView::ScaleType::FitCenter);
+            imageView->setStyle(SkPaint::kStroke_Style);
+            imageView->setBackgroundColor(SK_ColorRED);
+            imageView->setStrokeWidth(2);
+            auto lp = LayoutParams::makeExactlyLayoutParams(200, 300);
+            lp->setMargin({0, 100, 0, 0});
+            root->addView(imageView, lp);
+        }
+
+        {
+            auto imageView = new ImageView();
+            imageView->setConfig(root->config);
+            imageView->setSource("/sdcard/cowboy.png");
+            imageView->setCornerRadius(30);
+            imageView->setScaleType(ImageView::ScaleType::CenterCrop);
+            imageView->setStyle(SkPaint::kStroke_Style);
+            imageView->setBackgroundColor(SK_ColorRED);
+            imageView->setStrokeWidth(2);
+            auto lp = LayoutParams::makeExactlyLayoutParams(200, 300);
+            lp->setMargin({0, 100, 0, 0});
             root->addView(imageView, lp);
         }
 
@@ -43,9 +86,9 @@ void ImageViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int h
             imageView->setCornerRadius(30);
             imageView->setStyle(SkPaint::kStroke_Style);
             imageView->setBackgroundColor(SK_ColorRED);
-            imageView->setStrokeWidth(10);
-            auto lp = LayoutParams::makeExactlyLayoutParams(100, 150);
-            lp->setMargin({0, 200, 0, 0});
+            imageView->setStrokeWidth(2);
+            auto lp = LayoutParams::makeExactlyLayoutParams(300, 200);
+            lp->setMargin({0, 100, 0, 0});
             root->addView(imageView, lp);
         }
 
@@ -53,25 +96,13 @@ void ImageViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int h
             auto imageView = new ImageView();
             imageView->setConfig(root->config);
             imageView->setSource("/sdcard/cowboy.png");
-            imageView->setCornerRadius(30);
+            imageView->setCornerRadius(100);
+            imageView->setScaleType(ImageView::ScaleType::FitCenter);
             imageView->setStyle(SkPaint::kStroke_Style);
             imageView->setBackgroundColor(SK_ColorRED);
-            imageView->setStrokeWidth(10);
-            auto lp = LayoutParams::makeExactlyLayoutParams(150, 100);
-            lp->setMargin({0, 200, 0, 0});
-            root->addView(imageView, lp);
-        }
-
-        {
-            auto imageView = new ImageView();
-            imageView->setConfig(root->config);
-            imageView->setSource("/sdcard/cowboy.png");
-            imageView->setCornerRadius(30);
-            imageView->setStyle(SkPaint::kStroke_Style);
-            imageView->setBackgroundColor(SK_ColorRED);
-            imageView->setStrokeWidth(10);
-            auto lp = LayoutParams::makeExactlyLayoutParams(150, 100);
-            lp->setMargin({0, 200, 0, 0});
+            imageView->setStrokeWidth(2);
+            auto lp = LayoutParams::makeExactlyLayoutParams(200, 200);
+            lp->setMargin({0, 100, 0, 0});
             root->addView(imageView, lp);
         }
     }

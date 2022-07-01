@@ -3,12 +3,18 @@
 //
 
 #include <base/native_log.h>
+#include "core/SkColorFilter.h"
 #include "ImageView.h"
 #include "core/SkData.h"
 #include "core/SkImage.h"
 
-ImageView::ImageView() : View() {
-
+ImageView::ImageView() : View(), radius(0), scaleType(ScaleType::FitXY) {
+    imagePaint = std::make_unique<SkPaint>();
+    imagePaint->setAntiAlias(true);
+    srcRect.setEmpty();
+    dstRect.setEmpty();
+    clipRect.setEmpty();
+    imageMatrix = SkMatrix::I();
 }
 
 ImageView::~ImageView() {
@@ -17,6 +23,8 @@ ImageView::~ImageView() {
 
 void ImageView::setAlpha(float alpha) {
     View::setAlpha(alpha);
+    SkASSERT(imagePaint);
+    imagePaint->setAlphaf(alpha);
 }
 
 void ImageView::setSource(const char *path) {
@@ -24,7 +32,9 @@ void ImageView::setSource(const char *path) {
     skImage = SkImage::MakeFromEncoded(data);
     if (skImage == nullptr) {
         ALOGE("skImage is null, pls check %s", path)
+        return;
     }
+    srcRect.setWH(static_cast<float>(skImage->width()), static_cast<float >(skImage->height()));
 }
 
 void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -44,23 +54,65 @@ void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     setMeasuredDimension(skImage->width(), skImage->height());
 }
 
+void ImageView::layout(int l, int t, int r, int b) {
+    View::layout(l, t, r, b);
+    dstRect.setLTRB(static_cast<float >(l), static_cast<float >(t), static_cast<float >(r),
+                    static_cast<float >(b));
+    if (skImage == nullptr) {
+        return;
+    }
+    imageMatrix.setIdentity();
+    if (scaleType == ScaleType::FitCenter) {
+        auto imageRatio =
+                static_cast<float>(skImage->width()) / static_cast<float >(skImage->height());
+        auto viewRatio = dstRect.width() / dstRect.height();
+        if (imageRatio > viewRatio) {
+            imageMatrix.preScale(1.0f, viewRatio / imageRatio, dstRect.centerX(),
+                                 dstRect.centerY());
+        } else {
+            imageMatrix.preScale(imageRatio / viewRatio, 1.0f, dstRect.centerX(),
+                                 dstRect.centerY());
+        }
+    } else if (scaleType == ScaleType::CenterCrop) {
+        auto imageRatio =
+                static_cast<float>(skImage->width()) / static_cast<float >(skImage->height());
+        auto viewRatio = dstRect.width() / dstRect.height();
+        if (imageRatio > viewRatio) {
+            imageMatrix.preScale(imageRatio / viewRatio, 1.0f, dstRect.centerX(),
+                                 dstRect.centerY());
+        } else {
+            imageMatrix.preScale(1.0f, viewRatio / imageRatio, dstRect.centerX(),
+                                 dstRect.centerY());
+        }
+    }
+}
+
 void ImageView::draw(SkCanvas *canvas) {
     if (width == 0 || height == 0) {
         ALOGE("ignore ImageView draw, pls check width and height %d %d", width, height)
         return;
     }
-    //todo
-    canvas->drawImage(skImage, skRect.left(), skRect.top(), SkSamplingOptions(), paint);
+    canvas->save();
+    clipRect.setRectXY(dstRect, radius, radius);
+    canvas->clipRRect(clipRect);
+    canvas->setMatrix(imageMatrix);
+    canvas->drawImageRect(skImage, srcRect, dstRect, SkSamplingOptions(), imagePaint.get(),
+                          SkCanvas::kFast_SrcRectConstraint);
+    canvas->restore();
     View::draw(canvas);
-}
-
-void ImageView::layout(int l, int t, int r, int b) {
-//    ALOGD("imageView layout: %d %d %d %d", l, t, r, b)
-    View::layout(l, t, r, b);
 }
 
 const char *ImageView::name() {
     return "ImageView";
+}
+
+void ImageView::setCornerRadius(int radius) {
+    this->radius = static_cast<float >(radius);
+    View::setCornerRadius(radius);
+}
+
+void ImageView::setScaleType(ImageView::ScaleType scaleType) {
+    this->scaleType = scaleType;
 }
 
 

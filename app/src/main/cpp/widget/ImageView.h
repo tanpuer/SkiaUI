@@ -12,6 +12,14 @@ class ImageView : public View {
 
 public:
 
+    enum class ScaleType {
+        FitXY,
+        FitCenter,
+        CenterCrop
+    };
+
+public:
+
     ImageView();
 
     virtual ~ImageView();
@@ -22,15 +30,35 @@ public:
 
     virtual void draw(SkCanvas *canvas) override;
 
-    virtual const char * name() override;
+    virtual const char *name() override;
 
     virtual void setAlpha(float alpha) override;
 
+    virtual void setCornerRadius(int radius) override;
+
 #pragma mark ImageView api
 
-    void setSource(const char *path);
+    virtual void setSource(const char *path);
+
+    virtual void setScaleType(ScaleType scaleType);
+
+private:
 
     sk_sp<SkImage> skImage;
+
+    SkRect srcRect;
+
+    SkRect dstRect;
+
+    SkRRect clipRect;
+
+    std::unique_ptr<SkPaint> imagePaint;
+
+    SkMatrix imageMatrix;
+    
+    float radius;
+
+    ScaleType scaleType;
 
 };
 
