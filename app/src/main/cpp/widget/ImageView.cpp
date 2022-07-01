@@ -37,9 +37,10 @@ void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         auto width = MeasureSpec::getSize(widthMeasureSpec);
         auto height = MeasureSpec::getSize(heightMeasureSpec);
         setMeasuredDimension(width, height);
+        ALOGD("imageView size: %d %d", width, height)
         return;
     }
-//    ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
+    ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
     setMeasuredDimension(skImage->width(), skImage->height());
 }
 

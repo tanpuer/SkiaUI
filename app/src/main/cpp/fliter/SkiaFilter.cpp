@@ -11,10 +11,12 @@
 #include "VerticalDrawTest.h"
 #include "MovingDrawTest.h"
 #include "IAnimator.h"
+#include "ImageViewTest.h"
 
 SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
-    testDraw = new HorizontalDrawTest();
+//    testDraw = new HorizontalDrawTest();
+    testDraw = new ImageViewTest();
 //    testDraw = new MovingDrawTest();
 }
 
