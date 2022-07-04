@@ -9,6 +9,7 @@
 #include "View.h"
 #include "string"
 #include "core/SkFont.h"
+#include "core/SkTextBlob.h"
 
 class TextView : public View {
 
@@ -45,6 +46,8 @@ private:
     SkFont font;
 
     SkRect textRect;
+
+    sk_sp<SkTextBlob> textBlob;
 
 };
 

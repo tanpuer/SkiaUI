@@ -11,6 +11,8 @@
 TextView::TextView() : View() {
     textPaint = new SkPaint();
     textPaint->setAntiAlias(true);
+    textRect = SkRect::MakeEmpty();
+    textBlob = nullptr;
 }
 
 TextView::~TextView() {
@@ -24,6 +26,7 @@ const char *TextView::name() {
 
 void TextView::setText(SkString text) {
     this->text = std::move(text);
+    textBlob = SkTextBlob::MakeFromText(this->text.c_str(), strlen(this->text.c_str()), font, SkTextEncoding::kUTF8);
 }
 
 SkString TextView::getText() {
@@ -45,6 +48,10 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(0, 0);
         return;
     }
+    if (layoutParams->_widthMode == EXACTLY && layoutParams->_heightMode == EXACTLY) {
+        setMeasuredDimension(layoutParams->_width, layoutParams->_height);
+        return;
+    }
     auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
                                    SkTextEncoding::kUTF8,
                                    &textRect, textPaint);
@@ -56,9 +63,10 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
 
 void TextView::draw(SkCanvas *canvas) {
     View::draw(canvas);
-//    canvas->drawString(text, skRect.left(), skRect.top() + rect.height(), font, *textPaint);
+//    canvas->drawString(text, skRect.left(), skRect.top() + skRect.height(), font, *textPaint);
     canvas->drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, skRect.left(),
                            skRect.top() + textRect.height(), font, *textPaint);
+//    canvas->drawTextBlob(textBlob, skRect.left(), skRect.top(), *textPaint);
 }
 
 void TextView::setTextSize(SkScalar textSize) {
