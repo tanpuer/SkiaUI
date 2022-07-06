@@ -46,6 +46,8 @@ private:
 
     SkRect textRect;
 
+    SkString ellipsisStr;
+
 };
 
 

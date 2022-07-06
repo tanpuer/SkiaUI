@@ -12,6 +12,7 @@ TextView::TextView() : View() {
     textPaint = new SkPaint();
     textPaint->setAntiAlias(true);
     textRect = SkRect::MakeEmpty();
+    ellipsisStr = SkString('...');
 }
 
 TextView::~TextView() {
@@ -49,8 +50,13 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
                                    SkTextEncoding::kUTF8,
                                    &textRect, textPaint);
-    ALOGD("888888 %f %f %f %f", textRect.width(), textRect.height(), length, font.getSpacing())
     if (layoutParams->_widthMode == EXACTLY && layoutParams->_heightMode == EXACTLY) {
+        auto ellipsisStrLength = font.measureText(static_cast<const void *>(ellipsisStr.c_str()), 3,
+                                                  SkTextEncoding::kUTF8,
+                                                  nullptr, textPaint);
+        if (layoutParams->_width < length) {
+            
+        }
         setMeasuredDimension(layoutParams->_width, layoutParams->_height);
         return;
     }
