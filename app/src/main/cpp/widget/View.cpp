@@ -11,7 +11,8 @@ View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadi
                skRectWithBorder(SkIRect::MakeEmpty()),
                minWidth(0), minHeight(0),
                parentId(0),
-               marginLeft(0), marginTop(0), marginRight(0), marginBottom(0) {
+               marginLeft(0), marginTop(0), marginRight(0), marginBottom(0),
+               isDirty(false) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);

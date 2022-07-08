@@ -55,7 +55,8 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
                                                   SkTextEncoding::kUTF8,
                                                   nullptr, textPaint);
         if (layoutParams->_width < length) {
-            
+            textVector.clear();
+            //todo LineBreak
         }
         setMeasuredDimension(layoutParams->_width, layoutParams->_height);
         return;
@@ -68,8 +69,15 @@ void TextView::draw(SkCanvas *canvas) {
     //y是基线的位置
     canvas->drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, skRect.left(),
                            skRect.top() + textRect.height(), font, *textPaint);
+    canvas->drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, skRect.left(),
+                           skRect.top() + textRect.height() * 2, font, *textPaint);
 }
 
 void TextView::setTextSize(SkScalar textSize) {
     font.setSize(textSize);
+}
+
+void TextView::performLineBreak() {
+    auto start = 0;
+
 }

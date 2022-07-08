@@ -38,6 +38,8 @@ public:
 
     virtual void setAlpha(float alpha) override;
 
+    virtual void performLineBreak();
+
 private:
 
     SkString text;
@@ -47,6 +49,8 @@ private:
     SkRect textRect;
 
     SkString ellipsisStr;
+
+    std::vector<SkString> textVector;
 
 };
 

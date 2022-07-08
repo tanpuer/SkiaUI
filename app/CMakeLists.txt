@@ -7,9 +7,7 @@ set(JNI_LIBS_DIR ${CMAKE_SOURCE_DIR}/src/main/jniLibs)
 include_directories(
         ${JNI_LIBS_DIR}/skia
         ${JNI_LIBS_DIR}/skia/include
-        ${JNI_LIBS_DIR}/skia/module
-        ${JNI_LIBS_DIR}/skia/skresources
-        ${JNI_LIBS_DIR}/skia/svg
+        ${JNI_LIBS_DIR}/skia/modules
 
         src/main/cpp
         src/main/cpp/base

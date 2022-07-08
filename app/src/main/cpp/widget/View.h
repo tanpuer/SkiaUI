@@ -166,6 +166,10 @@ protected:
 
     virtual void handleAnimation();
 
+protected:
+
+    bool isDirty;
+
 };
 
 #endif //SKIAUI_VIEW_H

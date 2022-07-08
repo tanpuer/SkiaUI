@@ -3,7 +3,6 @@
 //
 
 #include "TextViewTest.h"
-#include "../../jniLibs/skia/include/core/SkCanvas.h"
 
 TextViewTest::TextViewTest() = default;
 
