@@ -12,6 +12,9 @@
 #include "skparagraph/include/TextStyle.h"
 #include "skparagraph/include/ParagraphBuilderImpl.h"
 #include "skparagraph/include/ParagraphStyle.h"
+#include "skparagraph/include/Paragraph.h"
+
+using namespace skia::textlayout;
 
 class TextView : public View {
 
@@ -41,9 +44,7 @@ public:
 
     virtual void setAlpha(float alpha) override;
 
-    virtual void performLineBreak();
-
-private:
+protected:
 
     SkString text;
 
@@ -55,11 +56,13 @@ private:
 
     std::vector<SkString> textVector;
 
-    std::unique_ptr<skia::textlayout::TextStyle> defaultStyle;
+    std::unique_ptr<TextStyle> defaultStyle;
 
-    skia::textlayout::ParagraphBuilderImpl *paragraphBuilder;
+    std::unique_ptr<ParagraphBuilderImpl> paragraphBuilder;
 
-    sk_sp<skia::textlayout::FontCollection> fontCollection;
+    sk_sp<FontCollection> fontCollection;
+
+    std::unique_ptr<Paragraph> paragraph;
 
 };
 
