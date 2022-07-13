@@ -13,6 +13,9 @@ TextView::TextView() : View() {
     textPaint->setAntiAlias(true);
     textRect = SkRect::MakeEmpty();
     ellipsisStr = SkString('...');
+    defaultStyle = std::make_unique<skia::textlayout::TextStyle>();
+    fontCollection = sk_make_sp<skia::textlayout::FontCollection>();
+    fontCollection->setDefaultFontManager(SkFontMgr::RefDefault());
 }
 
 TextView::~TextView() {
@@ -35,6 +38,8 @@ SkString TextView::getText() {
 void TextView::setTextColor(SkColor color) {
     SkASSERT(textPaint);
     textPaint->setColor(color);
+    defaultStyle->setForegroundColor(*textPaint);
+    defaultStyle->setBackgroundColor(*textPaint);
 }
 
 void TextView::setAlpha(float alpha) {
@@ -71,10 +76,17 @@ void TextView::draw(SkCanvas *canvas) {
                            skRect.top() + textRect.height(), font, *textPaint);
     canvas->drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, skRect.left(),
                            skRect.top() + textRect.height() * 2, font, *textPaint);
+
+//    skia::textlayout::ParagraphStyle paraStyle;
+//    paraStyle.setTextStyle(*defaultStyle);
+//    delete paragraphBuilder;
+//    paragraphBuilder = new skia::textlayout::ParagraphBuilderImpl(paraStyle, fontCollection);
+//    paragraphBuilder->addText(text.c_str());
 }
 
 void TextView::setTextSize(SkScalar textSize) {
     font.setSize(textSize);
+    defaultStyle->setFontSize(textSize);
 }
 
 void TextView::performLineBreak() {

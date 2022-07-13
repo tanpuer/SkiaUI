@@ -9,6 +9,9 @@
 #include "View.h"
 #include "string"
 #include "core/SkFont.h"
+#include "skparagraph/include/TextStyle.h"
+#include "skparagraph/include/ParagraphBuilderImpl.h"
+#include "skparagraph/include/ParagraphStyle.h"
 
 class TextView : public View {
 
@@ -51,6 +54,12 @@ private:
     SkString ellipsisStr;
 
     std::vector<SkString> textVector;
+
+    std::unique_ptr<skia::textlayout::TextStyle> defaultStyle;
+
+    skia::textlayout::ParagraphBuilderImpl *paragraphBuilder;
+
+    sk_sp<skia::textlayout::FontCollection> fontCollection;
 
 };
 

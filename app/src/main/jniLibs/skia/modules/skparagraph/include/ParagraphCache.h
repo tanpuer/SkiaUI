@@ -3,7 +3,7 @@
 #define ParagraphCache_DEFINED
 
 #include "include/private/SkMutex.h"
-#include "src/core/SkLRUCache.h"
+#include "core/SkLRUCache.h"
 #include <functional>  // std::function
 
 #define PARAGRAPH_CACHE_STATS

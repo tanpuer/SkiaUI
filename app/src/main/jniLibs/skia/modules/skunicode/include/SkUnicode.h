@@ -9,7 +9,7 @@
 
 #include "include/core/SkSpan.h"
 #include "include/core/SkTypes.h"
-#include "src/utils/SkUTF.h"
+#include "utils/SkUTF.h"
 #include <vector>
 
 #if !defined(SKUNICODE_IMPLEMENTATION)
