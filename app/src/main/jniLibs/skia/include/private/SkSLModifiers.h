@@ -10,11 +10,14 @@
 
 #include "include/private/SkSLLayout.h"
 
-#include <vector>
+#include <cstddef>
+#include <memory>
+#include <string>
 
 namespace SkSL {
 
 class Context;
+class Position;
 
 /**
  * A set of modifier keywords (in, out, uniform, etc.) appearing before a declaration.
@@ -43,11 +46,13 @@ struct Modifiers {
         kHighp_Flag          = 1 <<  6,
         kMediump_Flag        = 1 <<  7,
         kLowp_Flag           = 1 <<  8,
+        // We use the Metal name for this one (corresponds to the GLSL 'shared' modifier)
+        kThreadgroup_Flag    = 1 <<  9,
         // SkSL extensions, not present in GLSL
-        kES3_Flag            = 1 <<  9,
-        kHasSideEffects_Flag = 1 <<  10,
-        kInline_Flag         = 1 <<  11,
-        kNoInline_Flag       = 1 <<  12,
+        kES3_Flag            = 1 << 10,
+        kHasSideEffects_Flag = 1 << 11,
+        kInline_Flag         = 1 << 12,
+        kNoInline_Flag       = 1 << 13,
     };
 
     Modifiers()
@@ -58,8 +63,8 @@ struct Modifiers {
     : fLayout(layout)
     , fFlags(flags) {}
 
-    String description() const {
-        String result = fLayout.description();
+    std::string description() const {
+        std::string result = fLayout.description();
 
         // SkSL extensions
         if (fFlags & kES3_Flag) {
@@ -102,6 +107,11 @@ struct Modifiers {
             result += "lowp ";
         }
 
+        // We're using a non-GLSL name for this one; the GLSL equivalent is "shared"
+        if (fFlags & kThreadgroup_Flag) {
+            result += "threadgroup ";
+        }
+
         return result;
     }
 
@@ -117,7 +127,7 @@ struct Modifiers {
      * Verifies that only permitted modifiers and layout flags are included. Reports errors and
      * returns false in the event of a violation.
      */
-    bool checkPermitted(const Context& context, int line, int permittedModifierFlags,
+    bool checkPermitted(const Context& context, Position pos, int permittedModifierFlags,
             int permittedLayoutFlags) const;
 
     Layout fLayout;

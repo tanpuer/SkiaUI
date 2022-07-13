@@ -23,7 +23,7 @@
     !defined(SK_BUILD_FOR_UNIX) && !defined(SK_BUILD_FOR_MAC)
 
     #ifdef __APPLE__
-        #include "TargetConditionals.h"
+        #include <TargetConditionals.h>
     #endif
 
     #if defined(_WIN32) || defined(__SYMBIAN32__)
@@ -193,9 +193,9 @@
 #else
     #include "include/config/SkUserConfig.h"
 #endif
+// IWYU pragma: end_exports
 #include <stddef.h>
 #include <stdint.h>
-// IWYU pragma: end_exports
 
 // Post SkUserConfig.h checks and such.
 #if !defined(SK_DEBUG) && !defined(SK_RELEASE)
@@ -236,7 +236,7 @@
 #  define SK_SUPPORT_GPU 1
 #endif
 
-#if SK_SUPPORT_GPU || SK_GRAPHITE_ENABLED
+#if SK_SUPPORT_GPU || defined(SK_GRAPHITE_ENABLED)
 #  if !defined(SK_ENABLE_SKSL)
 #    define SK_ENABLE_SKSL
 #  endif
@@ -263,8 +263,10 @@
 
 #if defined(SK_BUILD_FOR_GOOGLE3)
     void SkDebugfForDumpStackTrace(const char* data, void* unused);
-    void DumpStackTrace(int skip_count, void w(const char*, void*), void* arg);
-#  define SK_DUMP_GOOGLE3_STACK() DumpStackTrace(0, SkDebugfForDumpStackTrace, nullptr)
+    namespace base {
+        void DumpStackTrace(int skip_count, void w(const char*, void*), void* arg);
+    }
+#  define SK_DUMP_GOOGLE3_STACK() ::base::DumpStackTrace(0, SkDebugfForDumpStackTrace, nullptr)
 #else
 #  define SK_DUMP_GOOGLE3_STACK()
 #endif
@@ -338,14 +340,6 @@
 #  endif
 #endif
 
-#if !defined(SK_MAYBE_UNUSED)
-#  if defined(__clang__) || defined(__GNUC__)
-#    define SK_MAYBE_UNUSED [[maybe_unused]]
-#  else
-#    define SK_MAYBE_UNUSED
-#  endif
-#endif
-
 /**
  * If your judgment is better than the compiler's (i.e. you've profiled it),
  * you can use SK_ALWAYS_INLINE to force inlining. E.g.
@@ -372,14 +366,6 @@
 #  endif
 #endif
 
-#if SK_CPU_SSE_LEVEL >= SK_CPU_SSE_LEVEL_SSE1
-    #define SK_PREFETCH(ptr) _mm_prefetch(reinterpret_cast<const char*>(ptr), _MM_HINT_T0)
-#elif defined(__GNUC__)
-    #define SK_PREFETCH(ptr) __builtin_prefetch(ptr)
-#else
-    #define SK_PREFETCH(ptr)
-#endif
-
 #ifndef SK_PRINTF_LIKE
 #  if defined(__clang__) || defined(__GNUC__)
 #    define SK_PRINTF_LIKE(A, B) __attribute__((format(printf, (A), (B))))
@@ -400,12 +386,10 @@
 #  define GR_TEST_UTILS 0
 #endif
 
-#ifndef SK_GPU_V2
-#  define SK_GPU_V2 0
-#endif
-
-#ifndef SK_GPU_V1
-#  define SK_GPU_V1 1
+#if !SK_SUPPORT_GPU
+   #define SK_GPU_V1 0 // always false if Ganesh is disabled
+#elif !defined(SK_GPU_V1)
+#  define SK_GPU_V1 1   // otherwise default to v1 enabled
 #endif
 
 #if defined(SK_HISTOGRAM_ENUMERATION)  || \
@@ -512,7 +496,7 @@ typedef unsigned U16CPU;
 /** @return false or true based on the condition
 */
 template <typename T> static constexpr bool SkToBool(const T& x) {
-    return 0 != x;  // NOLINT(modernize-use-nullptr)
+    return (bool)x;
 }
 
 static constexpr int16_t SK_MaxS16 = INT16_MAX;
@@ -537,6 +521,15 @@ static inline constexpr int64_t SkLeftShift(int64_t value, int32_t shift) {
 
 /** @return the number of entries in an array (not a pointer)
 */
+// The SkArrayCountHelper template returns a type 'char (&)[N]', a reference to an array of
+// char with N elements, where N is deduced using function parameter type deduction. This is then
+// used in the sizeof operator in SK_ARRAY_COUNT. The sizeof operator ignores the reference, and
+// just evaluates the size of the array type.
+//
+// DEPRECATED: use std::size() instead.
+// Note: Rarely, std::size(z) can't deduce the type of z during compile time for static_assert
+// while SK_ARRAY_COUNT can. It can't be deduced because z is part of class, and the class' this
+// pointer is not a valid constexpr expression. Use SkASSERT instead.
 template <typename T, size_t N> char (&SkArrayCountHelper(T (&array)[N]))[N];
 #define SK_ARRAY_COUNT(array) (sizeof(SkArrayCountHelper(array)))
 

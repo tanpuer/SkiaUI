@@ -7,6 +7,7 @@
 
 
 #include "View.h"
+#include "core/SkImage.h"
 
 class ImageView : public View {
 

@@ -28,9 +28,17 @@ link_directories(
 )
 
 set(LINK_LIB_LIST
+        freetype2
+        harfbuzz
+        icu
+        skcms
         skia
+        skparagraph
+        skresources
         skshaper
-        svg)
+        skunicode
+        svg
+        )
 
 aux_source_directory(src/main/cpp srcs)
 aux_source_directory(src/main/cpp/base srcs)

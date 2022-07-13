@@ -6,7 +6,6 @@
 #include "core/SkColorFilter.h"
 #include "ImageView.h"
 #include "core/SkData.h"
-#include "core/SkImage.h"
 
 ImageView::ImageView() : View(), radius(0), scaleType(ScaleType::FitXY) {
     imagePaint = std::make_unique<SkPaint>();
