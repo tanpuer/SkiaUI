@@ -44,6 +44,10 @@ public:
 
     virtual void setAlpha(float alpha) override;
 
+    void setMaxLines(int maxLine);
+
+    void setEllipsis(bool ellipsis);
+
 protected:
 
     SkString text;
@@ -63,6 +67,10 @@ protected:
     sk_sp<FontCollection> fontCollection;
 
     std::unique_ptr<Paragraph> paragraph;
+
+    int maxLine;
+
+    bool ellipsis;
 
 };
 

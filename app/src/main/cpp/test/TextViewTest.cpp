@@ -42,7 +42,7 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             auto textView = new TextView();
             textView->setConfig(root->config);
             textView->setText(SkString("abcdefghijABCDEFGHIJ"));
-            textView->setTextColor(SK_ColorBLACK);
+            textView->setTextColor(SK_ColorGREEN);
             textView->setTextSize(60);
             textView->setBackgroundColor(SK_ColorRED);
             textView->setStyle(SkPaint::kStroke_Style);

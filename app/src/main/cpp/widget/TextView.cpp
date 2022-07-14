@@ -8,7 +8,7 @@
 #include <base/native_log.h>
 #include "core/SkFont.h"
 
-TextView::TextView() : View() {
+TextView::TextView() : View(), maxLine(0), ellipsis(true) {
     textPaint = new SkPaint();
     textPaint->setAntiAlias(true);
     textRect = SkRect::MakeEmpty();
@@ -20,7 +20,6 @@ TextView::TextView() : View() {
 
 TextView::~TextView() {
     delete textPaint;
-//    ALOGD("~View TextView")
 }
 
 const char *TextView::name() {
@@ -46,6 +45,9 @@ void TextView::setTextColor(SkColor color) {
 void TextView::setAlpha(float alpha) {
     View::setAlpha(alpha);
     textPaint->setAlphaf(alpha);
+    auto color = textPaint->getColor();
+    defaultStyle->setColor(SkColorSetARGB(alpha * 255, SkColorGetR(color), SkColorGetG(color),
+                                          SkColorGetB(color)));
     isDirty = true;
 }
 
@@ -76,6 +78,10 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         skia::textlayout::ParagraphStyle paraStyle;
         paraStyle.setTextStyle(*defaultStyle);
         paraStyle.setTextAlign(TextAlign::kCenter);
+        if (maxLine > 0) {
+            paraStyle.setEllipsis(u"\u2026");
+            paraStyle.setMaxLines(maxLine);
+        }
         paragraphBuilder = std::make_unique<ParagraphBuilderImpl>(paraStyle, fontCollection);
         paragraphBuilder->addText(text.c_str());
         paragraph = paragraphBuilder->Build();
@@ -113,5 +119,16 @@ void TextView::draw(SkCanvas *canvas) {
 void TextView::setTextSize(SkScalar textSize) {
     font.setSize(textSize);
     defaultStyle->setFontSize(textSize);
+    isDirty = true;
+}
+
+void TextView::setMaxLines(int maxLine) {
+    assert(maxLine > 0);
+    this->maxLine = maxLine;
+    isDirty = true;
+}
+
+void TextView::setEllipsis(bool ellipsis) {
+    this->ellipsis = ellipsis;
     isDirty = true;
 }
