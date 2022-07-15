@@ -27,13 +27,13 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
         {
             auto textView = new TextView();
             textView->setConfig(root->config);
-            textView->setText(SkString("Code Boy"));
+            textView->setText(SkString(
+                    "ضخمة ص ،😁😂🤣ضضض ؤ،،😗😗😍😋شسي،😗😁😁ؤرى،😗😃😄😍ببب،🥰😅🥰🥰🥰ثيلااتنabcdefghijABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg中文"));
             textView->setTextColor(SK_ColorBLACK);
             textView->setTextSize(60);
             textView->setBackgroundColor(SK_ColorRED);
             textView->setStyle(SkPaint::kStroke_Style);
-//        textView->setAlignSelf(YGAlignCenter);
-            auto tvLayoutParams = LayoutParams::makeWrapContent(true, true);
+            auto tvLayoutParams = LayoutParams::makeExactlyWidth(width);
             tvLayoutParams->setMargin(50);
             root->addView(textView, tvLayoutParams);
         }
@@ -43,11 +43,23 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             textView->setConfig(root->config);
             textView->setText(SkString("abcdefghijABCDEFGHIJ"));
             textView->setTextColor(SK_ColorGREEN);
+            textView->setTextSize(100);
+            textView->setBackgroundColor(SK_ColorRED);
+            textView->setStyle(SkPaint::kStroke_Style);
+            auto tvLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 300);
+            tvLayoutParams->setMargin(50);
+            root->addView(textView, tvLayoutParams);
+        }
+
+        {
+            auto textView = new TextView();
+            textView->setConfig(root->config);
+            textView->setText(SkString("abcdefghijklmn\nABCDEFGHIJKLMN"));
+            textView->setTextColor(SK_ColorGREEN);
             textView->setTextSize(60);
             textView->setBackgroundColor(SK_ColorRED);
             textView->setStyle(SkPaint::kStroke_Style);
-//        textView->setAlignSelf(YGAlignCenter);
-            auto tvLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 300);
+            auto tvLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 100);
             tvLayoutParams->setMargin(50);
             root->addView(textView, tvLayoutParams);
         }

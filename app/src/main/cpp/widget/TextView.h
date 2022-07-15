@@ -46,8 +46,6 @@ public:
 
     void setMaxLines(int maxLine);
 
-    void setEllipsis(bool ellipsis);
-
 protected:
 
     SkString text;
@@ -55,8 +53,6 @@ protected:
     SkFont font;
 
     SkRect textRect;
-
-    SkString ellipsisStr;
 
     std::vector<SkString> textVector;
 
@@ -69,8 +65,6 @@ protected:
     std::unique_ptr<Paragraph> paragraph;
 
     int maxLine;
-
-    bool ellipsis;
 
 };
 

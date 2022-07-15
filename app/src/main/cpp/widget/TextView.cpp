@@ -7,12 +7,12 @@
 #include <utility>
 #include <base/native_log.h>
 #include "core/SkFont.h"
+#include "math.h"
 
-TextView::TextView() : View(), maxLine(0), ellipsis(true) {
+TextView::TextView() : View(), maxLine(0) {
     textPaint = new SkPaint();
     textPaint->setAntiAlias(true);
     textRect = SkRect::MakeEmpty();
-    ellipsisStr = SkString('...');
     defaultStyle = std::make_unique<TextStyle>();
     fontCollection = sk_make_sp<FontCollection>();
     fontCollection->setDefaultFontManager(SkFontMgr::RefDefault());
@@ -56,23 +56,6 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(0, 0);
         return;
     }
-//    auto length = font.measureText(static_cast<const void *>(text.c_str()), strlen(text.c_str()),
-//                                   SkTextEncoding::kUTF8,
-//                                   &textRect, textPaint);
-//    if (layoutParams->_widthMode == EXACTLY && layoutParams->_heightMode == EXACTLY) {
-//        auto ellipsisStrLength = font.measureText(static_cast<const void *>(ellipsisStr.c_str()), 3,
-//                                                  SkTextEncoding::kUTF8,
-//                                                  nullptr, textPaint);
-//        if (layoutParams->_width < length) {
-//            textVector.clear();
-//            //todo LineBreak
-//        }
-//        setMeasuredDimension(layoutParams->_width, layoutParams->_height);
-//        return;
-//    }
-//    setMeasuredDimension(static_cast<int>(length), static_cast<int>(font.getSpacing()));
-
-
     if (isDirty) {
         isDirty = false;
         skia::textlayout::ParagraphStyle paraStyle;
@@ -85,21 +68,33 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         paragraphBuilder = std::make_unique<ParagraphBuilderImpl>(paraStyle, fontCollection);
         paragraphBuilder->addText(text.c_str());
         paragraph = paragraphBuilder->Build();
-        if (layoutParams->_widthMode == EXACTLY && layoutParams->_heightMode == EXACTLY) {
-            setMeasuredDimension(layoutParams->_width, layoutParams->_height);
-            return;
+        auto width = 0;
+        auto height = 0;
+        auto length = font.measureText(static_cast<const void *>(text.c_str()),
+                                       strlen(text.c_str()),
+                                       SkTextEncoding::kUTF8,
+                                       &textRect, textPaint);
+        //为了方便计算大小，必须强制制定TextView的宽度
+        if (layoutParams->_widthMode == EXACTLY) {
+            width = layoutParams->_width;
+        } else {
+            width = length;
         }
-//        auto rectsForRange = paragraph->getRectsForRange(0, text.size(), RectHeightStyle::kTight,
-//                                                         RectWidthStyle::kTight);
-//        assert(rectsForRange.empty());
-//        auto wrapRect = rectsForRange[0].rect;
-//        if (layoutParams->_widthMode == EXACTLY) {
-//            setMeasuredDimension(layoutParams->_width, wrapRect.height());
-//        } else if (layoutParams->_heightMode == EXACTLY) {
-//            setMeasuredDimension(wrapRect.width(), layoutParams->_height);
-//        } else {
-//            setMeasuredDimension(wrapRect.width(), wrapRect.height());
-//        }
+        paragraph->layout(width);
+        auto spacing = font.getSpacing();
+        if (layoutParams->_heightMode == EXACTLY) {
+            // Parent has told us how big to be. So be it.
+            height = layoutParams->_height;
+            if (paragraph->getHeight() > layoutParams->_height) {
+                setMaxLines(floor(layoutParams->_height / spacing));
+                //当发现文字高度大于textview高度，更新maxLine，重新走measure方法
+                measure(widthMeasureSpec, heightMeasureSpec);
+                return;
+            }
+        } else {
+            height = paragraph->getHeight();
+        }
+        setMeasuredDimension(width, height);
     }
 }
 
@@ -110,9 +105,7 @@ void TextView::draw(SkCanvas *canvas) {
 //                           skRect.top() + textRect.height(), font, *textPaint);
 //    canvas->drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, skRect.left(),
 //                           skRect.top() + textRect.height() * 2, font, *textPaint);
-
     SkASSERT(paragraph);
-    paragraph->layout(skRect.width());
     paragraph->paint(canvas, skRect.left(), skRect.top());
 }
 
@@ -125,10 +118,5 @@ void TextView::setTextSize(SkScalar textSize) {
 void TextView::setMaxLines(int maxLine) {
     assert(maxLine > 0);
     this->maxLine = maxLine;
-    isDirty = true;
-}
-
-void TextView::setEllipsis(bool ellipsis) {
-    this->ellipsis = ellipsis;
     isDirty = true;
 }
