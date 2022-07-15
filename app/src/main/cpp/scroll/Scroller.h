@@ -5,4 +5,8 @@
 #ifndef SKIAUI_SCROLLER_H
 #define SKIAUI_SCROLLER_H
 
+class Scroller {
+
+};
+
 #endif //SKIAUI_SCROLLER_H
