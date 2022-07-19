@@ -81,7 +81,6 @@ void FlexboxLayout::layoutVertical(int l, int t, int r, int b) {
 }
 
 void FlexboxLayout::layoutHorizontal(int l, int t, int r, int b) {
-    auto tempLeft = l;
     for (auto &child: children) {
         auto left = static_cast<int>(YGNodeLayoutGetLeft(child->node));
         auto top = static_cast<int>(YGNodeLayoutGetTop(child->node));

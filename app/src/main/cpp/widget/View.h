@@ -129,11 +129,20 @@ public:
 
     virtual void setPadding(int padding);
 
-    virtual void setSizePercent(float widthPercent, float heightPercent);
+    /**
+     * 绝大部分情况下，宽度根据屏幕宽度百分比设置，高度参考宽度，保持宽高比
+     * @param widthPercent
+     * @param hwRatio
+     */
+    virtual void setSizePercent(float widthPercent, float hwRatio);
 
     virtual void setWidthAuto();
 
     virtual void setHeightAuto();
+
+    float widthPercent, hwRatio;
+
+    bool hasPercent();
 
 #pragma mark TouchEvent
 

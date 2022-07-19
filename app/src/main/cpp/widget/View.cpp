@@ -12,7 +12,8 @@ View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadi
                minWidth(0), minHeight(0),
                parentId(0),
                marginLeft(0), marginTop(0), marginRight(0), marginBottom(0),
-               isDirty(false) {
+               isDirty(false),
+               widthPercent(0.0f), hwRatio(0.0f) {
     viewId = VIEW_ID++;
     paint = new SkPaint();
     paint->setAntiAlias(true);
@@ -193,13 +194,13 @@ void View::setPadding(int padding) {
     YGNodeStyleSetPadding(node, YGEdgeAll, padding);
 }
 
-void View::setSizePercent(float widthPercent, float heightPercent) {
+void View::setSizePercent(float widthPercent, float hwRatio) {
     YGAssert(node, "view is null, pls check");
     if (node == nullptr) {
         return;
     }
-    YGNodeStyleSetWidthPercent(node, widthPercent);
-    YGNodeStyleSetHeightPercent(node, heightPercent);
+    this->widthPercent = widthPercent;
+    this->hwRatio = hwRatio;
 }
 
 void View::setWidthAuto() {
@@ -245,4 +246,8 @@ void View::handleAnimation() {
     if (animator != nullptr) {
 
     }
+}
+
+bool View::hasPercent() {
+    return !YGFloatsEqual(0.0f, widthPercent) && YGFloatsEqual(0.0f, hwRatio);
 }

@@ -280,3 +280,15 @@ void ViewGroup::requestDisallowInterceptTouchEvent(bool disallowIntercept) {
     touchEventDispatcher->requestDisallowInterceptTouchEvent(disallowIntercept);
 }
 
+bool ViewGroup::hasPercent() {
+    if (View::hasPercent()) {
+        return true;
+    }
+    for (auto &child: children) {
+        if (child->hasPercent()) {
+            return true;
+        }
+    }
+    return false;
+}
+

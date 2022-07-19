@@ -6,10 +6,13 @@
 #define SKIAUI_SCROLLVIEW_H
 
 
-#include "ViewGroup.h"
+#include "FlexboxLayout.h"
 #include "Scroller.h"
 
-class ScrollView : public ViewGroup {
+/**
+ * 高度=子View高度之和，不支持嵌套ScrollView
+ */
+class ScrollView : public FlexboxLayout {
 
 public:
 
@@ -17,6 +20,10 @@ public:
 
     virtual ~ScrollView();
 
+    virtual void measure(int widthMeasureSpec, int heightMeasureSpec) override;
+
+    virtual void layout(int l, int t, int r, int b) override;
+    
 protected:
 
     Scroller *scroller;
