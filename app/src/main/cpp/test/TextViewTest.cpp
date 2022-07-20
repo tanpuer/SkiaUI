@@ -85,14 +85,11 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             auto root1 = new FlexboxLayout();
             config = YGConfigNew();
             root1->setConfig(config);
-            auto lp = LayoutParams::makeWrapContent(width, height);
-            lp->setMargin(50);
-            root1->setLayoutParams(lp);
-            root1->setFlexWrap(YGWrapWrap);
+            root1->setFlexWrap(YGWrapNoWrap);
             root1->setFlexDirection(YGFlexDirectionRow);
-            root1->setJustifyContent(YGJustifyCenter);
+            root1->setJustifyContent(YGJustifyFlexStart);
             root1->setAlignItems(YGAlignCenter);
-            root1->setAlignContent(YGAlignCenter);
+            root1->setAlignContent(YGAlignAuto);
             root1->setStrokeWidth(10);
             root1->setStyle(SkPaint::kStroke_Style);
             root1->setBackgroundColor(SK_ColorYELLOW);
@@ -100,22 +97,9 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             {
                 auto textView = new TextView();
                 textView->setConfig(root1->config);
-                textView->setText(SkString("横向测试"));
+                textView->setText(SkString("horizontal test"));
                 textView->setTextColor(SK_ColorBLACK);
                 textView->setTextSize(60);
-                textView->setBackgroundColor(SK_ColorRED);
-                textView->setStyle(SkPaint::kStroke_Style);
-                auto tvLayoutParams = LayoutParams::makeExactlyWidth(width);
-                tvLayoutParams->setMargin(50);
-                root1->addView(textView, tvLayoutParams);
-            }
-
-            {
-                auto textView = new TextView();
-                textView->setConfig(root1->config);
-                textView->setText(SkString("abcdefghijABCDEFGHIJKLMNOPQRST"));
-                textView->setTextColor(SK_ColorGREEN);
-                textView->setTextSize(100);
                 textView->setBackgroundColor(SK_ColorRED);
                 textView->setStyle(SkPaint::kStroke_Style);
                 auto tvLayoutParams = LayoutParams::makeWrapContent();
@@ -126,17 +110,32 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             {
                 auto textView = new TextView();
                 textView->setConfig(root1->config);
-                textView->setText(SkString("abcdefghijklmn\nABCDEFGHIJKLMN"));
+                textView->setText(SkString("abcdefghijklmnopqrstuvw"));
                 textView->setTextColor(SK_ColorGREEN);
-                textView->setTextSize(60);
+                textView->setTextSize(100);
                 textView->setBackgroundColor(SK_ColorRED);
                 textView->setStyle(SkPaint::kStroke_Style);
-                auto tvLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 100);
+                auto tvLayoutParams = LayoutParams::makeWrapContent();
                 tvLayoutParams->setMargin(50);
                 root1->addView(textView, tvLayoutParams);
             }
+//
+//            {
+//                auto textView = new TextView();
+//                textView->setConfig(root1->config);
+//                textView->setText(SkString("abcdefghijklmn\nABCDEFGHIJKLMN"));
+//                textView->setTextColor(SK_ColorGREEN);
+//                textView->setTextSize(60);
+//                textView->setBackgroundColor(SK_ColorRED);
+//                textView->setStyle(SkPaint::kStroke_Style);
+//                auto tvLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 100);
+//                tvLayoutParams->setMargin(50);
+//                root1->addView(textView, tvLayoutParams);
+//            }
 
-            root->addView(root1, LayoutParams::makeExactlyWidth(width));
+            auto lp = LayoutParams::makeExactlyWidth(width);
+            lp->setMargin(50);
+            root->addView(root1, lp);
         }
 
     }

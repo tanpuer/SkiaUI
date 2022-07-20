@@ -223,7 +223,8 @@ int ViewGroup::getHeight() {
 int ViewGroup::getMaxHeightInChildren() {
     int maxHeight = 0;
     for (auto &child: children) {
-        maxHeight = std::max(maxHeight, child->getHeight());
+        maxHeight = std::max(maxHeight,
+                             child->getHeight() + child->marginTop + child->marginBottom);
     }
     return maxHeight;
 }
@@ -231,7 +232,7 @@ int ViewGroup::getMaxHeightInChildren() {
 int ViewGroup::getMaxWidthInChildren() {
     int maxWidth = 0;
     for (auto &child: children) {
-        maxWidth = std::max(maxWidth, child->getWidth());
+        maxWidth = std::max(maxWidth, child->getWidth() + child->marginLeft + child->marginRight);
     }
     return maxWidth;
 }

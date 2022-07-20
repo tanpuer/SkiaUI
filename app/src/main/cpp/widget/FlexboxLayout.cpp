@@ -36,12 +36,14 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
         if (layoutParams->_heightMode == EXACTLY) {
             YGNodeStyleSetHeight(node, layoutParams->_height);
         } else {
+            //todo, 目前只处理no-wrap，wrap时如果换行了就不对
             YGNodeStyleSetHeight(node, getMaxHeightInChildren());
         }
     } else {
         if (layoutParams->_widthMode == EXACTLY) {
             YGNodeStyleSetWidth(node, layoutParams->_width);
         } else {
+            //todo, 目前只处理no-wrap，wrap时如果换行了就不对
             YGNodeStyleSetWidth(node, getMaxWidthInChildren());
         }
         if (layoutParams->_heightMode == EXACTLY) {
@@ -57,6 +59,7 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
 }
 
 void FlexboxLayout::layout(int l, int t, int r, int b) {
+    ALOGD("FlexboxLayout margin %d %d %d %d", marginLeft, marginTop, marginRight, marginBottom);
     skRect.setLTRB(l, t, r, b);
     width = r - l;
     height = b - t;
@@ -91,4 +94,9 @@ void FlexboxLayout::layoutHorizontal(int l, int t, int r, int b) {
         //todo 需要考虑padding
         child->layout(left + l, top + t, left + l + width, top + t + height);
     }
+}
+
+void FlexboxLayout::setFlexWrap(YGWrap wrap) {
+    //默认只支持no-wrap，不换行
+    ViewGroup::setFlexWrap(YGWrapNoWrap);
 }

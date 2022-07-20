@@ -68,19 +68,17 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         paragraphBuilder = std::make_unique<ParagraphBuilderImpl>(paraStyle, fontCollection);
         paragraphBuilder->addText(text.c_str());
         paragraph = paragraphBuilder->Build();
-        auto width = 0;
-        auto height = 0;
-        auto length = font.measureText(static_cast<const void *>(text.c_str()),
-                                       strlen(text.c_str()),
-                                       SkTextEncoding::kUTF8,
-                                       &textRect, textPaint);
-        //为了方便计算大小，必须强制制定TextView的宽度
+        auto width = 0.0f;
+        auto height = 0.0f;
+        //为了方便计算大小，最好强制制定TextView的宽度，否则默认用maxIntrinsicWidth
         if (layoutParams->_widthMode == EXACTLY) {
-            width = layoutParams->_width;
+            width = static_cast<float >(layoutParams->_width);
+            paragraph->layout(width);
         } else {
-            width = length;
+            paragraph->layout(SK_ScalarInfinity);
+            width = paragraph->getMaxIntrinsicWidth() + 1;
+            paragraph->layout(width);
         }
-        paragraph->layout(width);
         auto spacing = font.getSpacing();
         if (layoutParams->_heightMode == EXACTLY) {
             // Parent has told us how big to be. So be it.
@@ -94,7 +92,7 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         } else {
             height = paragraph->getHeight();
         }
-        setMeasuredDimension(width, height);
+        setMeasuredDimension(static_cast<int>(width), static_cast<int>(height));
     }
 }
 
