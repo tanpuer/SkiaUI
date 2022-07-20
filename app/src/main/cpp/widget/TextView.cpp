@@ -82,7 +82,7 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         auto spacing = font.getSpacing();
         if (layoutParams->_heightMode == EXACTLY) {
             // Parent has told us how big to be. So be it.
-            height = layoutParams->_height;
+            height = static_cast<float >(layoutParams->_height);
             if (paragraph->getHeight() > layoutParams->_height) {
                 setMaxLines(floor(layoutParams->_height / spacing));
                 //当发现文字高度大于textview高度，更新maxLine，重新走measure方法
