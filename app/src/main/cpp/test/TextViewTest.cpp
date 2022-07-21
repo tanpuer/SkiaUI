@@ -47,6 +47,10 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
                 textView->setTextSize(60);
                 textView->setBackgroundColor(SK_ColorRED);
                 textView->setStyle(SkPaint::kStroke_Style);
+                textView->setDecoration(kLineThrough);
+                textView->setDecorationStyle(kSolid);
+                textView->setDecorationThicknessMultiplier(3);
+                textView->setDecorationColor(SK_ColorRED);
                 auto tvLayoutParams = LayoutParams::makeExactlyWidth(width);
                 tvLayoutParams->setMargin(50);
                 root1->addView(textView, tvLayoutParams);
@@ -55,11 +59,12 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             {
                 auto textView = new TextView();
                 textView->setConfig(root1->config);
-                textView->setText(SkString("abcdefghijABCDEFGHIJ"));
+                textView->setText(SkString("这是阴影测试"));
                 textView->setTextColor(SK_ColorGREEN);
                 textView->setTextSize(100);
                 textView->setBackgroundColor(SK_ColorRED);
                 textView->setStyle(SkPaint::kStroke_Style);
+                textView->addShadow(SK_ColorRED, {2.0, 2.0}, 1.0f);
                 auto tvLayoutParams = LayoutParams::makeExactlyLayoutParams(300, 300);
                 tvLayoutParams->setMargin(50);
                 root1->addView(textView, tvLayoutParams);

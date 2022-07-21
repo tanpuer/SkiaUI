@@ -40,11 +40,33 @@ public:
 
     virtual void setTextSize(SkScalar textSize);
 
-    SkPaint *textPaint;
-
     virtual void setAlpha(float alpha) override;
 
     void setMaxLines(int maxLine);
+
+    /**
+     * 上/中/下 划线
+     */
+    void setDecoration(TextDecoration decoration);
+
+    /**
+     * 实线/虚线/波浪线/点
+     */
+    void setDecorationStyle(TextDecorationStyle style);
+
+    void setDecorationColor(SkColor color);
+
+    /**
+     * decoration线条的粗度倍数
+     */
+    void setDecorationThicknessMultiplier(SkScalar m);
+
+    /**
+     * @param locale "en_US"
+     */
+    void setLocale(SkString locale);
+
+    void addShadow(SkColor color, SkPoint offset, double blurSigma);
 
 protected:
 
@@ -65,6 +87,8 @@ protected:
     std::unique_ptr<Paragraph> paragraph;
 
     int maxLine;
+
+    SkColor skColor;
 
 };
 

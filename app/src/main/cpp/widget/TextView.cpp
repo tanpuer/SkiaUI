@@ -9,9 +9,7 @@
 #include "core/SkFont.h"
 #include "math.h"
 
-TextView::TextView() : View(), maxLine(0) {
-    textPaint = new SkPaint();
-    textPaint->setAntiAlias(true);
+TextView::TextView() : View(), maxLine(0), skColor(SK_ColorBLACK) {
     textRect = SkRect::MakeEmpty();
     defaultStyle = std::make_unique<TextStyle>();
     fontCollection = sk_make_sp<FontCollection>();
@@ -19,7 +17,7 @@ TextView::TextView() : View(), maxLine(0) {
 }
 
 TextView::~TextView() {
-    delete textPaint;
+
 }
 
 const char *TextView::name() {
@@ -36,18 +34,15 @@ SkString TextView::getText() {
 }
 
 void TextView::setTextColor(SkColor color) {
-    SkASSERT(textPaint);
-    textPaint->setColor(color);
+    skColor = color;
     defaultStyle->setColor(color);
     isDirty = true;
 }
 
 void TextView::setAlpha(float alpha) {
     View::setAlpha(alpha);
-    textPaint->setAlphaf(alpha);
-    auto color = textPaint->getColor();
-    defaultStyle->setColor(SkColorSetARGB(alpha * 255, SkColorGetR(color), SkColorGetG(color),
-                                          SkColorGetB(color)));
+    defaultStyle->setColor(SkColorSetARGB(alpha * 255, SkColorGetR(skColor), SkColorGetG(skColor),
+                                          SkColorGetB(skColor)));
     isDirty = true;
 }
 
@@ -117,4 +112,29 @@ void TextView::setMaxLines(int maxLine) {
     assert(maxLine > 0);
     this->maxLine = maxLine;
     isDirty = true;
+}
+
+void TextView::setDecoration(TextDecoration decoration) {
+    defaultStyle->setDecoration(decoration);
+}
+
+void TextView::setDecorationStyle(TextDecorationStyle style) {
+    defaultStyle->setDecorationStyle(style);
+}
+
+void TextView::setDecorationColor(SkColor color) {
+    defaultStyle->setDecorationColor(color);
+}
+
+void TextView::setDecorationThicknessMultiplier(SkScalar m) {
+    defaultStyle->setDecorationThicknessMultiplier(m);
+}
+
+void TextView::setLocale(SkString locale) {
+    defaultStyle->setLocale(locale);
+}
+
+void TextView::addShadow(SkColor color, SkPoint offset, double blurSigma) {
+    auto shadow = TextShadow(color, offset, blurSigma);
+    defaultStyle->addShadow(shadow);
 }
