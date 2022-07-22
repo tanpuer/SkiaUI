@@ -34,6 +34,7 @@ void ImageView::setSource(const char *path) {
         return;
     }
     srcRect.setWH(static_cast<float>(skImage->width()), static_cast<float >(skImage->height()));
+    isDirty = true;
 }
 
 void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -41,16 +42,18 @@ void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
         setMeasuredDimension(0, 0);
         return;
     }
-    if (MeasureSpec::getMode(widthMeasureSpec) == EXACTLY &&
-        MeasureSpec::getMode(heightMeasureSpec) == EXACTLY) {
-        auto width = MeasureSpec::getSize(widthMeasureSpec);
-        auto height = MeasureSpec::getSize(heightMeasureSpec);
-        setMeasuredDimension(width, height);
-        ALOGD("imageView size: %d %d", width, height)
-        return;
+    if (isDirty) {
+        if (MeasureSpec::getMode(widthMeasureSpec) == EXACTLY &&
+            MeasureSpec::getMode(heightMeasureSpec) == EXACTLY) {
+            auto width = MeasureSpec::getSize(widthMeasureSpec);
+            auto height = MeasureSpec::getSize(heightMeasureSpec);
+            setMeasuredDimension(width, height);
+            ALOGD("imageView size: %d %d", width, height)
+            return;
+        }
+        ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
+        setMeasuredDimension(skImage->width(), skImage->height());
     }
-    ALOGD("imageView size: %d %d", skImage->width(), skImage->height())
-    setMeasuredDimension(skImage->width(), skImage->height());
 }
 
 void ImageView::layout(int l, int t, int r, int b) {
@@ -108,10 +111,12 @@ const char *ImageView::name() {
 void ImageView::setCornerRadius(int radius) {
     this->radius = static_cast<float >(radius);
     View::setCornerRadius(radius);
+    isDirty = true;
 }
 
 void ImageView::setScaleType(ImageView::ScaleType scaleType) {
     this->scaleType = scaleType;
+    isDirty = true;
 }
 
 
