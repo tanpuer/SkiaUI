@@ -71,7 +71,7 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
             paragraph->layout(width);
         } else {
             paragraph->layout(SK_ScalarInfinity);
-            width = floor(paragraph->getMaxIntrinsicWidth());
+            width = floor(paragraph->getMaxIntrinsicWidth()) + 1;
             paragraph->layout(width);
         }
         auto spacing = font.getSpacing();

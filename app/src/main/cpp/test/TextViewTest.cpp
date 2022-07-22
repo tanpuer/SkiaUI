@@ -90,7 +90,7 @@ void TextViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
             auto root1 = new FlexboxLayout();
             config = YGConfigNew();
             root1->setConfig(config);
-            root1->setFlexWrap(YGWrapNoWrap);
+            root1->setFlexWrap(YGWrapWrap);
             root1->setFlexDirection(YGFlexDirectionRow);
             root1->setJustifyContent(YGJustifyFlexStart);
             root1->setAlignItems(YGAlignCenter);

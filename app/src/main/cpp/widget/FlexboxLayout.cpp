@@ -22,7 +22,6 @@ void FlexboxLayout::setFlexDirection(YGFlexDirection direction) {
     ViewGroup::setFlexDirection(direction);
 }
 
-
 void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
     for (auto &child: children) {
         measureChild(child, widthMeasureSpec, heightMeasureSpec);
@@ -36,14 +35,14 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
         if (layoutParams->_heightMode == EXACTLY) {
             YGNodeStyleSetHeight(node, layoutParams->_height);
         } else {
-            //todo, 目前只处理no-wrap，wrap时如果换行了就不对
+            //no-wrap
             YGNodeStyleSetHeight(node, getMaxHeightInChildren());
         }
     } else {
         if (layoutParams->_widthMode == EXACTLY) {
             YGNodeStyleSetWidth(node, layoutParams->_width);
         } else {
-            //todo, 目前只处理no-wrap，wrap时如果换行了就不对
+            //no-wrap
             YGNodeStyleSetWidth(node, getMaxWidthInChildren());
         }
         if (layoutParams->_heightMode == EXACTLY) {
@@ -56,6 +55,38 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
           YGNodeStyleGetWidth(node).value, YGNodeStyleGetHeight(node).value);
     YGNodeCalculateLayout(node, YGNodeStyleGetWidth(node).value, YGNodeStyleGetHeight(node).value,
                           YGDirectionLTR);
+    //如果是wrap，存在换行的情况，要重新计算FlexboxLayout的宽高
+    if (layoutParams->_heightMode != EXACTLY && _direction == YGFlexDirectionRow &&
+        YGNodeStyleGetFlexWrap(node) == YGWrapWrap) {
+        auto minTop = INT_MAX;
+        auto maxTop = INT_MIN;
+        for (auto &child: children) {
+            if (child->skRect.top() < minTop) {
+                minTop = child->skRect.top();
+            }
+            if (child->skRect.top() > maxTop) {
+                maxTop = child->skRect.top();
+            }
+        }
+        if (maxTop > minTop) {
+            YGNodeStyleSetHeight(node, YGNodeStyleGetHeight(node).value + maxTop - minTop);
+        }
+    } else if (layoutParams->_widthMode != EXACTLY && _direction == YGFlexDirectionColumn &&
+               YGNodeStyleGetFlexWrap(node) == YGWrapWrap) {
+        auto minLeft = INT_MAX;
+        auto maxLeft = INT_MIN;
+        for (auto &child: children) {
+            if (child->skRect.left() < minLeft) {
+                minLeft = skRect.left();
+            }
+            if (child->skRect.left() > maxLeft) {
+                maxLeft = skRect.left();
+            }
+        }
+        if (maxLeft > minLeft) {
+            YGNodeStyleSetWidth(node, YGNodeStyleGetWidth(node).value + maxLeft - minLeft);
+        }
+    }
 }
 
 void FlexboxLayout::layout(int l, int t, int r, int b) {
@@ -94,9 +125,4 @@ void FlexboxLayout::layoutHorizontal(int l, int t, int r, int b) {
         //todo 需要考虑padding
         child->layout(left + l, top + t, left + l + width, top + t + height);
     }
-}
-
-void FlexboxLayout::setFlexWrap(YGWrap wrap) {
-    //默认只支持no-wrap，不换行
-    ViewGroup::setFlexWrap(YGWrapNoWrap);
 }

@@ -118,7 +118,6 @@ public:
 
     int marginLeft, marginTop, marginRight, marginBottom;
 
-protected:
     SkIRect skRect;
 
     SkIRect skRectWithBorder;

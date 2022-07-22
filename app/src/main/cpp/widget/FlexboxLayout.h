@@ -27,8 +27,6 @@ public:
 
     virtual void layout(int l, int t, int r, int b) override;
 
-    void setFlexWrap(YGWrap wrap) override;
-
 private:
 
     void layoutVertical(int l, int t, int r, int b);
