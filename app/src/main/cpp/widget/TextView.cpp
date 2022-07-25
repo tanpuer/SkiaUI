@@ -14,10 +14,11 @@ TextView::TextView() : View(), maxLine(0), skColor(SK_ColorBLACK) {
     defaultStyle = std::make_unique<TextStyle>();
     fontCollection = sk_make_sp<FontCollection>();
     fontCollection->setDefaultFontManager(SkFontMgr::RefDefault());
+    stringBuilders = std::vector<StringBuilder>();
 }
 
 TextView::~TextView() {
-
+    stringBuilders.clear();
 }
 
 const char *TextView::name() {
@@ -26,6 +27,7 @@ const char *TextView::name() {
 
 void TextView::setText(SkString text) {
     this->text = std::move(text);
+    stringBuilders.clear();
     isDirty = true;
 }
 
@@ -47,7 +49,7 @@ void TextView::setAlpha(float alpha) {
 }
 
 void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
-    if (text.isEmpty()) {
+    if (text.isEmpty() && stringBuilders.empty()) {
         setMeasuredDimension(0, 0);
         return;
     }
@@ -61,7 +63,18 @@ void TextView::measure(int widthMeasureSpec, int heightMeasureSpec) {
             paraStyle.setMaxLines(maxLine);
         }
         paragraphBuilder = std::make_unique<ParagraphBuilderImpl>(paraStyle, fontCollection);
-        paragraphBuilder->addText(text.c_str());
+        if (!stringBuilders.empty()) {
+            for (const auto &iterator: stringBuilders) {
+                TextStyle textStyle;
+                textStyle.setColor(iterator.color);
+                textStyle.setFontStyle(iterator.fontStyle);
+                textStyle.setFontSize(iterator.textSize);
+                paragraphBuilder->pushStyle(textStyle);
+                paragraphBuilder->addText(iterator.text.c_str());
+            }
+        } else {
+            paragraphBuilder->addText(text.c_str());
+        }
         paragraph = paragraphBuilder->Build();
         auto width = 0.0f;
         auto height = 0.0f;
@@ -130,11 +143,16 @@ void TextView::setDecorationThicknessMultiplier(SkScalar m) {
     defaultStyle->setDecorationThicknessMultiplier(m);
 }
 
-void TextView::setLocale(SkString locale) {
+void TextView::setLocale(const SkString &locale) {
     defaultStyle->setLocale(locale);
 }
 
 void TextView::addShadow(SkColor color, SkPoint offset, double blurSigma) {
     auto shadow = TextShadow(color, offset, blurSigma);
     defaultStyle->addShadow(shadow);
+}
+
+void TextView::pushText(const TextView::StringBuilder &stringBuilder) {
+    stringBuilders.emplace_back(stringBuilder);
+    isDirty = true;
 }

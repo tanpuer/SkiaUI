@@ -20,6 +20,28 @@ class TextView : public View {
 
 public:
 
+    struct StringBuilder {
+        SkString text;
+        SkColor color;
+        SkFontStyle fontStyle;
+        SkScalar textSize;
+
+        StringBuilder(SkString text, SkColor color, SkFontStyle fontStyle,
+                      SkScalar textSize) noexcept {
+            this->text = std::move(text);
+            this->color = color;
+            this->fontStyle = std::move(fontStyle);
+            this->textSize = textSize;
+        }
+
+        ~StringBuilder() {
+
+        }
+    };
+
+
+public:
+
     TextView();
 
     virtual ~TextView();
@@ -28,7 +50,7 @@ public:
 
     virtual void draw(SkCanvas *canvas) override;
 
-    const char * name() override;
+    const char *name() override;
 
 #pragma mark TextView api
 
@@ -43,6 +65,14 @@ public:
     virtual void setAlpha(float alpha) override;
 
     void setMaxLines(int maxLine);
+
+    /**
+     * 功能类似于Android的StringBuilder
+     * @param color
+     * @param fontStyle
+     * @param text
+     */
+    void pushText(const StringBuilder &stringBuilder);
 
     /**
      * 上/中/下 划线
@@ -64,7 +94,7 @@ public:
     /**
      * @param locale "en_US"
      */
-    void setLocale(SkString locale);
+    void setLocale(const SkString &locale);
 
     void addShadow(SkColor color, SkPoint offset, double blurSigma);
 
@@ -89,6 +119,8 @@ protected:
     int maxLine;
 
     SkColor skColor;
+
+    std::vector<StringBuilder> stringBuilders;
 
 };
 
