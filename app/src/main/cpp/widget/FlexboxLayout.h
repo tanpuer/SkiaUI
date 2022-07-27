@@ -27,13 +27,19 @@ public:
 
     virtual void layout(int l, int t, int r, int b) override;
 
-private:
+    virtual void setFlexWrap(YGWrap wrap) override;
+
+    virtual bool addView(View *view, LayoutParams *layoutParams) override;
+
+    virtual bool removeView(View *view) override;
+
+    YGFlexDirection _direction = YGFlexDirectionColumn;
+
+protected:
 
     void layoutVertical(int l, int t, int r, int b);
 
     void layoutHorizontal(int l, int t, int r, int b);
-
-    YGFlexDirection _direction = YGFlexDirectionColumn;
 
 };
 

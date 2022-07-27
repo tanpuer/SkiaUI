@@ -30,18 +30,17 @@ public:
 
     virtual void setWeakView(View *view);
 
-private:
+    virtual void findTargetView(TouchEvent *touchEvent);
 
-    void findTargetView(TouchEvent *touchEvent);
+    virtual void dispatchToTargetView(TouchEvent *touchEvent);
 
-    void dispatchToTargetView(TouchEvent *touchEvent);
+    virtual void clearTargetView();
 
-    void clearTargetView();
+    virtual View *
+    findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent *touchEvent, float tempLeft,
+                            float tempTop);
 
-    View *findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent *touchEvent, float tempLeft,
-                                  float tempTop);
-
-private:
+protected:
 
     View *view;
 

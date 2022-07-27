@@ -161,7 +161,7 @@ protected:
 
 #pragma mark moving
 
-protected:
+public:
 
     float translateX;
     float translateY;

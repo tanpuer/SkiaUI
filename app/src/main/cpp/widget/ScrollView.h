@@ -23,7 +23,21 @@ public:
     virtual void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
     virtual void layout(int l, int t, int r, int b) override;
-    
+
+    virtual void updateTranslateY(float diffY);
+
+    virtual void updateTranslateX(float diffX);
+
+    virtual void setFlexWrap(YGWrap wrap) override;
+
+    virtual void setFlexDirection(YGFlexDirection direction) override;
+
+    virtual bool addView(View *view, LayoutParams *layoutParams) override;
+
+    virtual bool removeView(View *view) override;
+
+    virtual bool canScroll();
+
 protected:
 
     Scroller *scroller;

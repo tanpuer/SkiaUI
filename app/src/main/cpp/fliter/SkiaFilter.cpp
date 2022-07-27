@@ -5,6 +5,7 @@
 #include <GLES3/gl3.h>
 #include <base/native_log.h>
 #include <yoga/Yoga.h>
+#include <ScrollViewTest.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
 #include "HorizontalDrawTest.h"
@@ -18,8 +19,9 @@ SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
     SkGraphics::Init();
 //    testDraw = new HorizontalDrawTest();
 //    testDraw = new ImageViewTest();
-    testDraw = new TextViewTest();
+//    testDraw = new TextViewTest();
 //    testDraw = new MovingDrawTest();
+    testDraw = new ScrollViewTest();
 }
 
 SkiaFilter::~SkiaFilter() {
