@@ -6,7 +6,7 @@
 #include "ScrollView.h"
 #include "algorithm"
 
-ScrollView::ScrollView() {
+ScrollView::ScrollView() : xVelocity(0.0f), yVelocity(0.0f) {
     touchEventDispatcher = std::make_unique<ScrollDispatcher>(this);
 }
 
@@ -104,4 +104,10 @@ bool ScrollView::canScroll() {
     } else {
         return abs(translateY) < getChildHeightSum() - height;
     }
+}
+
+void ScrollView::setVelocity(float x, float y) {
+    this->xVelocity = x;
+    this->yVelocity = y;
+    ALOGD("ScrollView setVelocity %f %f", x, y)
 }

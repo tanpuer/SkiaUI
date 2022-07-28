@@ -7,6 +7,7 @@
 
 
 #include <ITestDraw.h>
+#include <Velocity.h>
 #include "IFilter.h"
 #include "gpu/gl/GrGLInterface.h"
 #include "gpu/GrDirectContext.h"
@@ -26,6 +27,8 @@ public:
     virtual void doFrame(long time) override;
 
     void dispatchTouchEvent(TouchEvent *touchEvent) override;
+
+    void setVelocity(Velocity *velocity);
 
 private:
 

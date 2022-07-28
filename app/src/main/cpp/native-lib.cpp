@@ -57,12 +57,24 @@ native_TouchEvent(JNIEnv *env, jobject instance, jlong nativePtr, jint action, j
     ALOGD("native_TouchEvent %d %f %f", action, x, y)
 }
 
+extern "C" JNIEXPORT void JNICALL
+native_SetVelocity(JNIEnv *env, jobject instance, jlong nativePtr, jfloat x, jfloat y) {
+    auto skiaContext = reinterpret_cast<SkiaViewContext *>(nativePtr);
+    if (skiaContext == nullptr) {
+        ALOGE("native_TouchEvent reinterpret_cast error")
+        return;
+    }
+    skiaContext->setVelocity(x, y);
+    ALOGD("native_SetVelocity %f %f", x, y)
+}
+
 static JNINativeMethod g_RenderMethods[] = {
         {"nativeSurfaceCreated",   "(Landroid/view/Surface;)J", (void *) native_SurfaceCreated},
         {"nativeSurfaceChanged",   "(JII)V",                    (void *) native_SurfaceChanged},
         {"nativeSurfaceDestroyed", "(J)V",                      (void *) native_SurfaceDestroyed},
         {"nativeSurfaceDoFrame",   "(JJ)V",                     (void *) native_SurfaceDoFrame},
-        {"nativeTouchEvent",       "(JIFF)Z",                   (void *) native_TouchEvent}
+        {"nativeTouchEvent",       "(JIFF)Z",                   (void *) native_TouchEvent},
+        {"nativeSetVelocity",      "(JFF)V",                    (void *) native_SetVelocity}
 };
 
 static int RegisterNativeMethods(JNIEnv *env, const char *className, JNINativeMethod *nativeMethods,

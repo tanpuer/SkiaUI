@@ -33,3 +33,9 @@ void SkiaViewContext::dispatchTouchEvent(TouchEvent *touchEvent) {
         glContext->sendMessage(glContext->kMsgTouchEvent, touchEvent);
     }
 }
+
+void SkiaViewContext::setVelocity(float x, float y) {
+    if (glContext != nullptr) {
+        glContext->sendMessage(glContext->kMsgTouchVelocity, (void *) (new Velocity(x, y)));
+    }
+}

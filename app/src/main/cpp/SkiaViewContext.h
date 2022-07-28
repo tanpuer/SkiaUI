@@ -24,6 +24,8 @@ public:
 
     void dispatchTouchEvent(TouchEvent *touchEvent);
 
+    void setVelocity(float x, float y);
+
 private:
 
     HYEGLContext *glContext;

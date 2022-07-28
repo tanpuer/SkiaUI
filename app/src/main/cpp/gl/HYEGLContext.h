@@ -19,7 +19,8 @@ public:
         kMsgSurfaceSizeChanged,
         kMsgSurfaceOnDestroy,
         kMsgDoFrame,
-        kMsgTouchEvent
+        kMsgTouchEvent,
+        kMsgTouchVelocity
     };
 
 public:

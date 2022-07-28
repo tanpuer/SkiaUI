@@ -43,6 +43,10 @@ void HYEGLContext::handleMessage(Looper::LooperMessage *msg) {
             render->DispatchTouchEvent(static_cast<TouchEvent *>(msg->obj));
             break;
         }
+        case kMsgTouchVelocity: {
+            render->DispatchTouchVelocity(static_cast<Velocity *>(msg->obj));
+            break;
+        }
         default: {
             ALOGE("Unknown msg type, pls check %d", msg->what)
         }

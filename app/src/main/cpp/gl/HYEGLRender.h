@@ -6,6 +6,7 @@
 #define HYEDITOR_TEMPLEEGLRENDER_H
 
 #include <jni.h>
+#include <Velocity.h>
 #include "memory"
 #include "HYEGLCore.h"
 #include "HYAssetsHolder.h"
@@ -31,6 +32,8 @@ public:
     void OnDoFrame(long timeMills);
 
     void DispatchTouchEvent(TouchEvent *touchEvent);
+
+    void DispatchTouchVelocity(Velocity *velocity);
 
 private:
 

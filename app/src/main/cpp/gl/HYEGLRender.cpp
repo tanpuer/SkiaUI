@@ -67,3 +67,10 @@ void HYEGLRender::DispatchTouchEvent(TouchEvent *touchEvent) {
         delete touchEvent;
     }
 }
+
+void HYEGLRender::DispatchTouchVelocity(Velocity *velocity) {
+    if (mFilter != nullptr) {
+        mFilter->setVelocity(velocity);
+    }
+    delete velocity;
+}

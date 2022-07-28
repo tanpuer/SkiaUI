@@ -10,6 +10,8 @@ class HYSkiaView @JvmOverloads constructor(
 
     private var nativePtr: Long = 0L
 
+    private var velocityTracker: VelocityTracker? = null
+
     init {
         holder.addCallback(this)
     }
@@ -17,6 +19,7 @@ class HYSkiaView @JvmOverloads constructor(
     override fun surfaceCreated(holder: SurfaceHolder) {
         nativePtr = nativeSurfaceCreated(holder.surface)
         Choreographer.getInstance().postFrameCallback(this)
+        velocityTracker = VelocityTracker.obtain()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -27,6 +30,8 @@ class HYSkiaView @JvmOverloads constructor(
         Choreographer.getInstance().removeFrameCallback(this)
         nativeSurfaceDestroyed(nativePtr)
         nativePtr = 0L
+        velocityTracker?.recycle()
+        velocityTracker = null
     }
 
     override fun doFrame(time: Long) {
@@ -38,6 +43,15 @@ class HYSkiaView @JvmOverloads constructor(
         if (nativePtr == 0L) {
             return false
         }
+        velocityTracker?.addMovement(event)
+        if (event.action == MotionEvent.ACTION_UP) {
+            velocityTracker?.computeCurrentVelocity(1000)
+            nativeSetVelocity(
+                nativePtr,
+                velocityTracker?.xVelocity ?: 0f,
+                velocityTracker?.yVelocity ?: 0f
+            )
+        }
         return nativeTouchEvent(nativePtr, event.action, event.x, event.y)
     }
 
@@ -46,6 +60,7 @@ class HYSkiaView @JvmOverloads constructor(
     private external fun nativeSurfaceDestroyed(nativePtr: Long)
     private external fun nativeSurfaceDoFrame(nativePtr: Long, time: Long)
     private external fun nativeTouchEvent(nativePtr: Long, action: Int, x: Float, y: Float): Boolean
+    private external fun nativeSetVelocity(nativePtr: Long, xVelocity: Float, yVelocity: Float)
 
     companion object {
         init {

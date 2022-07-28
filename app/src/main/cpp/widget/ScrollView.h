@@ -38,9 +38,13 @@ public:
 
     virtual bool canScroll();
 
+    void setVelocity(float x, float y);
+
 protected:
 
     Scroller *scroller;
+
+    float xVelocity, yVelocity;
 
 };
 

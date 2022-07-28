@@ -6,6 +6,7 @@
 #include <base/native_log.h>
 #include <yoga/Yoga.h>
 #include <ScrollViewTest.h>
+#include <ScrollView.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
 #include "HorizontalDrawTest.h"
@@ -82,5 +83,13 @@ void SkiaFilter::dispatchTouchEvent(TouchEvent *touchEvent) {
     if (root == nullptr) {
         return;
     }
-    dynamic_cast<ViewGroup *>(root)->dispatchTouchEvent(touchEvent);
+    dynamic_cast<ViewGroup *>(root)->dispatchTouchEvent(mTouchEvent.get());
+}
+
+void SkiaFilter::setVelocity(Velocity *velocity) {
+    auto root = testDraw->getRootView();
+    auto scrollView = reinterpret_cast<ScrollView *>(root);
+    if (root != nullptr) {
+        scrollView->setVelocity(velocity->xVelocity, velocity->yVelocity);
+    }
 }
