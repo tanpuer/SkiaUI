@@ -17,4 +17,7 @@
 9. todo 接入v8
 
 
-![image](https://github.com/tanpuer/SkiaUI/blob/master/app/skia-ui.png)
+![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example1.jpeg)
+![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example2.jpeg)
+![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example1.gif)
+![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example2.gif)
