@@ -12,12 +12,12 @@
 4. 事件分发大体模仿安卓dispatchTouchEvent/interceptTouchEvent/onTouchEvent等，做了简化处理。
 5. 动画支持scale/rotate/translate，在layout阶段更新SKMatrix，从而更新绘制的矩形。
 6. 目前只支持View/TextView/ImageView，todo View凑活；ImageView支持了scaleType，圆角；TextView接入SkParagraph。
-7. scrollView实现，滑动，todo fling
+7. scrollView实现，滑动，fling
 8. todo 脏区渲染
 9. todo 接入v8
 
 
-![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example1.jpeg)
-![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example2.jpeg)
-![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example1.gif)
-![image](https://github.com/tanpuer/SkiaUI/blob/master/app/example2.gif)
+![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example1.jpeg)
+![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.jpeg)
+![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example1.gif)
+![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.gif)
