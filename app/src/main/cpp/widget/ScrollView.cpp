@@ -6,7 +6,10 @@
 #include "ScrollView.h"
 #include "algorithm"
 
-ScrollView::ScrollView() : xVelocity(0.0f), yVelocity(0.0f) {
+float ScrollView::DECELERATION_RATE = (float) (log(0.78) / log(0.9));
+
+ScrollView::ScrollView() : xVelocity(0.0f), yVelocity(0.0f), isFling(false),
+                           startTime(0L) {
     touchEventDispatcher = std::make_unique<ScrollDispatcher>(this);
 }
 
@@ -48,6 +51,9 @@ void ScrollView::layout(int l, int t, int r, int b) {
     skRect.setLTRB(l, t, r, b);
     width = r - l;
     height = b - t;
+    if (isFling) {
+        calculateFlingTranslate();
+    }
     if (_direction == YGFlexDirectionRow) {
         layoutHorizontal(l + translateX, t, r, b);
     } else {
@@ -110,4 +116,46 @@ void ScrollView::setVelocity(float x, float y) {
     this->xVelocity = x;
     this->yVelocity = y;
     ALOGD("ScrollView setVelocity %f %f", x, y)
+}
+
+void ScrollView::startFling() {
+    if (_direction == YGFlexDirectionColumn) {
+        if (abs(yVelocity) <= MIN_VELOCITY) {
+            return;
+        } else if (abs(yVelocity) >= MAX_VELOCITY) {
+            yVelocity = yVelocity > 0 ? MAX_VELOCITY : -MAX_VELOCITY;
+        }
+        startTime = IAnimator::currTime;
+        isFling = true;
+    } else {
+        if (abs(xVelocity) <= MIN_VELOCITY) {
+            return;
+        } else if (abs(xVelocity) >= MAX_VELOCITY) {
+            xVelocity = xVelocity > 0 ? MAX_VELOCITY : -MAX_VELOCITY;
+        }
+        startTime = IAnimator::currTime;
+        isFling = true;
+    }
+}
+
+void ScrollView::stopFling() {
+    isFling = false;
+}
+
+float ScrollView::calculateFlingTranslate() {
+    float velocity = yVelocity - (yVelocity > 0 ? 1.0f : -1.0f) * GRAVITY *
+                                 (IAnimator::currTime - startTime); //v' = v + gt;
+    ALOGD("ScrollView velocity %f %f", yVelocity, velocity)
+    if (yVelocity / velocity < 0 || abs(velocity) <= MIN_VELOCITY) {
+        isFling = false;
+    }
+//    float ppi = context.getResources().getDisplayMetrics().density * 160.0f;
+//  see OverScroller.java
+    float ppi = 3 * 160.0f;
+    auto mPhysicalCoeff = GRAVITY * 39.37f * ppi * 0.84f;
+    auto l = log(INFLEXION * abs(velocity) / (FLING_FRICTION * mPhysicalCoeff));
+    double decelMinusOne = DECELERATION_RATE - 1.0;
+    auto diff = FLING_FRICTION * mPhysicalCoeff * exp(DECELERATION_RATE / decelMinusOne * l);
+    updateTranslateY(diff * (yVelocity > 0 ? 1.0 : -1.0) / 10.0);
+    return 0.0f;
 }

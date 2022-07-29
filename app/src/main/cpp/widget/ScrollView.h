@@ -7,12 +7,20 @@
 
 
 #include "FlexboxLayout.h"
-#include "Scroller.h"
 
 /**
- * 高度=子View高度之和，不支持嵌套ScrollView
+ * 如果是wrap 高度=子View高度之和，不支持嵌套ScrollView
  */
 class ScrollView : public FlexboxLayout {
+
+public:
+
+    constexpr static int MIN_VELOCITY = 50;
+    constexpr static int MAX_VELOCITY = 8000;
+    constexpr static float FLING_FRICTION = 0.015f;
+    static float DECELERATION_RATE;
+    constexpr static float INFLEXION = 0.35f;
+    constexpr static float GRAVITY = 9.8f;
 
 public:
 
@@ -40,11 +48,19 @@ public:
 
     void setVelocity(float x, float y);
 
+    void startFling();
+
+    void stopFling();
+
 protected:
 
-    Scroller *scroller;
-
     float xVelocity, yVelocity;
+
+    float calculateFlingTranslate();
+
+    bool isFling;
+
+    long startTime;
 
 };
 

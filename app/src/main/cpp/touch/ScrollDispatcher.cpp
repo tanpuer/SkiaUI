@@ -13,6 +13,7 @@ ScrollDispatcher::~ScrollDispatcher() = default;
 bool ScrollDispatcher::onTouchEvent(TouchEvent *touchEvent) {
     switch (touchEvent->action) {
         case TouchEvent::ACTION_DOWN: {
+            scrollView->stopFling();
             if (scrollView->_direction == YGFlexDirectionColumn) {
                 startY = touchEvent->y;
             } else {
@@ -31,6 +32,7 @@ bool ScrollDispatcher::onTouchEvent(TouchEvent *touchEvent) {
             break;
         }
         case TouchEvent::ACTION_UP: {
+            scrollView->startFling();
             break;
         }
         case TouchEvent::ACTION_CANCEL: {

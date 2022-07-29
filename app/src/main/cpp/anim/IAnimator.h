@@ -12,6 +12,9 @@ class IAnimator {
 
 public:
 
+    /**
+     * 每画一帧，会记录当前的时间戳，其他动画或者变化可参考此时间
+     */
     static long currTime;
 
 public:
