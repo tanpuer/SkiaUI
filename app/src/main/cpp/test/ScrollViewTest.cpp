@@ -4,6 +4,7 @@
 
 #include <ScrollView.h>
 #include "ScrollViewTest.h"
+#include "time_utils.h"
 
 ScrollViewTest::ScrollViewTest() = default;
 
@@ -89,7 +90,14 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
 
     auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
     auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
+    auto start = javaTimeMillis();
     root->measure(rootWidthSpec, rootHeightSpec);
+    auto measureTime = javaTimeMillis();
+    ALOGD("TimeMills measure %ld", measureTime - start);
     root->layout(0, 0, width, height);
+    auto layoutTime = javaTimeMillis();
+    ALOGD("TimeMills layout %ld", layoutTime - measureTime);
     root->draw(canvas);
+    auto drawTime = javaTimeMillis();
+    ALOGD("TimeMills draw %ld", drawTime - layoutTime);
 }
