@@ -11,10 +11,11 @@ float ScrollView::DECELERATION_RATE = (float) (log(0.78) / log(0.9));
 ScrollView::ScrollView() : xVelocity(0.0f), yVelocity(0.0f), isFling(false),
                            startTime(0L) {
     touchEventDispatcher = std::make_unique<ScrollDispatcher>(this);
+    scrollCallbacks = std::vector<std::function<void(float dx, float dy)>>();
 }
 
 ScrollView::~ScrollView() {
-
+    scrollCallbacks.clear();
 }
 
 void ScrollView::measure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -48,9 +49,7 @@ void ScrollView::measure(int widthMeasureSpec, int heightMeasureSpec) {
 }
 
 void ScrollView::layout(int l, int t, int r, int b) {
-    skRect.setLTRB(l, t, r, b);
-    width = r - l;
-    height = b - t;
+    View::layout(l, t, r, b);
     if (isFling) {
         calculateFlingTranslate();
     }
@@ -71,7 +70,9 @@ void ScrollView::updateTranslateY(float diffY) {
     if (translateY >= 0) {
         translateY = 0;
     }
-    ALOGD("translateY update %f", translateY)
+    for (auto &callback: scrollCallbacks) {
+        callback(0.0, diffY);
+    }
 }
 
 void ScrollView::setFlexWrap(YGWrap wrap) {
@@ -91,6 +92,9 @@ void ScrollView::updateTranslateX(float diffX) {
     }
     if (translateX >= 0) {
         translateX = 0;
+    }
+    for (auto &callback: scrollCallbacks) {
+        callback(diffX, 0.0);
     }
 }
 
@@ -158,4 +162,8 @@ float ScrollView::calculateFlingTranslate() {
     auto diff = FLING_FRICTION * mPhysicalCoeff * exp(DECELERATION_RATE / decelMinusOne * l);
     updateTranslateY(diff * (yVelocity > 0 ? 1.0 : -1.0) / 10.0);
     return 0.0f;
+}
+
+void ScrollView::addScrollCallback(std::function<void(float, float)> callback) {
+    scrollCallbacks.emplace_back(callback);
 }

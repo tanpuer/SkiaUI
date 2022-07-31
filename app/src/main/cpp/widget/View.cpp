@@ -26,6 +26,7 @@ View::~View() {
     if (node != nullptr) {
         YGNodeFree(node);
     }
+    viewLayoutCallback = nullptr;
 }
 
 #pragma mark yoga
@@ -76,6 +77,9 @@ void View::layout(int l, int t, int r, int b) {
     width = r - l;
     height = b - t;
 //    ALOGD("%s layout %d %d", name(), width, height)
+    if (viewLayoutCallback != nullptr) {
+        viewLayoutCallback(l, t, r, b);
+    }
 }
 
 void View::draw(SkCanvas *canvas) {
@@ -250,4 +254,12 @@ void View::handleAnimation() {
 
 bool View::hasPercent() {
     return !YGFloatsEqual(0.0f, widthPercent) && YGFloatsEqual(0.0f, hwRatio);
+}
+
+void View::setLayoutCallback(std::function<void(int, int, int, int)> callback) {
+    viewLayoutCallback = callback;
+}
+
+void View::removeLayoutCallback() {
+    viewLayoutCallback = nullptr;
 }

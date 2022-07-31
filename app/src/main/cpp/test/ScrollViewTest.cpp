@@ -5,6 +5,7 @@
 #include <ScrollView.h>
 #include "ScrollViewTest.h"
 #include "time_utils.h"
+#include "native_log.h"
 
 ScrollViewTest::ScrollViewTest() = default;
 
@@ -83,6 +84,10 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
                 auto tvLayoutParams = LayoutParams::makeWrapContent();
                 tvLayoutParams->setMargin(50);
                 root->addView(textView, tvLayoutParams);
+                auto listener = [](int l, int t, int r, int b) -> void {
+                    ALOGD("LayoutCallback result %d %d %d %d", l, t, r, b)
+                };
+                textView->setLayoutCallback(listener);
             }
         }
 
@@ -93,11 +98,15 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
     auto start = javaTimeMillis();
     root->measure(rootWidthSpec, rootHeightSpec);
     auto measureTime = javaTimeMillis();
-    ALOGD("TimeMills measure %ld", measureTime - start);
+    ALOGD("TimeMills measure %ld", measureTime - start)
     root->layout(0, 0, width, height);
     auto layoutTime = javaTimeMillis();
-    ALOGD("TimeMills layout %ld", layoutTime - measureTime);
+    ALOGD("TimeMills layout %ld", layoutTime - measureTime)
     root->draw(canvas);
     auto drawTime = javaTimeMillis();
-    ALOGD("TimeMills draw %ld", drawTime - layoutTime);
+    ALOGD("TimeMills draw %ld", drawTime - layoutTime)
+
+    reinterpret_cast<ScrollView *>(root)->addScrollCallback([](float dx, float dy) -> void {
+//        ALOGD("ScrollView scroll dx: %f, dy: %f", dx, dy)
+    });
 }

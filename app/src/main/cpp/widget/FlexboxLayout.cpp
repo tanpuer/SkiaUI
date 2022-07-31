@@ -91,9 +91,7 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
 
 void FlexboxLayout::layout(int l, int t, int r, int b) {
     ALOGD("FlexboxLayout margin %d %d %d %d", marginLeft, marginTop, marginRight, marginBottom);
-    skRect.setLTRB(l, t, r, b);
-    width = r - l;
-    height = b - t;
+    View::layout(l, t, r, b);
     if (_direction == YGFlexDirectionRow) {
         layoutHorizontal(l, t, r, b);
     } else {

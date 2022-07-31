@@ -14,7 +14,6 @@
 class ScrollView : public FlexboxLayout {
 
 public:
-
     constexpr static int MIN_VELOCITY = 50;
     constexpr static int MAX_VELOCITY = 8000;
     constexpr static float FLING_FRICTION = 0.015f;
@@ -52,6 +51,8 @@ public:
 
     void stopFling();
 
+    void addScrollCallback(std::function<void(float dx, float dy)> callback);
+
 protected:
 
     float xVelocity, yVelocity;
@@ -61,6 +62,8 @@ protected:
     bool isFling;
 
     long startTime;
+
+    std::vector<std::function<void(float dx, float dy)>> scrollCallbacks;
 
 };
 

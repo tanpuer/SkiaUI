@@ -178,6 +178,18 @@ protected:
 
     bool isDirty;
 
+#pragma mark cakllbacks
+
+public:
+
+    void setLayoutCallback(std::function<void(int, int, int, int)> callback);
+
+    void removeLayoutCallback();
+
+protected:
+
+    std::function<void(int, int, int, int)> viewLayoutCallback = nullptr;
+
 };
 
 #endif //SKIAUI_VIEW_H
