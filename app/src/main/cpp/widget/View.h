@@ -114,13 +114,13 @@ public:
 
     SkPaint *paint;
 
-    std::array<int, 4> cornerRadius;
-
     int marginLeft, marginTop, marginRight, marginBottom;
 
     SkIRect skRect;
 
-    SkIRect skRectWithBorder;
+    int cornerRadius;
+
+    SkRect skRectWithBorder;
 
 public:
     //todo 后续才支持的

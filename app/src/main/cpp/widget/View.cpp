@@ -7,8 +7,8 @@
 #include "View.h"
 #include "effects/SkCornerPathEffect.h"
 
-View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadius(),
-               skRectWithBorder(SkIRect::MakeEmpty()),
+View::View() : width(0.0), height(0.0), skRect(SkIRect::MakeEmpty()), cornerRadius(0),
+               skRectWithBorder(SkRect::MakeEmpty()),
                minWidth(0), minHeight(0),
                parentId(0),
                marginLeft(0), marginTop(0), marginRight(0), marginBottom(0),
@@ -83,16 +83,14 @@ void View::layout(int l, int t, int r, int b) {
 }
 
 void View::draw(SkCanvas *canvas) {
-    //todo 默认画boarder，Android的onDraw默认啥都不做
     if (YGFloatsEqual(paint->getStrokeWidth(), 0.0f)) {
         canvas->drawIRect(skRect, *paint);
     } else {
-        //todo 如果有strokeWidth，就会有一半画在rect外面，简单考虑，默认全部都算内边框
+        //view边框，辅助看大小
         auto diff = (paint->getStrokeWidth()) / 2;
         skRectWithBorder.setLTRB(skRect.left() + diff, skRect.top() + diff, skRect.right() - diff,
                                  skRect.bottom() - diff);
-        //todo debug边框
-        canvas->drawIRect(skRectWithBorder, *paint);
+        canvas->drawRoundRect(skRectWithBorder, cornerRadius, cornerRadius, *paint);
     }
 }
 
@@ -141,6 +139,7 @@ void View::setCornerRadius(int radius) {
         ALOGE("radius must > 0")
         return;
     }
+    cornerRadius = radius;
     paint->setPathEffect(SkCornerPathEffect::Make(static_cast<SkScalar>(radius)));
 }
 
