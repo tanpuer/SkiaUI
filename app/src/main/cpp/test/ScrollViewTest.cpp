@@ -89,6 +89,20 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
                 };
                 textView->setLayoutCallback(listener);
             }
+
+            {
+                auto imageView = new ImageView();
+                imageView->setConfig(root->config);
+                imageView->setSource("/sdcard/cowboy.png");
+                imageView->setCornerRadius(100);
+                imageView->setScaleType(ImageView::ScaleType::FitCenter);
+                imageView->setStyle(SkPaint::kStroke_Style);
+                imageView->setBackgroundColor(SK_ColorRED);
+                imageView->setStrokeWidth(2);
+                auto lp = LayoutParams::makeExactlyLayoutParams(200, 200);
+                lp->setMargin({0, 100, 0, 0});
+                root->addView(imageView, lp);
+            }
         }
 
     }
