@@ -45,6 +45,10 @@ public:
 
     virtual bool canScroll();
 
+    virtual void draw(SkCanvas *canvas) override;
+
+    virtual bool ignoreChildDraw(const View *child);
+
     void setVelocity(float x, float y);
 
     void startFling();

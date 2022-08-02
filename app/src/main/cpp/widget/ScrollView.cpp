@@ -167,3 +167,34 @@ float ScrollView::calculateFlingTranslate() {
 void ScrollView::addScrollCallback(std::function<void(float, float)> callback) {
     scrollCallbacks.emplace_back(callback);
 }
+
+void ScrollView::draw(SkCanvas *canvas) {
+    for (auto child: children) {
+        if (ignoreChildDraw(child)) {
+            ALOGD("ScrollView draw ignore invisible child %s %d %d", child->name(),
+                  child->skRect.top(), child->skRect.bottom())
+        } else {
+            child->draw(canvas);
+        }
+    }
+    View::draw(canvas);
+}
+
+bool ScrollView::ignoreChildDraw(const View *child) {
+    if (_direction == YGFlexDirectionColumn) {
+        const auto childRect = child->skRect;
+        auto childTop = childRect.top();
+        auto childBottom = childRect.bottom();
+        auto scrollTop = skRect.top();
+        auto scrollBottom = skRect.bottom();
+        //bottom小于ScrollView的top-100/top大于ScrollView的bottom+100，则认为在屏幕上不可见，不进行绘制
+        return childTop > scrollBottom + 100 || childBottom < scrollTop - 100;
+    } else {
+        const auto childRect = child->skRect;
+        auto childLeft = childRect.left();
+        auto childRight = childRect.right();
+        auto scrollLeft = skRect.left();
+        auto scrollRight = skRect.right();
+        return childLeft > scrollRight + 100 || childRight < scrollLeft - 100;
+    }
+}
