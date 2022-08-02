@@ -101,7 +101,14 @@ void ImageView::draw(SkCanvas *canvas) {
     canvas->drawImageRect(skImage, srcRect, dstRect, SkSamplingOptions(), imagePaint.get(),
                           SkCanvas::kFast_SrcRectConstraint);
     canvas->restore();
-    View::draw(canvas);
+    if (width == height && width == cornerRadius * 2) {
+        auto diff = (paint->getStrokeWidth()) / 2;
+        skRectWithBorder.setLTRB(skRect.left() + diff, skRect.top() + diff, skRect.right() - diff,
+                                 skRect.bottom() - diff);
+        canvas->drawRoundRect(skRectWithBorder, cornerRadius, cornerRadius, *paint);
+    } else {
+        View::draw(canvas);
+    }
 }
 
 const char *ImageView::name() {
