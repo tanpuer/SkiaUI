@@ -90,7 +90,11 @@ void View::draw(SkCanvas *canvas) {
         auto diff = (paint->getStrokeWidth()) / 2;
         skRectWithBorder.setLTRB(skRect.left() + diff, skRect.top() + diff, skRect.right() - diff,
                                  skRect.bottom() - diff);
-        canvas->drawRect(skRectWithBorder, *paint);
+        if (width == height && width == cornerRadius * 2) {
+            canvas->drawRoundRect(skRectWithBorder, cornerRadius, cornerRadius, *paint);
+        } else {
+            canvas->drawRect(skRectWithBorder, *paint);
+        }
     }
 }
 
