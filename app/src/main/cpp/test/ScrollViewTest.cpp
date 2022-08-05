@@ -3,6 +3,7 @@
 //
 
 #include <ScrollView.h>
+#include <ProgressBar.h>
 #include "ScrollViewTest.h"
 #include "time_utils.h"
 #include "native_log.h"
@@ -28,6 +29,15 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
         root->setBackgroundColor(SK_ColorBLUE);
 
         for (int i = 0; i < 10; ++i) {
+            {
+                auto progressBar = new ProgressBar();
+                progressBar->setConfig(root->config);
+                progressBar->setBarColor(SK_ColorRED);
+                progressBar->setBackgroundColor(SK_ColorTRANSPARENT);
+                progressBar->setStrokeWidth(10.0);
+                root->addView(progressBar, LayoutParams::makeExactlyLayoutParams(200, 200));
+            }
+
             {
                 auto textView = new TextView();
                 textView->setConfig(root->config);
