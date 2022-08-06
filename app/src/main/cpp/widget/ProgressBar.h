@@ -20,17 +20,27 @@ public:
 
     virtual void setBarColor(SkColor color);
 
-    virtual void setGradientBarColor(SkColor startColor, SkColor endColor);
+    virtual void setGradientBarColor(SkColor colors[], int size);
 
     virtual void setBackgroundColor(SkColor color) override;
 
     virtual void draw(SkCanvas *canvas) override;
+
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override;
 
     virtual void layout(int l, int t, int r, int b) override;
 
 protected:
 
     SkRect progressRect;
+
+private:
+
+    int index;
+
+    SkColor backgroundColor = SK_ColorTRANSPARENT;
+
+    SkColor progressColor = SK_ColorTRANSPARENT;
 
 };
 

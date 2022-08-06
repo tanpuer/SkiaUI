@@ -33,8 +33,11 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
                 auto progressBar = new ProgressBar();
                 progressBar->setConfig(root->config);
                 progressBar->setBarColor(SK_ColorRED);
-                progressBar->setBackgroundColor(SK_ColorTRANSPARENT);
+                progressBar->setBackgroundColor(SK_ColorGRAY);
                 progressBar->setStrokeWidth(10.0);
+                progressBar->setStyle(SkPaint::kStroke_Style);
+                SkColor colors[3] = {SK_ColorRED, SK_ColorYELLOW, SK_ColorBLUE};
+                progressBar->setGradientBarColor(colors, 3);
                 root->addView(progressBar, LayoutParams::makeExactlyLayoutParams(200, 200));
             }
 
