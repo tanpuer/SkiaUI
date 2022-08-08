@@ -72,6 +72,12 @@ private:
 
     std::function<void(int progress)> progressCallback;
 
+    std::vector<SkColor> gradientColors;
+
+    int gradientColorSize;
+
+    bool setShader;
+
 };
 
 

@@ -10,6 +10,9 @@ ProgressBar::ProgressBar()
         : View(), progressRect(SkRect::MakeEmpty()), autoMode(true), progress(0), index(0),
           type(ProgressBarType::CIRCLE), pressed(false), progressCallback(nullptr) {
     paint->setStroke(true);
+    gradientColors = std::vector<SkColor>();
+    gradientColorSize = 0;
+    setShader = false;
 }
 
 ProgressBar::~ProgressBar() = default;
@@ -19,8 +22,11 @@ void ProgressBar::setBarColor(SkColor color) {
 }
 
 void ProgressBar::setGradientBarColor(SkColor colors[], int size) {
-    //todo 滑动的时候centerX，centerY一直在变化，需要不停更新shader，因此gradient还是适合非滑动页面
-//    paint->setShader(SkGradientShader::MakeSweep(0, 0, colors, nullptr, size));
+    // todo 滑动的时候centerX，centerY一直在变化，需要不停更新shader，因此gradient还是适合非滑动页面
+    for (int i = 0; i < size; ++i) {
+        gradientColors.emplace_back(colors[i]);
+    }
+    gradientColorSize = size;
 }
 
 void ProgressBar::setBackgroundColor(SkColor color) {
@@ -36,9 +42,24 @@ void ProgressBar::layout(int l, int t, int r, int b) {
     if (type == ProgressBarType::CIRCLE) {
         auto diff = width * 0.2;
         progressRect.setLTRB(l + diff, t + diff, r - diff, b - diff);
+        if (!setShader && gradientColorSize > 0) {
+            setShader = true;
+            paint->setShader(
+                    SkGradientShader::MakeSweep(progressRect.centerX(), progressRect.centerY(),
+                                                &gradientColors[0], nullptr, gradientColorSize));
+        }
     } else if (type == ProgressBarType::LINEAR) {
         auto diff = height / 3.0f;
         progressRect.setLTRB(l + marginLeft, t + diff, r - marginRight, b - diff);
+        if (!setShader && gradientColorSize > 0) {
+            setShader = true;
+            std::vector<SkPoint> points;
+            points.emplace_back(SkPoint::Make(progressRect.left(), progressRect.centerY()));
+            points.emplace_back(SkPoint::Make(progressRect.right(), progressRect.centerY()));
+            paint->setShader(
+                    SkGradientShader::MakeLinear(&points[0], &gradientColors[0], nullptr,
+                                                 gradientColorSize, SkTileMode::kClamp));
+        }
     }
 }
 

@@ -44,8 +44,6 @@ void ProgressBarDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width,
             progressBar->setAutoMode(false);
             progressBar->setProgress(30);
             progressBar->setStyle(SkPaint::kStroke_Style);
-            SkColor colors[3] = {SK_ColorRED, SK_ColorYELLOW, SK_ColorBLUE};
-            progressBar->setGradientBarColor(colors, 3);
             root->addView(progressBar, LayoutParams::makeExactlyLayoutParams(200, 200));
         }
 
@@ -59,8 +57,6 @@ void ProgressBarDrawTest::doDrawTest(int drawCount, SkCanvas *canvas, int width,
             progressBar->setType(ProgressBar::ProgressBarType::LINEAR);
             progressBar->setProgress(30);
             progressBar->setStyle(SkPaint::kStroke_Style);
-            SkColor colors[3] = {SK_ColorRED, SK_ColorYELLOW, SK_ColorBLUE};
-            progressBar->setGradientBarColor(colors, 3);
             auto lp = LayoutParams::makeExactlyLayoutParams(width, 60);
             lp->setMargin({50, 100, 50, 0});
             root->addView(progressBar, lp);
