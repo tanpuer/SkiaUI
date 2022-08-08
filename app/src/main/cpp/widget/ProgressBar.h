@@ -12,6 +12,13 @@ class ProgressBar : public View {
 
 public:
 
+    enum class ProgressBarType {
+        CIRCLE,
+        LINEAR
+    };
+
+public:
+
     ProgressBar();
 
     virtual ~ProgressBar();
@@ -30,6 +37,15 @@ public:
 
     virtual void layout(int l, int t, int r, int b) override;
 
+    /**
+     * @param progress 0 - 100
+     */
+    virtual void setProgress(int progress);
+
+    virtual void setAutoMode(bool autoMode);
+
+    virtual void setType(ProgressBarType type);
+
 protected:
 
     SkRect progressRect;
@@ -41,6 +57,12 @@ private:
     SkColor backgroundColor = SK_ColorTRANSPARENT;
 
     SkColor progressColor = SK_ColorTRANSPARENT;
+
+    bool autoMode;
+
+    int progress;
+
+    ProgressBarType type;
 
 };
 

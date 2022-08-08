@@ -7,6 +7,7 @@
 #include <yoga/Yoga.h>
 #include <ScrollViewTest.h>
 #include <ScrollView.h>
+#include <ProgressBarDrawTest.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
 #include "HorizontalDrawTest.h"
@@ -22,7 +23,8 @@ SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
 //    testDraw = new ImageViewTest();
 //    testDraw = new TextViewTest();
 //    testDraw = new MovingDrawTest();
-    testDraw = new ScrollViewTest();
+//    testDraw = new ScrollViewTest();
+    testDraw = new ProgressBarDrawTest();
 }
 
 SkiaFilter::~SkiaFilter() {
