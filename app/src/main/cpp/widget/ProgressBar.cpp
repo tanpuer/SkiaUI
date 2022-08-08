@@ -8,7 +8,7 @@
 
 ProgressBar::ProgressBar()
         : View(), progressRect(SkRect::MakeEmpty()), autoMode(true), progress(0), index(0),
-          type(ProgressBarType::CIRCLE) {
+          type(ProgressBarType::CIRCLE), pressed(false), progressCallback(nullptr) {
     paint->setStroke(true);
 }
 
@@ -37,7 +37,8 @@ void ProgressBar::layout(int l, int t, int r, int b) {
         auto diff = width * 0.2;
         progressRect.setLTRB(l + diff, t + diff, r - diff, b - diff);
     } else if (type == ProgressBarType::LINEAR) {
-        progressRect.setLTRB(l + marginLeft, t, r - marginRight, b);
+        auto diff = height / 3.0f;
+        progressRect.setLTRB(l + marginLeft, t + diff, r - marginRight, b - diff);
     }
 }
 
@@ -71,10 +72,11 @@ void ProgressBar::draw(SkCanvas *canvas) {
         }
         paint->setColor(progressColor);
         progressRect.setLTRB(progressRect.left(), progressRect.top(),
-                             progressRect.right() * progress / 100,
+                             progressRect.width() * progress / 100 + progressRect.left(),
                              progressRect.bottom());
         canvas->drawRoundRect(progressRect, height / 2, height / 2, *paint);
-        canvas->drawCircle(progressRect.right(), progressRect.centerY(), height, *paint);
+        canvas->drawCircle(progressRect.right(), progressRect.centerY(),
+                           height / 3 * (pressed ? 1.2f : 1.0f), *paint);
     }
 }
 
@@ -92,4 +94,38 @@ void ProgressBar::setAutoMode(bool autoMode) {
 void ProgressBar::setType(ProgressBar::ProgressBarType type) {
     this->type = type;
     isDirty = true;
+}
+
+bool ProgressBar::onTouchEvent(TouchEvent *touchEvent) {
+    if (!autoMode && type == ProgressBarType::LINEAR) {
+        switch (touchEvent->action) {
+            case TouchEvent::ACTION_DOWN:
+            case TouchEvent::ACTION_MOVE: {
+                pressed = true;
+                auto lastProgress = progress;
+                progress = static_cast<int>((touchEvent->x - YGNodeLayoutGetLeft(node)) * 100 /
+                                            width);
+                if (progress > 100) {
+                    progress = 100;
+                } else if (progress < 0) {
+                    progress = 0;
+                }
+                if (progressCallback != nullptr && lastProgress != progress) {
+                    progressCallback(progress);
+                }
+                break;
+            }
+            case TouchEvent::ACTION_CANCEL:
+            case TouchEvent::ACTION_UP: {
+                pressed = false;
+                break;
+            }
+        }
+        return true;
+    }
+    return View::onTouchEvent(touchEvent);
+}
+
+void ProgressBar::setProgressCallback(std::function<void(int)> progressCallback) {
+    this->progressCallback = progressCallback;
 }

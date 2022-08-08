@@ -46,6 +46,10 @@ public:
 
     virtual void setType(ProgressBarType type);
 
+    virtual bool onTouchEvent(TouchEvent *touchEvent) override;
+
+    virtual void setProgressCallback(std::function<void(int progress)> progressCallback);
+
 protected:
 
     SkRect progressRect;
@@ -63,6 +67,10 @@ private:
     int progress;
 
     ProgressBarType type;
+
+    bool pressed;
+
+    std::function<void(int progress)> progressCallback;
 
 };
 
