@@ -50,6 +50,8 @@ public:
 
     virtual void setProgressCallback(std::function<void(int progress)> progressCallback);
 
+    virtual void setStrokeWidth(SkScalar _width) override;
+
 protected:
 
     SkRect progressRect;
@@ -57,10 +59,6 @@ protected:
 private:
 
     int index;
-
-    SkColor backgroundColor = SK_ColorTRANSPARENT;
-
-    SkColor progressColor = SK_ColorTRANSPARENT;
 
     bool autoMode;
 
@@ -77,6 +75,8 @@ private:
     int gradientColorSize;
 
     bool setShader;
+
+    SkPaint *backgroundPaint;
 
 };
 

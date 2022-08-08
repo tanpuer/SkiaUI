@@ -13,12 +13,17 @@ ProgressBar::ProgressBar()
     gradientColors = std::vector<SkColor>();
     gradientColorSize = 0;
     setShader = false;
+    backgroundPaint = new SkPaint();
+    backgroundPaint->setAntiAlias(true);
+    backgroundPaint->setStyle(SkPaint::kStroke_Style);
 }
 
-ProgressBar::~ProgressBar() = default;
+ProgressBar::~ProgressBar() {
+    delete backgroundPaint;
+}
 
 void ProgressBar::setBarColor(SkColor color) {
-    this->progressColor = color;
+    paint->setColor(color);
 }
 
 void ProgressBar::setGradientBarColor(SkColor colors[], int size) {
@@ -30,7 +35,7 @@ void ProgressBar::setGradientBarColor(SkColor colors[], int size) {
 }
 
 void ProgressBar::setBackgroundColor(SkColor color) {
-    this->backgroundColor = color;
+    backgroundPaint->setColor(color);
 }
 
 void ProgressBar::measure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -73,11 +78,7 @@ void ProgressBar::draw(SkCanvas *canvas) {
         } else {
             index = progress * 360 / 100;
         }
-        if (backgroundColor != SK_ColorTRANSPARENT) {
-            paint->setColor(backgroundColor);
-            canvas->drawArc(progressRect, 0.0, 360, false, *paint);
-        }
-        paint->setColor(progressColor);
+        canvas->drawArc(progressRect, 0.0, 360, false, *backgroundPaint);
         canvas->drawArc(progressRect, 0.0, index, false, *paint);
     } else if (type == ProgressBarType::LINEAR) {
         if (autoMode) {
@@ -87,11 +88,8 @@ void ProgressBar::draw(SkCanvas *canvas) {
             }
         }
         paint->setStyle(SkPaint::kFill_Style);
-        if (backgroundColor != SK_ColorTRANSPARENT) {
-            paint->setColor(backgroundColor);
-            canvas->drawRoundRect(progressRect, height / 2, height / 2, *paint);
-        }
-        paint->setColor(progressColor);
+        backgroundPaint->setStyle(SkPaint::kFill_Style);
+        canvas->drawRoundRect(progressRect, height / 2, height / 2, *backgroundPaint);
         progressRect.setLTRB(progressRect.left(), progressRect.top(),
                              progressRect.width() * progress / 100 + progressRect.left(),
                              progressRect.bottom());
@@ -149,4 +147,9 @@ bool ProgressBar::onTouchEvent(TouchEvent *touchEvent) {
 
 void ProgressBar::setProgressCallback(std::function<void(int)> progressCallback) {
     this->progressCallback = progressCallback;
+}
+
+void ProgressBar::setStrokeWidth(SkScalar _width) {
+    View::setStrokeWidth(_width);
+    backgroundPaint->setStrokeWidth(_width);
 }
