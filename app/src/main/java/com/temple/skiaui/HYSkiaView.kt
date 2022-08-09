@@ -39,7 +39,7 @@ class HYSkiaView @JvmOverloads constructor(
         Choreographer.getInstance().postFrameCallback(this)
     }
 
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         if (nativePtr == 0L) {
             return false
         }
