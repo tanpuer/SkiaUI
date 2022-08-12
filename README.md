@@ -5,7 +5,7 @@
 使用Skia和Yoga，基于SurfaceView实现简单的支持flexbox布局的ui样式demo
 步骤：
 1. 引入Skia和Yoga。
-   skia编译参考官方文档 https://skia.org/docs/user/build/。 
+   skia编译参考官方文档 https://skia.org/docs/user/build/ 
    Yoga直接源码拿过来用了。
 2. 配置好gl环境，使用Skia硬件加速。
 3. 绘制模仿安卓Measure/Layout/Draw三板斧流程，只支持Flexbox布局。
