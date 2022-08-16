@@ -8,6 +8,7 @@
 #include <ScrollViewTest.h>
 #include <ScrollView.h>
 #include <ProgressBarDrawTest.h>
+#include <time_utils.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
 #include "HorizontalDrawTest.h"
@@ -23,8 +24,8 @@ SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
 //    testDraw = new ImageViewTest();
 //    testDraw = new TextViewTest();
 //    testDraw = new MovingDrawTest();
-//    testDraw = new ScrollViewTest();
-    testDraw = new ProgressBarDrawTest();
+    testDraw = new ScrollViewTest();
+//    testDraw = new ProgressBarDrawTest();
 }
 
 SkiaFilter::~SkiaFilter() {
@@ -73,19 +74,22 @@ void SkiaFilter::doFrame(long time) {
     SkASSERT(skCanvas);
     skCanvas->clear(SK_ColorWHITE);
 
-    //todo test code,目前每次都渲染，后续要改成脏区渲染
+    auto start = javaTimeMillis();
     testDraw->doDrawTest(drawCount, skCanvas, width, height);
+    ALOGD("SkiaFilter doFrame duration %ld", javaTimeMillis() - start)
 
     skCanvas->flush();
 }
 
 void SkiaFilter::dispatchTouchEvent(TouchEvent *touchEvent) {
+    auto start = javaTimeMillis();
     mTouchEvent = std::unique_ptr<TouchEvent>(touchEvent);
     auto root = testDraw->getRootView();
     if (root == nullptr) {
         return;
     }
     dynamic_cast<ViewGroup *>(root)->dispatchTouchEvent(mTouchEvent.get());
+    ALOGD("SkiaFilter dispatchTouchEvent duration %ld", javaTimeMillis() - start)
 }
 
 void SkiaFilter::setVelocity(Velocity *velocity) {
