@@ -6,22 +6,85 @@
 #define SKIAUI_BASELISTVIEW_H
 
 #include "BaseListAdapter.h"
+#include "FlexboxLayout.h"
 
 template<typename T>
-
-class BaseListView {
+class BaseListView : public FlexboxLayout {
 
 public:
 
-    BaseListView();
+    BaseListView() : FlexboxLayout() {
+        this->adapter = nullptr;
+    }
 
-    virtual ~BaseListView();
+    virtual ~BaseListView() {
+        if (adapter != nullptr) {
+            delete adapter;
+        }
+    }
 
-    virtual void setAdapter(BaseListAdapter<T> adapter);
+#pragma mark ListView api
 
-    virtual void attachChild(View *view);
+    virtual void setAdapter(BaseListAdapter<T> *adapter) {
+        this->adapter = adapter;
+    }
 
-    virtual void detachChild(View *view);
+    /**
+     * 当ListView可见区域还没放满时，应当通过adapter创建子View
+     * @return
+     */
+    virtual View *createView(int index) = 0;
+
+    /**
+     * 将view添加到FlexboxLayout中
+     * @param view
+     */
+    virtual void attachChild(View *view) {
+
+    }
+
+    /**
+     * 从FlexboxLayout中移除该view
+     * @param view
+     */
+    virtual void detachChild(View *view) {
+
+    }
+
+#pragma mark View api
+
+    /**
+     * ListView的宽高要固定
+     * 在onMeasure过程中发现还没铺满，要创建子view并添加进来
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
+    void measure(int widthMeasureSpec, int heightMeasureSpec) override {
+        SkASSERT(adapter);
+        YGNodeStyleSetWidth(node, MeasureSpec::getSize(widthMeasureSpec));
+        YGNodeStyleSetHeight(node, MeasureSpec::getSize(heightMeasureSpec));
+        while (height > getChildHeightSum() && adapter->canCreateView()) {
+            auto index = children.size();
+            auto child = adapter->createView(index);
+            //加入view的时候要attach，remove的时候要detach
+            adapter->attachView(child);
+
+            child->setConfig(config);
+            auto lp = LayoutParams::makeExactlyWidth(width);
+            lp->setMargin({0, 20, 0, 20});
+            FlexboxLayout::addView(child, lp);
+            child->measure(widthMeasureSpec, heightMeasureSpec);
+            auto item = adapter->getItem(index);
+            adapter->bindView(child, item);
+        }
+        YGNodeCalculateLayout(node, YGNodeStyleGetWidth(node).value,
+                              YGNodeStyleGetHeight(node).value,
+                              YGDirectionLTR);
+    }
+
+protected:
+
+    BaseListAdapter<T> *adapter;
 
 };
 

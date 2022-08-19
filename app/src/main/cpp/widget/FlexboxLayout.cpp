@@ -4,7 +4,7 @@
 
 #include "FlexboxLayout.h"
 
-FlexboxLayout::FlexboxLayout() {
+FlexboxLayout::FlexboxLayout() : ViewGroup() {
 
 }
 

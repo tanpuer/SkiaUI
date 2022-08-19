@@ -7,38 +7,78 @@
 
 #include "vector"
 #include "View.h"
+#include "set"
 
 template<typename T>
 class BaseListAdapter {
 
-    static_assert(std::is_default_constructible<T>::value,
-                  "Class ListAdapter require default-constructor");
-
 public:
 
-    BaseListAdapter();
+    BaseListAdapter() {
+        currentIndex = 0;
+        mData = std::vector<T>();
+        viewPool = std::set<View *>();
+    }
 
-    virtual ~BaseListAdapter();
+    virtual ~BaseListAdapter() {
 
-    virtual void setData(std::vector<T> data);
+    }
 
-    virtual void notifyDataSetChanged();
+    virtual void setData(std::vector<T> data) {
+        this->mData = std::move(data);
+        notifyDataSetChanged();
+    }
 
-    virtual void notifyItemChanged();
+    virtual void notifyDataSetChanged() {
 
-    virtual int getItemCount();
+    }
 
-    virtual View *createView();
+    virtual void notifyItemChanged() {
 
-    virtual void bindView(View *view, T model);
+    }
 
-    virtual void attachView(View *view);
+    virtual int getItemCount() {
+        return mData.size();
+    }
 
-    virtual void detachView(View *view);
+    /**
+     * 暂时不考虑多itemType，后续也好加
+     * @return
+     */
+    virtual View *createView(int index) = 0;
+
+    virtual bool canCreateView() {
+        return currentIndex < mData.size();
+    }
+
+    virtual void bindView(View *view, T model) = 0;
+
+    /**
+     * view从缓存池中取出，加到屏幕上的ViewGroup里
+     */
+    virtual void attachView(View *view) {
+        currentIndex++;
+    }
+
+    /**
+     * 从ViewGroup里移除，放入到缓存池中
+     * @param view
+     */
+    virtual void detachView(View *view) {
+        currentIndex--;
+    }
+
+    T getItem(int index) {
+        return mData[index];
+    }
 
 protected:
 
     std::vector<T> mData;
+
+    std::set<View *> viewPool;
+
+    int currentIndex;
 
 };
 

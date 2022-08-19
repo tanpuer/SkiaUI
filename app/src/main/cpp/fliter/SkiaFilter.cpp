@@ -9,6 +9,7 @@
 #include <ScrollView.h>
 #include <ProgressBarDrawTest.h>
 #include <time_utils.h>
+#include <ListViewTest.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
 #include "HorizontalDrawTest.h"
@@ -24,8 +25,9 @@ SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
 //    testDraw = new ImageViewTest();
 //    testDraw = new TextViewTest();
 //    testDraw = new MovingDrawTest();
-    testDraw = new ScrollViewTest();
+//    testDraw = new ScrollViewTest();
 //    testDraw = new ProgressBarDrawTest();
+    testDraw = new ListViewTest();
 }
 
 SkiaFilter::~SkiaFilter() {
