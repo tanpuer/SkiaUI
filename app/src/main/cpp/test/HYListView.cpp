@@ -20,3 +20,10 @@ void HYListView::setAdapter(BaseListAdapter<int> *adapter) {
 View *HYListView::createView(int index) {
     return adapter->createView(index);
 }
+
+void HYListView::attachChild(View *view) {
+    BaseListView::attachChild(view);
+    auto lp = LayoutParams::makeExactlyWidth(width);
+    lp->setMargin({0, 20, 0, 20});
+    FlexboxLayout::addView(view, lp);
+}

@@ -23,6 +23,8 @@ public:
 
     void setAdapter(BaseListAdapter<int> *adapter) override;
 
+    void attachChild(View *view) override;
+
 };
 
 

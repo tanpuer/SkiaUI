@@ -40,7 +40,8 @@ public:
      * @param view
      */
     virtual void attachChild(View *view) {
-
+        view->setConfig(config);
+        adapter->attachView(view);
     }
 
     /**
@@ -65,14 +66,9 @@ public:
         YGNodeStyleSetHeight(node, MeasureSpec::getSize(heightMeasureSpec));
         while (height > getChildHeightSum() && adapter->canCreateView()) {
             auto index = children.size();
-            auto child = adapter->createView(index);
+            auto child = adapter->createView(adapter->getCurrentIndex());
             //加入view的时候要attach，remove的时候要detach
-            adapter->attachView(child);
-
-            child->setConfig(config);
-            auto lp = LayoutParams::makeExactlyWidth(width);
-            lp->setMargin({0, 20, 0, 20});
-            FlexboxLayout::addView(child, lp);
+            attachChild(child);
             child->measure(widthMeasureSpec, heightMeasureSpec);
             auto item = adapter->getItem(index);
             adapter->bindView(child, item);

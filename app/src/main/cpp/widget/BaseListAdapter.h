@@ -72,6 +72,10 @@ public:
         return mData[index];
     }
 
+    int getCurrentIndex() {
+        return currentIndex;
+    }
+
 protected:
 
     std::vector<T> mData;
