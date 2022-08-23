@@ -30,3 +30,7 @@ View *HYListAdapter::createView(int index) {
 void HYListAdapter::bindView(View *view, int model) {
 
 }
+
+bool HYListAdapter::canCreateView() {
+    return BaseListAdapter::canCreateView();
+}

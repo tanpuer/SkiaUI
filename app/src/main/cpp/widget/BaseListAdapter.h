@@ -48,7 +48,7 @@ public:
     virtual View *createView(int index) = 0;
 
     virtual bool canCreateView() {
-        return currentIndex < mData.size();
+        return currentIndex <= mData.size() - 1;
     }
 
     virtual void bindView(View *view, T model) = 0;

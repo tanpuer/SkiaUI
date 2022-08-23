@@ -61,21 +61,23 @@ public:
      * @param heightMeasureSpec
      */
     void measure(int widthMeasureSpec, int heightMeasureSpec) override {
-        SkASSERT(adapter);
-        YGNodeStyleSetWidth(node, MeasureSpec::getSize(widthMeasureSpec));
-        YGNodeStyleSetHeight(node, MeasureSpec::getSize(heightMeasureSpec));
-        while (height > getChildHeightSum() && adapter->canCreateView()) {
+        SkASSERT(adapter != nullptr);
+        auto width = MeasureSpec::getSize(widthMeasureSpec);
+        auto height = MeasureSpec::getSize(heightMeasureSpec);
+        ViewGroup::setMeasuredDimension(width, height);
+        ALOGD("BaseListView measure %d %d", height)
+//        while (this->height > getChildHeightSum()) {
+        //todo crash
+        while (children.size() <= adapter->getItemCount()) {
             auto index = children.size();
             auto child = adapter->createView(adapter->getCurrentIndex());
             //加入view的时候要attach，remove的时候要detach
             attachChild(child);
-            child->measure(widthMeasureSpec, heightMeasureSpec);
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
             auto item = adapter->getItem(index);
             adapter->bindView(child, item);
         }
-        YGNodeCalculateLayout(node, YGNodeStyleGetWidth(node).value,
-                              YGNodeStyleGetHeight(node).value,
-                              YGDirectionLTR);
+        YGNodeCalculateLayout(node, width, height, YGDirectionLTR);
     }
 
 protected:

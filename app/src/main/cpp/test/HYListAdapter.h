@@ -20,6 +20,8 @@ public:
 
     void bindView(View *view, int model) override;
 
+    virtual bool canCreateView() override;
+
 };
 
 

@@ -240,6 +240,7 @@ int ViewGroup::getMaxWidthInChildren() {
 int ViewGroup::getChildHeightSum() {
     int sum = 0;
     for (auto &child: children) {
+        SkASSERT(child != nullptr);
         sum += child->getHeight() + child->marginTop + child->marginBottom;
     }
     return sum;
