@@ -48,7 +48,7 @@ public:
     virtual View *createView(int index) = 0;
 
     virtual bool canCreateView() {
-        return currentIndex <= mData.size() - 1;
+        return currentIndex < mData.size();
     }
 
     virtual void bindView(View *view, T model) = 0;
@@ -69,6 +69,7 @@ public:
     }
 
     T getItem(int index) {
+        SkASSERT(index < mData.size());
         return mData[index];
     }
 

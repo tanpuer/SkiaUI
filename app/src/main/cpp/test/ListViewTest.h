@@ -16,7 +16,7 @@ public:
 
     virtual ~ListViewTest();
 
-    void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) override;
+    virtual void doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) override;
 
 };
 

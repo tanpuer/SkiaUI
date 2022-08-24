@@ -38,14 +38,7 @@ void ListViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
 
     auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);
     auto rootHeightSpec = MeasureSpec::makeMeasureSpec(height, EXACTLY);
-    auto start = javaTimeMillis();
     root->measure(rootWidthSpec, rootHeightSpec);
-    auto measureTime = javaTimeMillis();
-    ALOGD("TimeMills measure %ld", measureTime - start)
     root->layout(0, 0, width, height);
-    auto layoutTime = javaTimeMillis();
-    ALOGD("TimeMills layout %ld", layoutTime - measureTime)
     root->draw(canvas);
-    auto drawTime = javaTimeMillis();
-    ALOGD("TimeMills draw %ld", drawTime - layoutTime)
 }

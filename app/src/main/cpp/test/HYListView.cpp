@@ -22,6 +22,9 @@ View *HYListView::createView(int index) {
 }
 
 void HYListView::attachChild(View *view) {
+    if (view == nullptr) {
+        return;
+    }
     BaseListView::attachChild(view);
     auto lp = LayoutParams::makeExactlyWidth(width);
     lp->setMargin({0, 20, 0, 20});

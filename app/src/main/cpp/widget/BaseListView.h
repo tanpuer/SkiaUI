@@ -60,23 +60,20 @@ public:
      * @param widthMeasureSpec
      * @param heightMeasureSpec
      */
-    void measure(int widthMeasureSpec, int heightMeasureSpec) override {
+    virtual void measure(int widthMeasureSpec, int heightMeasureSpec) override {
         SkASSERT(adapter != nullptr);
-        auto width = MeasureSpec::getSize(widthMeasureSpec);
-        auto height = MeasureSpec::getSize(heightMeasureSpec);
+        SkASSERT(layoutParams->_widthMode == EXACTLY && layoutParams->_heightMode == EXACTLY);
+        auto width = layoutParams->_width;
+        auto height = layoutParams->_height;
+//        while (height > getChildHeightSum() && children.size() < adapter->getItemCount()) {
+//            auto index = adapter->getCurrentIndex();
+//            auto child = adapter->createView(index);
+//            //加入view的时候要attach，remove的时候要detach
+//            attachChild(child);
+//            adapter->bindView(child, adapter->getItem(index));
+//            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+//        }
         ViewGroup::setMeasuredDimension(width, height);
-        ALOGD("BaseListView measure %d %d", height)
-//        while (this->height > getChildHeightSum()) {
-        //todo crash
-        while (children.size() <= adapter->getItemCount()) {
-            auto index = children.size();
-            auto child = adapter->createView(adapter->getCurrentIndex());
-            //加入view的时候要attach，remove的时候要detach
-            attachChild(child);
-            measureChild(child, widthMeasureSpec, heightMeasureSpec);
-            auto item = adapter->getItem(index);
-            adapter->bindView(child, item);
-        }
         YGNodeCalculateLayout(node, width, height, YGDirectionLTR);
     }
 
