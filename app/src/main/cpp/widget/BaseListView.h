@@ -65,15 +65,15 @@ public:
         SkASSERT(layoutParams->_widthMode == EXACTLY && layoutParams->_heightMode == EXACTLY);
         auto width = layoutParams->_width;
         auto height = layoutParams->_height;
-//        while (height > getChildHeightSum() && children.size() < adapter->getItemCount()) {
-//            auto index = adapter->getCurrentIndex();
-//            auto child = adapter->createView(index);
-//            //加入view的时候要attach，remove的时候要detach
-//            attachChild(child);
-//            adapter->bindView(child, adapter->getItem(index));
-//            measureChild(child, widthMeasureSpec, heightMeasureSpec);
-//        }
         ViewGroup::setMeasuredDimension(width, height);
+        while (height > getChildHeightSum() && children.size() < adapter->getItemCount()) {
+            auto index = adapter->getCurrentIndex();
+            auto child = adapter->createView(index);
+            //加入view的时候要attach，remove的时候要detach
+            attachChild(child);
+            adapter->bindView(child, adapter->getItem(index));
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+        }
         YGNodeCalculateLayout(node, width, height, YGDirectionLTR);
     }
 
