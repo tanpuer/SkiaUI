@@ -52,6 +52,11 @@ public:
 
     }
 
+    virtual void setVelocity(float x, float y) {
+        xVelocity = x;
+        yVelocity = y;
+    }
+
 #pragma mark View api
 
     /**
@@ -80,6 +85,8 @@ public:
 protected:
 
     BaseListAdapter<T> *adapter;
+
+    float xVelocity, yVelocity;
 
 };
 

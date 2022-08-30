@@ -10,6 +10,7 @@
 #include <ProgressBarDrawTest.h>
 #include <time_utils.h>
 #include <ListViewTest.h>
+#include <BaseListView.h>
 #include "SkiaFilter.h"
 #include "core/SkGraphics.h"
 #include "HorizontalDrawTest.h"
@@ -96,8 +97,13 @@ void SkiaFilter::dispatchTouchEvent(TouchEvent *touchEvent) {
 
 void SkiaFilter::setVelocity(Velocity *velocity) {
     auto root = testDraw->getRootView();
-    auto scrollView = reinterpret_cast<ScrollView *>(root);
-    if (root != nullptr) {
+    auto scrollView = dynamic_cast<ScrollView *>(root);
+    if (scrollView != nullptr) {
         scrollView->setVelocity(velocity->xVelocity, velocity->yVelocity);
+        return;
+    }
+    auto listView = dynamic_cast<BaseListView<void *> *>(root);
+    if (listView != nullptr) {
+        listView->setVelocity(velocity->xVelocity, velocity->yVelocity);
     }
 }
