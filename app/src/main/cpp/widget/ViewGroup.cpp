@@ -20,16 +20,16 @@ ViewGroup::~ViewGroup() {
 }
 
 bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
+    return addView(view, layoutParams, YGNodeGetChildCount(node));
+}
+
+bool ViewGroup::addView(View *view, LayoutParams *layoutParams, uint32_t index) {
     if (view == nullptr || view->node == nullptr) {
         ALOGE("add null view, pls check view!")
         return false;
     }
     auto childCount = YGNodeGetChildCount(node);
-//    ALOGD("%s%lld addChildView %s%lld at index %d", name(), viewId, view->name(), view->viewId, childCount)
-//    if (view->node->getOwner() != nullptr) {
-//        ALOGE("addChildView error node->getOwner() != null %s %lld %lld", view->parentName, view->parentId, viewId)
-//    }
-    YGNodeInsertChild(node, view->node, childCount);
+    YGNodeInsertChild(node, view->node, index);
     view->parentName = name();
     view->parentId = viewId;
     children.emplace_back(view);
