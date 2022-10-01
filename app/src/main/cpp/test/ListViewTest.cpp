@@ -29,7 +29,7 @@ void ListViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
         root->setBackgroundColor(SK_ColorBLUE);
         auto adapter = new HYListAdapter();
         auto data = std::vector<int>();
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 100; ++i) {
             data.emplace_back(i);
         }
         adapter->setData(data);

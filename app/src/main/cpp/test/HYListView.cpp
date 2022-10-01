@@ -6,7 +6,8 @@
 #include "HYListAdapter.h"
 
 HYListView::HYListView() : BaseListView<int>() {
-
+    //todo !!!
+    setCustomTouchEventDispatcher(new ListViewDispatcher<int>(this));
 }
 
 HYListView::~HYListView() {

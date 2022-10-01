@@ -15,6 +15,7 @@ class BaseListAdapter {
 public:
 
     BaseListAdapter() {
+        startIndex = 0;
         currentIndex = 0;
         mData = std::vector<T>();
         viewPool = std::set<View *>();
@@ -77,6 +78,10 @@ public:
         return currentIndex;
     }
 
+    int getStartIndex() {
+        return startIndex;
+    }
+
 protected:
 
     std::vector<T> mData;
@@ -84,6 +89,8 @@ protected:
     std::set<View *> viewPool;
 
     int currentIndex;
+
+    int startIndex;
 
 };
 
