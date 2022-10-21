@@ -39,7 +39,8 @@ void ImageView::setSource(const char *path) {
 
 void ImageView::measure(int widthMeasureSpec, int heightMeasureSpec) {
     if (skImage == nullptr) {
-        setMeasuredDimension(0, 0);
+        setMeasuredDimension(MeasureSpec::getSize(widthMeasureSpec),
+                             MeasureSpec::getSize(heightMeasureSpec));
         return;
     }
     if (isDirty) {
