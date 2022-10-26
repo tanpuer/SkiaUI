@@ -7,6 +7,7 @@
 #include "ScrollViewTest.h"
 #include "time_utils.h"
 #include "native_log.h"
+#include "Button.h"
 
 ScrollViewTest::ScrollViewTest() = default;
 
@@ -37,6 +38,17 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
                 progressBar->setStrokeWidth(10.0);
                 progressBar->setStyle(SkPaint::kStroke_Style);
                 root->addView(progressBar, LayoutParams::makeExactlyLayoutParams(200, 200));
+            }
+
+            {
+                auto button = new Button();
+                button->setConfig(root->config);
+                button->setText(SkString("Button"));
+                button->setTextSize(60);
+                button->setTextColor(SK_ColorRED);
+                auto btnLayoutParams = LayoutParams::makeWrapContent();
+                btnLayoutParams->setMargin(50);
+                root->addView(button, btnLayoutParams);
             }
 
             {
