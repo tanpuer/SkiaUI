@@ -45,7 +45,10 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
                 button->setConfig(root->config);
                 button->setText(SkString("Button"));
                 button->setTextSize(60);
-                button->setTextColor(SK_ColorRED);
+                button->setCornerRadius(20);
+                button->setBackgroundColor(SK_ColorRED);
+                button->setTextColor(SK_ColorBLACK);
+                button->addShadow(SK_ColorRED, {2.0, 2.0}, 1.0f);
                 auto btnLayoutParams = LayoutParams::makeWrapContent();
                 btnLayoutParams->setMargin(50);
                 root->addView(button, btnLayoutParams);

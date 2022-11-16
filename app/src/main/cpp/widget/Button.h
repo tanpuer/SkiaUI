@@ -16,11 +16,20 @@ public:
 
     ~Button();
 
+    void setMeasuredDimension(int _measuredWidth, int _measuredHeight) override;
+
+    void draw(SkCanvas *canvas) override;
+
 private:
 
+    /**
+     * 水波纹
+     */
     SkPaint *ripplePaint;
 
-    int defaultRadius;
+    int defaultRadius = 20;
+
+    int defaultPadding = 20;
 
 };
 
