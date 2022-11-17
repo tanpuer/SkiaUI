@@ -23,6 +23,8 @@ public:
 
     virtual ~ProgressBar();
 
+    virtual bool forceRequestTouchMove() override;
+
 #pragma mark progressbar api
 
     virtual void setBarColor(SkColor color);

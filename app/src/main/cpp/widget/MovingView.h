@@ -22,6 +22,8 @@ public:
 
     const char *name() override;
 
+    virtual bool forceRequestTouchMove() override;
+
 private:
 
     float lastX;

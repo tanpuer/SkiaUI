@@ -145,11 +145,11 @@ View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchE
 }
 
 bool TouchEventDispatcher::checkTouchInTargetView(TouchEvent *touchEvent) {
-    if (dynamic_cast<MovingView *> (weakTargetView) != nullptr) {
-        return true;
-    }
     if (weakTargetView == nullptr || weakTargetView->node == nullptr) {
         return false;
+    }
+    if (weakTargetView->forceRequestTouchMove()) {
+        return true;
     }
     auto width = YGNodeLayoutGetWidth(weakTargetView->node);
     auto height = YGNodeLayoutGetHeight(weakTargetView->node);

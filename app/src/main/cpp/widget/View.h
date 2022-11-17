@@ -155,6 +155,12 @@ public:
 
     virtual void setCustomTouchEventDispatcher(TouchEventDispatcher *touchEventDispatcher);
 
+    /**
+     * move事件超出view的范围时，如果要继续消费move事件返回true，比如MovingView，ProgressBar，其余View默认返回false
+     * @return
+     */
+    virtual bool forceRequestTouchMove();
+
 protected:
 
     std::unique_ptr<TouchEventDispatcher> touchEventDispatcher;
@@ -188,7 +194,7 @@ public:
 
     virtual void setOnClickListener(std::function<void(View *)> clickListener);
 
-    virtual std::function<void(View*)> getClickListener();
+    virtual std::function<void(View *)> getClickListener();
 
     virtual void removeClickListener();
 

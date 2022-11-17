@@ -70,3 +70,7 @@ MovingView::~MovingView() {
 const char *MovingView::name() {
     return "MovingView";
 }
+
+bool MovingView::forceRequestTouchMove() {
+    return true;
+}

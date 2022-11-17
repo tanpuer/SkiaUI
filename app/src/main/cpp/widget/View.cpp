@@ -286,3 +286,7 @@ void View::performClick() {
 std::function<void(View *)> View::getClickListener() {
     return viewClickListener;
 }
+
+bool View::forceRequestTouchMove() {
+    return false;
+}
