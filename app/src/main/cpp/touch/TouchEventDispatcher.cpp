@@ -5,6 +5,7 @@
 #include "TouchEventDispatcher.h"
 #include <yoga/Yoga.h>
 #include "ViewGroup.h"
+#include "MovingView.h"
 
 TouchEventDispatcher::TouchEventDispatcher(View *view) {
     this->view = view;
@@ -144,6 +145,9 @@ View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchE
 }
 
 bool TouchEventDispatcher::checkTouchInTargetView(TouchEvent *touchEvent) {
+    if (dynamic_cast<MovingView *> (weakTargetView) != nullptr) {
+        return true;
+    }
     if (weakTargetView == nullptr || weakTargetView->node == nullptr) {
         return false;
     }
