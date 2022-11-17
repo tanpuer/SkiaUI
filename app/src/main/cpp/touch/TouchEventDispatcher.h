@@ -40,12 +40,17 @@ public:
     findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent *touchEvent, float tempLeft,
                             float tempTop);
 
+    bool checkTouchInTargetView(TouchEvent *touchEvent);
+
 protected:
 
     View *view;
 
     //todo 改用weak_ptr
     View *weakTargetView;
+
+    float targetViewLeft = 0.0f;
+    float targetViewTop = 0.0f;
 
 };
 

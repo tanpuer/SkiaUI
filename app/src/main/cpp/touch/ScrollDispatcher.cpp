@@ -94,6 +94,8 @@ View *ScrollDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchEvent
                 return findTargetViewTraversal(dynamic_cast<ViewGroup *>(child), touchEvent, left,
                                                top);
             } else {
+                targetViewLeft = left;
+                targetViewTop = top;
                 return child;
             }
         }

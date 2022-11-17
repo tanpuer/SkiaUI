@@ -29,7 +29,11 @@ bool TouchEventDispatcher::dispatchTouchEvent(TouchEvent *touchEvent) {
             break;
         }
         case TouchEvent::ACTION_MOVE: {
-            dispatchToTargetView(touchEvent);
+            if (checkTouchInTargetView(touchEvent)) {
+                dispatchToTargetView(touchEvent);
+            } else {
+                clearTargetView();
+            }
             break;
         }
         case TouchEvent::ACTION_UP: {
@@ -126,10 +130,22 @@ View *TouchEventDispatcher::findTargetViewTraversal(ViewGroup *viewGroup, TouchE
                                                top);
             } else {
                 ALOGD("findTargetViewTraversal result %s %lld", child->name(), child->viewId)
+                targetViewLeft = left;
+                targetViewTop = top;
                 return child;
             }
         }
     }
     ALOGD("findTargetViewTraversal null")
     return viewGroup;
+}
+
+bool TouchEventDispatcher::checkTouchInTargetView(TouchEvent *touchEvent) {
+    if (weakTargetView == nullptr || weakTargetView->node == nullptr) {
+        return false;
+    }
+    auto width = YGNodeLayoutGetWidth(weakTargetView->node);
+    auto height = YGNodeLayoutGetHeight(weakTargetView->node);
+    return touchEvent->x >= targetViewLeft && touchEvent->x <= targetViewLeft + width
+           && touchEvent->y >= targetViewTop && touchEvent->y <= targetViewTop + height;
 }
