@@ -52,6 +52,9 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
                 auto btnLayoutParams = LayoutParams::makeWrapContent();
                 btnLayoutParams->setMargin(50);
                 root->addView(button, btnLayoutParams);
+                button->setOnClickListener([](View *view) {
+                    ALOGD("setOnClickListener perform %s", view->name())
+                });
             }
 
             {

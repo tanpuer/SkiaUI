@@ -27,6 +27,7 @@ View::~View() {
         YGNodeFree(node);
     }
     viewLayoutCallback = nullptr;
+    viewClickListener = nullptr;
 }
 
 #pragma mark yoga
@@ -266,4 +267,22 @@ void View::setLayoutCallback(std::function<void(int, int, int, int)> callback) {
 
 void View::removeLayoutCallback() {
     viewLayoutCallback = nullptr;
+}
+
+void View::setOnClickListener(std::function<void(View *)> clickListener) {
+    viewClickListener = clickListener;
+}
+
+void View::removeClickListener() {
+    viewClickListener = nullptr;
+}
+
+void View::performClick() {
+    if (viewClickListener != nullptr) {
+        viewClickListener(this);
+    }
+}
+
+std::function<void(View *)> View::getClickListener() {
+    return viewClickListener;
 }

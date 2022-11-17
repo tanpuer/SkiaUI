@@ -99,7 +99,10 @@ void TouchEventDispatcher::findTargetView(TouchEvent *touchEvent) {
 
 void TouchEventDispatcher::dispatchToTargetView(TouchEvent *touchEvent) {
     if (weakTargetView != nullptr) {
-        weakTargetView->onTouchEvent(touchEvent);
+        auto consumed = weakTargetView->onTouchEvent(touchEvent);
+        if (!consumed && touchEvent->action == TouchEvent::ACTION_UP) {
+            weakTargetView->performClick();
+        }
     }
 }
 

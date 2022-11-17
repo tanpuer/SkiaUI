@@ -182,13 +182,23 @@ protected:
 
 public:
 
-    void setLayoutCallback(std::function<void(int, int, int, int)> callback);
+    virtual void setLayoutCallback(std::function<void(int, int, int, int)> callback);
 
-    void removeLayoutCallback();
+    virtual void removeLayoutCallback();
+
+    virtual void setOnClickListener(std::function<void(View *)> clickListener);
+
+    virtual std::function<void(View*)> getClickListener();
+
+    virtual void removeClickListener();
+
+    virtual void performClick();
 
 protected:
 
     std::function<void(int, int, int, int)> viewLayoutCallback = nullptr;
+
+    std::function<void(View *)> viewClickListener = nullptr;
 
 };
 
