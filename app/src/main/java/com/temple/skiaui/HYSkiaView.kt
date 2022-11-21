@@ -43,6 +43,7 @@ class HYSkiaView @JvmOverloads constructor(
         if (nativePtr == 0L) {
             return false
         }
+        nativeTouchEvent(nativePtr, event.action, event.x, event.y)
         velocityTracker?.addMovement(event)
         if (event.action == MotionEvent.ACTION_UP) {
             velocityTracker?.computeCurrentVelocity(1000)
@@ -52,7 +53,7 @@ class HYSkiaView @JvmOverloads constructor(
                 velocityTracker?.yVelocity ?: 0f
             )
         }
-        return nativeTouchEvent(nativePtr, event.action, event.x, event.y)
+        return true
     }
 
     private external fun nativeSurfaceCreated(surface: Surface): Long

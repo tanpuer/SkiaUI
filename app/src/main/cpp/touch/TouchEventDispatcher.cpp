@@ -30,11 +30,10 @@ bool TouchEventDispatcher::dispatchTouchEvent(TouchEvent *touchEvent) {
             break;
         }
         case TouchEvent::ACTION_MOVE: {
-            if (checkTouchInTargetView(touchEvent)) {
-                dispatchToTargetView(touchEvent);
-            } else {
+            if (!checkTouchInTargetView(touchEvent)) {
                 clearTargetView();
             }
+            dispatchToTargetView(touchEvent);
             break;
         }
         case TouchEvent::ACTION_UP: {
