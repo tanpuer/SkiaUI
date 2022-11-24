@@ -4,7 +4,7 @@
 #include "SkiaViewContext.h"
 #include "android/native_window_jni.h"
 
-const char *HYSkiaView = "com/temple/skiaui/HYSkiaView";
+const char *HYSkiaView = "com/temple/skiaui/HYSkiaSurfaceView";
 const char *HYSkiaTextureView = "com/temple/skiaui/HYSkiaTextureView";
 
 extern "C" JNIEXPORT jlong JNICALL

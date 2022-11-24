@@ -2,7 +2,6 @@ package com.temple.skiaui
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
@@ -50,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addSkiaView() {
         findViewById<ConstraintLayout>(R.id.clContainer).addView(
-            HYSkiaView(this),
+            HYSkiaSurfaceView(this),
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )

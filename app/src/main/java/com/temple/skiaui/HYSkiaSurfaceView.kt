@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.*
 
-class HYSkiaView @JvmOverloads constructor(
+class HYSkiaSurfaceView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : SurfaceView(context, attrs, defStyleAttr), SurfaceHolder.Callback, Choreographer.FrameCallback {
 

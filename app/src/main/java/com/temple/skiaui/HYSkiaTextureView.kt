@@ -7,7 +7,8 @@ import android.view.*
 import android.view.Choreographer.FrameCallback
 
 /**
- * 使用SurfaceView，渲染延迟感觉比TextureView要明显，比如跟手这个直观的感觉，TextureView要比SurfaceView好。
+ * 使用SurfaceView，渲染延迟感觉比TextureView要明显，同样都是监听vync信号，在doFrame回调里进行渲染，
+ * 比如跟手这个直观的感觉，TextureView要比SurfaceView好。
  */
 class HYSkiaTextureView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
