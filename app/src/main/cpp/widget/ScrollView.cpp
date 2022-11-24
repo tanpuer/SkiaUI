@@ -110,9 +110,9 @@ bool ScrollView::removeView(View *view) {
 
 bool ScrollView::canScroll() {
     if (_direction == YGFlexDirectionRow) {
-        return abs(translateX) < getChildWidthSum() - width;
+        return abs(translateX) <= getChildWidthSum() - width;
     } else {
-        return abs(translateY) < getChildHeightSum() - height;
+        return abs(translateY) <= getChildHeightSum() - height;
     }
 }
 
