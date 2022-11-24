@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addSkiaView() {
         findViewById<ConstraintLayout>(R.id.clContainer).addView(
-            HYSkiaSurfaceView(this),
+            HYSkiaTextureView(this),
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT
         )
