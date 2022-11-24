@@ -58,7 +58,16 @@ void ScrollDispatcher::findTargetView(TouchEvent *touchEvent) {
 }
 
 void ScrollDispatcher::dispatchToTargetView(TouchEvent *touchEvent) {
-    TouchEventDispatcher::dispatchToTargetView(touchEvent);
+    if (weakTargetView != nullptr) {
+        auto consumed = weakTargetView->onTouchEvent(touchEvent);
+        if (!consumed && touchEvent->action == TouchEvent::ACTION_UP) {
+            weakTargetView->performClick();
+        }
+        if (consumed) {
+            //如果已经被消费了，ScrollView就不能消费去滑动了
+            return;
+        }
+    }
     if (canScroll()) {
         scrollView->onTouchEvent(touchEvent);
     }

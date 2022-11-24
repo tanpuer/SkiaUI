@@ -41,6 +41,17 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
             }
 
             {
+                auto view = new MovingView();
+                view->setConfig(root->config);
+                view->setBackgroundColor(SK_ColorBLUE);
+                view->setStyle(SkPaint::kFill_Style);
+                view->setCornerRadius(30);
+                auto viewLayoutParams = LayoutParams::makeExactlyLayoutParams(200, 200);
+                viewLayoutParams->setMargin({0, 30, 0, 0});
+                root->addView(view, viewLayoutParams);
+            }
+
+            {
                 auto button = new Button();
                 button->setConfig(root->config);
                 button->setText(SkString("Button"));
