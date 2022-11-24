@@ -5,6 +5,7 @@
 #include "android/native_window_jni.h"
 
 const char *HYSkiaView = "com/temple/skiaui/HYSkiaView";
+const char *HYSkiaTextureView = "com/temple/skiaui/HYSkiaTextureView";
 
 extern "C" JNIEXPORT jlong JNICALL
 native_SurfaceCreated(JNIEnv *env, jobject instance, jobject javaSurface) {
@@ -107,6 +108,7 @@ extern "C" jint JNI_OnLoad(JavaVM *jvm, void *p) {
         return JNI_ERR;
     }
     RegisterNativeMethods(env, HYSkiaView, g_RenderMethods, std::size(g_RenderMethods));
+    RegisterNativeMethods(env, HYSkiaTextureView, g_RenderMethods, std::size(g_RenderMethods));
     return JNI_VERSION_1_6;
 }
 
@@ -118,4 +120,5 @@ extern "C" void JNI_OnUnload(JavaVM *jvm, void *p) {
     }
     HYAssetsHolder::get().setJVM(jvm);
     UnRegisterNativeMethods(env, HYSkiaView);
+    UnRegisterNativeMethods(env, HYSkiaTextureView);
 }
