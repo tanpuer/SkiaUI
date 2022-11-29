@@ -1,10 +1,9 @@
 # SkiaUI
 
-切换到develop分支
+switch to branch develop
 
-Using Skia and Yoga to build a simple UI framework for Android.
+Using Ski, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework for Android.
 
-使用Skia和Yoga，基于SurfaceView实现简单的支持flexbox布局的ui样式demo
 步骤：
 1. 引入Skia和Yoga。
    skia编译参考官方文档 https://skia.org/docs/user/build/ 
