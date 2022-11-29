@@ -2,7 +2,7 @@
 
 switch to branch develop
 
-Using Ski, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework for Android.
+Using Skia, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework for Android.
 
 步骤：
 1. 引入Skia和Yoga。
