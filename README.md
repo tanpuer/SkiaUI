@@ -5,9 +5,9 @@ switch to branch develop
 Using Skia, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework for Android.
 
 步骤：
-1. 引入Skia和Yoga。
-   skia编译参考官方文档 https://skia.org/docs/user/build/ 
-   Yoga直接源码拿过来用了。
+1. import Skia and Yoga。
+   skia: https://skia.org/docs/user/build/ 
+   Yoga: using directly with source code。
 2. 配置好gl环境，使用Skia硬件加速。
 3. 绘制模仿安卓Measure/Layout/Draw三板斧流程，只支持Flexbox布局。
 4. 事件分发大体模仿安卓dispatchTouchEvent/interceptTouchEvent/onTouchEvent等，做了简化处理。

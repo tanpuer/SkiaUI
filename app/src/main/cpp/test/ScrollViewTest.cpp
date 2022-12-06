@@ -41,6 +41,24 @@ void ScrollViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int 
             }
 
             {
+                auto progressBar = new ProgressBar();
+                progressBar->setConfig(root->config);
+                progressBar->setBarColor(SK_ColorRED);
+                progressBar->setBackgroundColor(SK_ColorGRAY);
+                progressBar->setStrokeWidth(10.0);
+                progressBar->setAutoMode(false);
+                progressBar->setType(ProgressBar::ProgressBarType::LINEAR);
+                progressBar->setProgress(30);
+                progressBar->setStyle(SkPaint::kStroke_Style);
+                auto lp = LayoutParams::makeExactlyLayoutParams(width, 60);
+                lp->setMargin({50, 50, 50, 50});
+                root->addView(progressBar, lp);
+                progressBar->setProgressCallback([](int progress) {
+                    ALOGD("ProgressBar progress: %d", progress)
+                });
+            }
+
+            {
                 auto view = new MovingView();
                 view->setConfig(root->config);
                 view->setBackgroundColor(SK_ColorBLUE);
