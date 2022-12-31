@@ -4,9 +4,7 @@
 
 #include <time_utils.h>
 #include "ListViewTest.h"
-#include "BaseListView.h"
-#include "HYListView.h"
-#include "HYListAdapter.h"
+#include "HYRecyclerView.h"
 
 ListViewTest::ListViewTest() = default;
 
@@ -14,9 +12,9 @@ ListViewTest::~ListViewTest() = default;
 
 void ListViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int height) {
     if (root == nullptr) {
-        auto listView = new HYListView();
+        auto recyclerView = new HYRecyclerView();
         config = YGConfigNew();
-        root = listView;
+        root = recyclerView;
         root->setConfig(config);
         root->setLayoutParams(LayoutParams::makeExactlyLayoutParams(width, height));
         root->setFlexWrap(YGWrapNoWrap);
@@ -27,13 +25,6 @@ void ListViewTest::doDrawTest(int drawCount, SkCanvas *canvas, int width, int he
         root->setStrokeWidth(10);
         root->setStyle(SkPaint::kStroke_Style);
         root->setBackgroundColor(SK_ColorBLUE);
-        auto adapter = new HYListAdapter();
-        auto data = std::vector<int>();
-        for (int i = 0; i < 100; ++i) {
-            data.emplace_back(i);
-        }
-        adapter->setData(data);
-        listView->setAdapter(adapter);
     }
 
     auto rootWidthSpec = MeasureSpec::makeMeasureSpec(width, EXACTLY);

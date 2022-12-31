@@ -111,7 +111,9 @@ void TextView::draw(SkCanvas *canvas) {
 //                           skRect.top() + textRect.height(), font, *textPaint);
 //    canvas->drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, skRect.left(),
 //                           skRect.top() + textRect.height() * 2, font, *textPaint);
-    SkASSERT(paragraph);
+    if (paragraph == nullptr) {
+        return;
+    }
     paragraph->paint(canvas, skRect.left(), skRect.top());
 }
 
