@@ -69,6 +69,12 @@ protected:
 
     std::vector<std::function<void(float dx, float dy)>> scrollCallbacks;
 
+    /**
+     * 上次滑动是往下/往右
+     */
+    bool lastScrollDown = true;
+    bool lastScrollRight = true;
+
 };
 
 

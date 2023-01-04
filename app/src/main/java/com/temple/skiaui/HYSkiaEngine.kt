@@ -55,13 +55,7 @@ class HYSkiaEngine : Choreographer.FrameCallback {
     private external fun nativeSurfaceChanged(nativePtr: Long, width: Int, height: Int)
     private external fun nativeSurfaceDestroyed(nativePtr: Long)
     private external fun nativeSurfaceDoFrame(nativePtr: Long, time: Long)
-    private external fun nativeTouchEvent(
-        nativePtr: Long,
-        action: Int,
-        x: Float,
-        y: Float
-    ): Boolean
-
+    private external fun nativeTouchEvent(nativePtr: Long, action: Int, x: Float, y: Float): Boolean
     private external fun nativeSetVelocity(nativePtr: Long, xVelocity: Float, yVelocity: Float)
 
     companion object {

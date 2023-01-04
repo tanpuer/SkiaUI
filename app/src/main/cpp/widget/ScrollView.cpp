@@ -73,6 +73,7 @@ void ScrollView::updateTranslateY(float diffY) {
     for (auto &callback: scrollCallbacks) {
         callback(0.0, diffY);
     }
+    lastScrollDown = diffY < 0.0f;
 }
 
 void ScrollView::setFlexWrap(YGWrap wrap) {
@@ -96,6 +97,7 @@ void ScrollView::updateTranslateX(float diffX) {
     for (auto &callback: scrollCallbacks) {
         callback(diffX, 0.0);
     }
+    lastScrollRight = diffX < 0.0f;
 }
 
 bool ScrollView::addView(View *view, LayoutParams *layoutParams) {

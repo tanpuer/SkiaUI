@@ -28,7 +28,6 @@ bool ViewGroup::addView(View *view, LayoutParams *layoutParams, uint32_t index) 
         ALOGE("add null view, pls check view!")
         return false;
     }
-    auto childCount = YGNodeGetChildCount(node);
     YGNodeInsertChild(node, view->node, index);
     view->parentName = name();
     view->parentId = viewId;

@@ -28,7 +28,7 @@ public:
     HYRecyclerView() {
         auto adapter = new HYRecyclerAdapter();
         auto data = std::vector<TestModel *>();
-        for (int i = 0; i < 100; ++i) {
+        for (int i = 0; i < 200; ++i) {
             auto string = "abc" + std::to_string(i);
             data.emplace_back(new TestModel(i, SkString(string)));
         }
@@ -60,6 +60,7 @@ public:
         void onBindViewHolder(RecyclerViewHolder<TestModel *> *viewHolder, int index,
                               TestModel *item) override {
             viewHolder->updateView(item);
+            ALOGD("RecyclerView onBindViewHolder %s", item->b.c_str())
         }
 
         class HYRecyclerVH : public RecyclerViewHolder<TestModel *> {

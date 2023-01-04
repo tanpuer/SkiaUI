@@ -38,24 +38,56 @@ public:
         }
         if (_direction == YGFlexDirectionColumn) {
             int childHeightSum = 0;
-            for (auto child: children) {
+            for (auto &child: children) {
                 childHeightSum += child->getHeight();
             }
 
-            //todo childHeightSum < height * 3
-            while (children.size() < adapter->getSize() && childHeightSum < height * 3) {
-                auto vh = adapter->onCreateViewHolder();
-                if (vh == nullptr) {
-                    continue;
+            if (childHeightSum > height) {
+                //从头清理
+                for (auto itr = adapter->currVHList.cbegin(); itr != adapter->currVHList.cend();) {
+                    if (*itr == nullptr) {
+                        break;
+                    }
+                    auto itemView = (*itr)->getItemView();
+                    if (ignoreChildDraw(itemView)) {
+                        adapter->recycleStartVH(*itr);
+                        itr = adapter->currVHList.cbegin();
+                        ScrollView::removeView(itemView);
+                    } else {
+                        itr++;
+                        break;
+                    }
+                }
+                //从尾清理
+                for (auto itr = adapter->currVHList.cend(); itr != adapter->currVHList.cbegin();) {
+                    if (*itr == nullptr) {
+                        break;
+                    }
+                    auto itemView = (*itr)->getItemView();
+                    if (ignoreChildDraw(itemView)) {
+                        adapter->recyclerEndVH(*itr);
+                        itr = adapter->currVHList.cend();
+                        ScrollView::removeView(itemView);
+                    } else {
+                        itr--;
+                        break;
+                    }
+                }
+            }
+
+            while (children.size() < adapter->getSize() &&
+                   childHeightSum - abs(translateY) <= height) {
+                RecyclerViewHolder<T> *vh = nullptr;
+                if (lastScrollDown) {
+                    vh = adapter->handleEndVH();
+                } else {
+                    vh = adapter->handleStartVH();
                 }
                 View *child = vh->getItemView();
-                //todo 找到此时需要更添加的pos,
-                int pos = children.size();
-                //todo
-                adapter->onBindViewHolder(vh, pos, adapter->getItem(pos));
                 auto viewLayoutParams = LayoutParams::makeExactlyWidth(width);
                 child->setConfig(getConfig());
                 ScrollView::addView(child, viewLayoutParams);
+                ALOGD("RecyclerView addView: %s", child->name())
                 child->measure(widthMeasureSpec, heightMeasureSpec);
                 childHeightSum += child->getHeight();
             }
@@ -74,6 +106,15 @@ public:
 
     virtual void draw(SkCanvas *canvas) override {
         ScrollView::draw(canvas);
+    }
+
+    virtual bool canScroll() override {
+        //todo 先写死无限滑动
+        if (_direction == YGFlexDirectionColumn) {
+            return true;
+        } else {
+            return true;
+        }
     }
 
 #pragma mark adapter
