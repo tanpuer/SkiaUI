@@ -19,7 +19,7 @@ Using Skia, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework
    ProgressBar支持圆形和直线形，可拖拽修改进度。
 7. scrollView实现，滑动，fling，目前滑动效果过于僵硬，todo 优化滑动效果。
 8. todo 脏区渲染
-9. todo ListView的实现
+9. 基于ScrollView实现RecyclerView，todo性能优化
 10. todo 接入v8
 
 
