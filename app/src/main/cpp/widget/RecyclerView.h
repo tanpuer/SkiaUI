@@ -61,28 +61,28 @@ public:
                     }
                 }
                 //从尾清理
-//                for (auto itr = adapter->currVHList.cend(); itr != adapter->currVHList.cbegin();) {
-//                    if (*itr == nullptr) {
-//                        break;
-//                    }
-//                    auto itemView = (*itr)->getItemView();
-//                    if (ignoreChildDraw(itemView)) {
-//                        adapter->recyclerEndVH(*itr);
-//                        itr = adapter->currVHList.cend();
-//                        ScrollView::removeViewAt(children.size() - 1);
-//                    } else {
-//                        itr--;
-//                        break;
-//                    }
-//                }
+                for (auto itr = adapter->currVHList.cend() - 1; itr != adapter->currVHList.cbegin();) {
+                    if (*itr == nullptr) {
+                        break;
+                    }
+                    auto itemView = (*itr)->getItemView();
+                    if (ignoreChildDraw(itemView)) {
+                        adapter->recyclerEndVH(*itr);
+                        itr = adapter->currVHList.cend() - 1;
+                        ScrollView::removeViewAt(children.size() - 1);
+                    } else {
+                        itr--;
+                        break;
+                    }
+                }
             }
 
             while (children.empty() ||
                    (skRect.height() > 0 && !lastScrollDown && adapter->startIndex > 0 &&
-                    children.front()->skRect.top() > skRect.top() - 100) ||
+                    children.front()->skRect.top() > skRect.top() - 50) ||
                    (skRect.height() > 0 && lastScrollDown &&
                     adapter->endIndex < adapter->getSize() &&
-                    children.back()->skRect.bottom() < skRect.bottom() + 100)) {
+                    children.back()->skRect.bottom() < skRect.bottom() + 50)) {
                 RecyclerViewHolder<T> *vh = nullptr;
                 if (lastScrollDown) {
                     vh = adapter->handleEndVH();
@@ -110,7 +110,7 @@ public:
         } else {
             //todo 横向滑动暂时忽略
         }
-        ViewGroup::setMeasuredDimension(width, height);
+        ViewGroup::setMeasuredDimension(layoutParams->_width, layoutParams->_height);
         YGNodeCalculateLayout(node, YGNodeStyleGetWidth(node).value,
                               YGNodeStyleGetHeight(node).value,
                               YGDirectionLTR);

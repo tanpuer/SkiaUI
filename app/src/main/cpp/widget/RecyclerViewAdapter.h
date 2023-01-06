@@ -93,9 +93,9 @@ public:
      */
     void recyclerEndVH(RecyclerViewHolder<T> *vh) {
         putViewHolderToCache(vh);
-        onRecycleViewHolder(vh, data[endIndex]);
         endIndex--;
-        currVHList.erase(currVHList.end());
+        onRecycleViewHolder(vh, data[endIndex]);
+        currVHList.erase(currVHList.end() - 1);
     }
 
     /**
