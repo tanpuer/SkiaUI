@@ -42,7 +42,7 @@ public:
                 childHeightSum += child->getHeight();
             }
 
-            if (childHeightSum > height) {
+            if (!YGFloatsEqual(0.0f, translateY) && childHeightSum > height) {
                 //从头清理
                 for (auto itr = adapter->currVHList.cbegin(); itr != adapter->currVHList.cend();) {
                     if (*itr == nullptr) {
@@ -52,31 +52,37 @@ public:
                     if (ignoreChildDraw(itemView)) {
                         adapter->recycleStartVH(*itr);
                         itr = adapter->currVHList.cbegin();
-                        ScrollView::removeView(itemView);
+                        translateY += children[0]->skRect.height();
+                        ScrollView::removeViewAt(0);
+                        ALOGD("RecyclerView removeViewAt 0")
                     } else {
                         itr++;
                         break;
                     }
                 }
                 //从尾清理
-                for (auto itr = adapter->currVHList.cend(); itr != adapter->currVHList.cbegin();) {
-                    if (*itr == nullptr) {
-                        break;
-                    }
-                    auto itemView = (*itr)->getItemView();
-                    if (ignoreChildDraw(itemView)) {
-                        adapter->recyclerEndVH(*itr);
-                        itr = adapter->currVHList.cend();
-                        ScrollView::removeView(itemView);
-                    } else {
-                        itr--;
-                        break;
-                    }
-                }
+//                for (auto itr = adapter->currVHList.cend(); itr != adapter->currVHList.cbegin();) {
+//                    if (*itr == nullptr) {
+//                        break;
+//                    }
+//                    auto itemView = (*itr)->getItemView();
+//                    if (ignoreChildDraw(itemView)) {
+//                        adapter->recyclerEndVH(*itr);
+//                        itr = adapter->currVHList.cend();
+//                        ScrollView::removeViewAt(children.size() - 1);
+//                    } else {
+//                        itr--;
+//                        break;
+//                    }
+//                }
             }
 
-            while (children.size() < adapter->getSize() &&
-                   childHeightSum - abs(translateY) <= height) {
+            while (children.empty() ||
+                   (skRect.height() > 0 && !lastScrollDown && adapter->startIndex > 0 &&
+                    children.front()->skRect.top() > skRect.top() - 100) ||
+                   (skRect.height() > 0 && lastScrollDown &&
+                    adapter->endIndex < adapter->getSize() &&
+                    children.back()->skRect.bottom() < skRect.bottom() + 100)) {
                 RecyclerViewHolder<T> *vh = nullptr;
                 if (lastScrollDown) {
                     vh = adapter->handleEndVH();
@@ -86,9 +92,19 @@ public:
                 View *child = vh->getItemView();
                 auto viewLayoutParams = LayoutParams::makeExactlyWidth(width);
                 child->setConfig(getConfig());
-                ScrollView::addView(child, viewLayoutParams);
+                if (lastScrollDown) {
+                    ScrollView::addView(child, viewLayoutParams);
+                } else {
+                    ScrollView::addViewAt(child, viewLayoutParams, 0);
+                }
                 ALOGD("RecyclerView addView: %s", child->name())
                 child->measure(widthMeasureSpec, heightMeasureSpec);
+                if (!lastScrollDown) {
+                    if (abs(translateY) < child->getHeight()) {
+
+                    }
+                    translateY -= child->getHeight();
+                }
                 childHeightSum += child->getHeight();
             }
         } else {
@@ -115,6 +131,10 @@ public:
         } else {
             return true;
         }
+    }
+
+    void updateTranslateY(float diffY) override {
+        ScrollView::updateTranslateY(diffY);
     }
 
 #pragma mark adapter

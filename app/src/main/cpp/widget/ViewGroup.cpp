@@ -20,10 +20,10 @@ ViewGroup::~ViewGroup() {
 }
 
 bool ViewGroup::addView(View *view, LayoutParams *layoutParams) {
-    return addView(view, layoutParams, YGNodeGetChildCount(node));
+    return addViewAt(view, layoutParams, YGNodeGetChildCount(node));
 }
 
-bool ViewGroup::addView(View *view, LayoutParams *layoutParams, uint32_t index) {
+bool ViewGroup::addViewAt(View *view, LayoutParams *layoutParams, uint32_t index) {
     if (view == nullptr || view->node == nullptr) {
         ALOGE("add null view, pls check view!")
         return false;
@@ -31,7 +31,7 @@ bool ViewGroup::addView(View *view, LayoutParams *layoutParams, uint32_t index) 
     YGNodeInsertChild(node, view->node, index);
     view->parentName = name();
     view->parentId = viewId;
-    children.emplace_back(view);
+    children.insert(children.cbegin() + index, view);
     view->setLayoutParams(layoutParams);
     return true;
 }
@@ -52,11 +52,26 @@ bool ViewGroup::removeView(View *view) {
     return false;
 }
 
+bool ViewGroup::removeViewAt(uint32_t index) {
+    if (index < 0 || index >= children.size()) {
+        return false;
+    }
+    auto view = children[index];
+    if (view == nullptr) {
+        return false;
+    }
+    children.erase(children.cbegin() + index);
+    //todo 是否要析构删除的view
+    YGNodeRemoveChild(node, view->node);
+    return true;
+}
+
 void ViewGroup::removeAllViews() {
     if (node == nullptr) {
         ALOGE("remove null view, pls check view!")
         return;
     }
+    children.clear();
     YGNodeRemoveAllChildren(node);
 }
 

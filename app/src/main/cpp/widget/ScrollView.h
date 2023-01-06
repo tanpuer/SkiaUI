@@ -41,7 +41,11 @@ public:
 
     virtual bool addView(View *view, LayoutParams *layoutParams) override;
 
+    virtual bool addViewAt(View *view, LayoutParams *layoutParams, uint32_t index) override;
+
     virtual bool removeView(View *view) override;
+
+    virtual bool removeViewAt(uint32_t index) override;
 
     virtual bool canScroll();
 

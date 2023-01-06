@@ -53,9 +53,11 @@ public:
 
     virtual bool addView(View *view, LayoutParams *layoutParams);
 
-    virtual bool addView(View *view, LayoutParams *layoutParams, uint32_t index);
+    virtual bool addViewAt(View *view, LayoutParams *layoutParams, uint32_t index);
 
     virtual bool removeView(View *view);
+
+    virtual bool removeViewAt(uint32_t index);
 
     virtual void removeAllViews();
 

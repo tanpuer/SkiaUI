@@ -63,6 +63,11 @@ public:
             ALOGD("RecyclerView onBindViewHolder %s", item->b.c_str())
         }
 
+        void
+        onRecycleViewHolder(RecyclerViewHolder<TestModel *> *viewHolder, TestModel *item) override {
+            ALOGD("RecyclerView onRecycleViewHolder %s", item->b.c_str())
+        }
+
         class HYRecyclerVH : public RecyclerViewHolder<TestModel *> {
 
         public:

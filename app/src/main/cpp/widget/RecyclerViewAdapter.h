@@ -43,6 +43,8 @@ public:
 
     virtual void onBindViewHolder(RecyclerViewHolder<T> *viewHolder, int index, T item) = 0;
 
+    virtual void onRecycleViewHolder(RecyclerViewHolder<T> *viewHolder, T item) = 0;
+
     virtual void putViewHolderToCache(RecyclerViewHolder<T> *vh) {
         vhCache.push(vh);
     }
@@ -80,6 +82,7 @@ public:
      */
     void recycleStartVH(RecyclerViewHolder<T> *vh) {
         putViewHolderToCache(vh);
+        onRecycleViewHolder(vh, data[startIndex]);
         startIndex++;
         currVHList.erase(currVHList.begin());
     }
@@ -90,6 +93,7 @@ public:
      */
     void recyclerEndVH(RecyclerViewHolder<T> *vh) {
         putViewHolderToCache(vh);
+        onRecycleViewHolder(vh, data[endIndex]);
         endIndex--;
         currVHList.erase(currVHList.end());
     }
