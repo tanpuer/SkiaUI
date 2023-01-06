@@ -61,7 +61,8 @@ public:
                     }
                 }
                 //从尾清理
-                for (auto itr = adapter->currVHList.cend() - 1; itr != adapter->currVHList.cbegin();) {
+                for (auto itr = adapter->currVHList.cend() - 1;
+                     itr != adapter->currVHList.cbegin();) {
                     if (*itr == nullptr) {
                         break;
                     }
@@ -90,7 +91,7 @@ public:
                     vh = adapter->handleStartVH();
                 }
                 View *child = vh->getItemView();
-                auto viewLayoutParams = LayoutParams::makeExactlyWidth(width);
+                auto viewLayoutParams = LayoutParams::makeExactlyWidth(layoutParams->_width);
                 child->setConfig(getConfig());
                 if (lastScrollDown) {
                     ScrollView::addView(child, viewLayoutParams);
