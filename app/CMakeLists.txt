@@ -21,6 +21,7 @@ include_directories(
         src/main/cpp/scroll
         src/main/cpp/touch
         src/main/cpp/anim
+        src/main/cpp/plugin
 )
 
 link_directories(
@@ -52,6 +53,7 @@ aux_source_directory(src/main/cpp/test srcs)
 aux_source_directory(src/main/cpp/scroll srcs)
 aux_source_directory(src/main/cpp/touch srcs)
 aux_source_directory(src/main/cpp/anim srcs)
+aux_source_directory(src/main/cpp/plugin srcs)
 
 add_library(native-lib SHARED ${srcs})
 

@@ -69,7 +69,7 @@ public:
 
     YGNodeRef node;
 
-    YGConfigRef config;
+    YGConfigRef config = nullptr;
 
 protected:
 

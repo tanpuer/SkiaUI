@@ -8,6 +8,7 @@
 
 #include "../widget/RecyclerView.h"
 #include "TextView.h"
+#include "ProgressBar.h"
 
 struct TestModel {
 
@@ -42,30 +43,71 @@ public:
 
     class HYRecyclerAdapter : public RecyclerViewAdapter<TestModel *> {
 
-        RecyclerViewHolder<TestModel *> *onCreateViewHolder() override {
-            auto textView = new TextView();
-            textView->setText(SkString("abc"));
-            textView->setTextColor(SK_ColorBLACK);
-            textView->setTextSize(60);
-            textView->setBackgroundColor(SK_ColorRED);
-            textView->setStyle(SkPaint::kStroke_Style);
-            textView->setDecoration(kLineThrough);
-            textView->setDecorationStyle(kSolid);
-            textView->setDecorationThicknessMultiplier(3);
-            textView->setDecorationColor(SK_ColorRED);
-            auto vh = new HYRecyclerVH(textView);
-            return vh;
+        RecyclerViewHolder<TestModel *> *onCreateViewHolder(int itemType) override {
+            switch (itemType) {
+//                case 1: {
+//                    auto flexboxLayout = new FlexboxLayout();
+//                    flexboxLayout->setConfig(config);
+//                    flexboxLayout->setFlexWrap(YGWrapNoWrap);
+//                    flexboxLayout->setFlexDirection(YGFlexDirectionColumn);
+//                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
+//                    flexboxLayout->setAlignItems(YGAlignCenter);
+//                    flexboxLayout->setAlignContent(YGAlignCenter);
+//                    auto vh = new HYRecyclerVH2(flexboxLayout);
+//                    {
+//                        auto progressBar = new ProgressBar();
+//                        progressBar->setConfig(config);
+//                        progressBar->setBarColor(SK_ColorRED);
+//                        progressBar->setBackgroundColor(SK_ColorGRAY);
+//                        progressBar->setStrokeWidth(10.0);
+//                        progressBar->setStyle(SkPaint::kStroke_Style);
+//                        flexboxLayout->addView(progressBar,
+//                                               LayoutParams::makeExactlyLayoutParams(200, 200));
+//                    }
+//                    return vh;
+//                }
+//                case 2: {
+//                    auto flexboxLayout = new FlexboxLayout();
+//                    flexboxLayout->setConfig(config);
+//                    auto vh = new HYRecyclerVH3(flexboxLayout);
+//                    return vh;
+//                }
+                default: {
+                    auto textView = new TextView();
+                    textView->setConfig(config);
+                    textView->setText(SkString("abc"));
+                    textView->setTextColor(SK_ColorBLACK);
+                    textView->setTextSize(60);
+                    textView->setBackgroundColor(SK_ColorRED);
+                    textView->setStyle(SkPaint::kStroke_Style);
+                    textView->setDecoration(kLineThrough);
+                    textView->setDecorationStyle(kSolid);
+                    textView->setDecorationThicknessMultiplier(3);
+                    textView->setDecorationColor(SK_ColorRED);
+                    auto vh = new HYRecyclerVH(textView);
+                    return vh;
+                }
+            }
         }
 
         void onBindViewHolder(RecyclerViewHolder<TestModel *> *viewHolder, int index,
                               TestModel *item) override {
             viewHolder->updateView(item);
+            if (this->itemClickListener != nullptr) {
+                viewHolder->getItemView()->setOnClickListener([this, item](View *view) {
+                    this->itemClickListener(item, view);
+                });
+            }
             ALOGD("RecyclerView onBindViewHolder %s", item->b.c_str())
         }
 
         void
         onRecycleViewHolder(RecyclerViewHolder<TestModel *> *viewHolder, TestModel *item) override {
             ALOGD("RecyclerView onRecycleViewHolder %s", item->b.c_str())
+        }
+
+        int getItemType(int index) override {
+            return index % 3;
         }
 
         class HYRecyclerVH : public RecyclerViewHolder<TestModel *> {
@@ -85,6 +127,36 @@ public:
                 }
             }
 
+        };
+
+        class HYRecyclerVH2 : public RecyclerViewHolder<TestModel *> {
+
+        public:
+
+            HYRecyclerVH2(View *itemView) : RecyclerViewHolder<TestModel *>(itemView) {
+
+            }
+
+            HYRecyclerVH2() = delete;
+
+            void updateView(TestModel *item) override {
+
+            }
+
+        };
+
+        class HYRecyclerVH3 : public RecyclerViewHolder<TestModel *> {
+
+        public:
+            HYRecyclerVH3(View *itemView) : RecyclerViewHolder<TestModel *>(itemView) {
+
+            }
+
+            HYRecyclerVH3() = delete;
+
+            void updateView(TestModel *item) override {
+
+            }
         };
 
     };

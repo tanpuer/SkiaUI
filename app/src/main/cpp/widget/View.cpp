@@ -228,6 +228,10 @@ void View::setHeightAuto() {
 }
 
 void View::setConfig(YGConfigRef config) {
+    if (this->config != nullptr) {
+        ALOGD("multi set config error, pls check")
+        return;
+    }
     this->config = config;
     //todo setConfig之后才会进行node的创建
     node = YGNodeNewWithConfig(config);

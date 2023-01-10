@@ -13,10 +13,6 @@
 template<typename T>
 class RecyclerView : public ScrollView {
 
-    enum class RecyclerOrientation {
-
-    };
-
 public:
 
     RecyclerView() {
@@ -36,6 +32,7 @@ public:
             ViewGroup::setMeasuredDimension(width, height);
             return;
         }
+        adapter->setConfig(getConfig());
         if (_direction == YGFlexDirectionColumn) {
             int childHeightSum = 0;
             for (auto &child: children) {
@@ -78,10 +75,13 @@ public:
                 }
             }
 
+            //再setMeasureDimension调用前height为0，此时要用layoutParams->_height才行
             while (children.empty() ||
-                   (skRect.height() > 0 && !lastScrollDown && adapter->startIndex > 0 &&
+                   (height == 0 && childHeightSum < layoutParams->_height) ||
+                   (height > 0 && skRect.height() > 0 && !lastScrollDown &&
+                    adapter->startIndex > 0 &&
                     children.front()->skRect.top() > skRect.top() - 50) ||
-                   (skRect.height() > 0 && lastScrollDown &&
+                   (height > 0 && skRect.height() > 0 && lastScrollDown &&
                     adapter->endIndex < adapter->getSize() &&
                     children.back()->skRect.bottom() < skRect.bottom() + 50)) {
                 RecyclerViewHolder<T> *vh = nullptr;
@@ -92,7 +92,6 @@ public:
                 }
                 View *child = vh->getItemView();
                 auto viewLayoutParams = LayoutParams::makeExactlyWidth(layoutParams->_width);
-                child->setConfig(getConfig());
                 if (lastScrollDown) {
                     ScrollView::addView(child, viewLayoutParams);
                 } else {
@@ -101,9 +100,6 @@ public:
                 ALOGD("RecyclerView addView: %s", child->name())
                 child->measure(widthMeasureSpec, heightMeasureSpec);
                 if (!lastScrollDown) {
-                    if (abs(translateY) < child->getHeight()) {
-
-                    }
                     translateY -= child->getHeight();
                 }
                 childHeightSum += child->getHeight();
@@ -122,7 +118,12 @@ public:
     }
 
     virtual void draw(SkCanvas *canvas) override {
-        ScrollView::draw(canvas);
+        ALOGD("RecyclerView draw, child count: %d", children.size())
+        for (auto child: children) {
+            //不同于ScrollView，RecyclerView不需要判断不可见的child不绘制
+            child->draw(canvas);
+        }
+        View::draw(canvas);
     }
 
     virtual bool canScroll() override {
