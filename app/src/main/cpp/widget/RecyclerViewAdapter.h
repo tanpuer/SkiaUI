@@ -8,6 +8,8 @@
 #include "vector"
 #include "stack"
 #include "RecyclerViewHolder.h"
+#include "unordered_map"
+#include "TextView.h"
 
 template<typename T>
 class RecyclerViewAdapter {
@@ -15,9 +17,7 @@ class RecyclerViewAdapter {
 public:
 
     RecyclerViewAdapter() {
-        data = std::vector<T>();
-        vhCache = std::stack<RecyclerViewHolder<T> *>();
-        currVHList = std::vector<RecyclerViewHolder<T> *>();
+
     }
 
     virtual ~RecyclerViewAdapter() {
@@ -49,17 +49,26 @@ public:
 
     virtual void onRecycleViewHolder(RecyclerViewHolder<T> *viewHolder, T item) = 0;
 
-    virtual void putViewHolderToCache(RecyclerViewHolder<T> *vh) {
-        vhCache.push(vh);
+    virtual void putViewHolderToCache(int itemType, RecyclerViewHolder<T> *vh) {
+        if (vhCache.find(itemType) == vhCache.end()) {
+            vhCache.emplace(itemType, std::stack<RecyclerViewHolder<T> *>());
+        }
+        ALOGD("RecyclerView push to cache %d %s", itemType, static_cast<TextView*>(vh->getItemView())->getText().c_str())
+        vhCache[itemType].push(vh);
     }
 
-    virtual RecyclerViewHolder<T> *getViewHolderFromCache() {
-        if (vhCache.empty()) {
-            return nullptr;
+    virtual RecyclerViewHolder<T> *getViewHolderFromCache(int itemType) {
+        if (vhCache.find(itemType) == vhCache.end()) {
+            vhCache.emplace(itemType, std::stack<RecyclerViewHolder<T> *>());
         }
-        auto vh = vhCache.top();
-        vhCache.pop();
-        return vh;
+        if (vhCache[itemType].empty()) {
+            return nullptr;
+        } else {
+            auto vhStack = vhCache[itemType];
+            auto vh = vhStack.top();
+            vhStack.pop();
+            return vh;
+        }
     }
 
 #pragma mark notify
@@ -85,7 +94,9 @@ public:
      * @param vh
      */
     void recycleStartVH(RecyclerViewHolder<T> *vh) {
-        putViewHolderToCache(vh);
+        auto text = static_cast<TextView *>(vh->getItemView())->getText();
+//        ALOGD("RecyclerView recycleStartVH %d", startIndex)
+        putViewHolderToCache(getItemType(startIndex), vh);
         onRecycleViewHolder(vh, data[startIndex]);
         startIndex++;
         currVHList.erase(currVHList.begin());
@@ -96,7 +107,8 @@ public:
      * @param vh
      */
     void recyclerEndVH(RecyclerViewHolder<T> *vh) {
-        putViewHolderToCache(vh);
+        ALOGD("RecyclerView recyclerEndVH %d", endIndex)
+        putViewHolderToCache(getItemType(endIndex), vh);
         endIndex--;
         onRecycleViewHolder(vh, data[endIndex]);
         currVHList.erase(currVHList.end() - 1);
@@ -106,11 +118,14 @@ public:
      * 向上滑动时，处理头部的vh
      */
     RecyclerViewHolder<T> *handleStartVH() {
-        auto vh = getViewHolderFromCache();
         startIndex--;
+        auto vh = getViewHolderFromCache(getItemType(startIndex));
         if (vh == nullptr) {
             auto itemType = getItemType(startIndex);
             vh = onCreateViewHolder(itemType);
+            ALOGD("RecyclerView create new VH %d", startIndex)
+        } else {
+            ALOGD("RecyclerView getVHFromCache %d", startIndex)
         }
         auto item = data[startIndex];
         onBindViewHolder(vh, startIndex, item);
@@ -123,10 +138,23 @@ public:
      * @return
      */
     RecyclerViewHolder<T> *handleEndVH() {
-        auto vh = getViewHolderFromCache();
+        auto vh = getViewHolderFromCache(getItemType(endIndex));
+//        assert(vhCache[getItemType(endIndex)].empty());
         if (vh == nullptr) {
             auto itemType = getItemType(endIndex);
             vh = onCreateViewHolder(itemType);
+            ALOGD("RecyclerView create new VH %d", endIndex)
+        } else {
+            ALOGD("RecyclerView create new VH %d", endIndex)
+            auto text = static_cast<TextView *>(vh->getItemView())->getText();
+            auto stack = vhCache[getItemType(endIndex)];
+            const char *text1 = "null";
+            if (!stack.empty()) {
+                text1 = static_cast<TextView *>(stack.top()->getItemView())->getText().c_str();
+            }
+            ALOGD("RecyclerView get VH from Cache, owner is not null %d %d %s %s", endIndex, vh->getItemView()->node->getOwner() != nullptr,  text.c_str(), text1)
+
+//            ALOGD("RecyclerView getVHFromCache %d", endIndex)
         }
         auto item = data[endIndex];
         onBindViewHolder(vh, endIndex, item);
@@ -156,9 +184,9 @@ protected:
 private:
 
     /**
-     * vh缓存，暂时用Stack实现
+     * vh缓存，暂时用Map + Stack实现
      */
-    std::stack<RecyclerViewHolder<T> *> vhCache;
+    std::unordered_map<int, std::stack<RecyclerViewHolder<T> *>> vhCache;
 
 public:
     /**

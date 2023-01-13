@@ -78,7 +78,7 @@ void ViewGroup::removeAllViews() {
 void ViewGroup::setMeasuredDimension(int _measuredWidth, int _measuredHeight) {
     width = _measuredWidth;
     height = _measuredHeight;
-    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
+//    ALOGD("ViewGroup setMeasuredDimension %s %d %d", name(), _measuredWidth, _measuredHeight)
     YGNodeStyleSetWidth(node, static_cast<float>(_measuredWidth));
     YGNodeStyleSetHeight(node, static_cast<float>(_measuredHeight));
 }

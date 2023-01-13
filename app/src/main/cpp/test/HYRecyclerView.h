@@ -9,6 +9,7 @@
 #include "../widget/RecyclerView.h"
 #include "TextView.h"
 #include "ProgressBar.h"
+#include "ImageView.h"
 
 struct TestModel {
 
@@ -53,6 +54,7 @@ public:
 //                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
 //                    flexboxLayout->setAlignItems(YGAlignCenter);
 //                    flexboxLayout->setAlignContent(YGAlignCenter);
+//                    flexboxLayout->setStyle(SkPaint::kStroke_Style);
 //                    auto vh = new HYRecyclerVH2(flexboxLayout);
 //                    {
 //                        auto progressBar = new ProgressBar();
@@ -69,7 +71,26 @@ public:
 //                case 2: {
 //                    auto flexboxLayout = new FlexboxLayout();
 //                    flexboxLayout->setConfig(config);
-//                    auto vh = new HYRecyclerVH3(flexboxLayout);
+//                    flexboxLayout->setFlexWrap(YGWrapNoWrap);
+//                    flexboxLayout->setFlexDirection(YGFlexDirectionColumn);
+//                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
+//                    flexboxLayout->setAlignItems(YGAlignCenter);
+//                    flexboxLayout->setAlignContent(YGAlignCenter);
+//                    flexboxLayout->setStyle(SkPaint::kStroke_Style);
+//                    auto vh = new HYRecyclerVH2(flexboxLayout);
+//                    {
+//                        auto imageView = new ImageView();
+//                        imageView->setConfig(config);
+//                        imageView->setSource("/sdcard/cowboy.png");
+//                        imageView->setCornerRadius(100);
+//                        imageView->setScaleType(ImageView::ScaleType::FitCenter);
+//                        imageView->setStyle(SkPaint::kStroke_Style);
+//                        imageView->setBackgroundColor(SK_ColorRED);
+//                        imageView->setStrokeWidth(2);
+//                        auto lp = LayoutParams::makeExactlyLayoutParams(200, 200);
+//                        lp->setMargin({0, 100, 0, 100});
+//                        flexboxLayout->addView(imageView, lp);
+//                    }
 //                    return vh;
 //                }
                 default: {
@@ -98,12 +119,12 @@ public:
                     this->itemClickListener(item, view);
                 });
             }
-            ALOGD("RecyclerView onBindViewHolder %s", item->b.c_str())
+//            ALOGD("RecyclerView onBindViewHolder %s", item->b.c_str())
         }
 
         void
         onRecycleViewHolder(RecyclerViewHolder<TestModel *> *viewHolder, TestModel *item) override {
-            ALOGD("RecyclerView onRecycleViewHolder %s", item->b.c_str())
+//            ALOGD("RecyclerView onRecycleViewHolder %s", item->b.c_str())
         }
 
         int getItemType(int index) override {

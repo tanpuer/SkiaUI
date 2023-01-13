@@ -23,6 +23,10 @@ public:
         delete adapter;
     }
 
+    const char *name() override {
+        return "RecyclerView";
+    }
+
     virtual void measure(int widthMeasureSpec, int heightMeasureSpec) override {
         //简化处理RecyclerView必须指定宽高
         assert(layoutParams->_heightMode == EXACTLY);
@@ -51,12 +55,18 @@ public:
                         itr = adapter->currVHList.cbegin();
                         translateY += children[0]->skRect.height();
                         ScrollView::removeViewAt(0);
-                        ALOGD("RecyclerView removeViewAt 0")
                     } else {
-                        itr++;
                         break;
                     }
                 }
+//                auto firstVH = adapter->currVHList[0];
+//                if (ignoreChildDraw(firstVH->getItemView())) {
+//                    ScrollView::removeViewAt(0);
+//                    adapter->recycleStartVH(adapter->currVHList[0]);
+//                    translateY += firstVH->getItemView()->skRect.height();
+//                }
+
+
                 //从尾清理
                 for (auto itr = adapter->currVHList.cend() - 1;
                      itr != adapter->currVHList.cbegin();) {
@@ -69,21 +79,37 @@ public:
                         itr = adapter->currVHList.cend() - 1;
                         ScrollView::removeViewAt(children.size() - 1);
                     } else {
-                        itr--;
                         break;
                     }
                 }
             }
 
             //再setMeasureDimension调用前height为0，此时要用layoutParams->_height才行
-            while (children.empty() ||
+//            while (children.empty() ||
+//                   (height == 0 && childHeightSum < layoutParams->_height) ||
+//                   (height > 0 && skRect.height() > 0 && !lastScrollDown &&
+//                    adapter->startIndex > 0 &&
+//                    children.front()->skRect.top() > skRect.top() - 50) ||
+//                   (height > 0 && skRect.height() > 0 && lastScrollDown &&
+//                    adapter->endIndex < adapter->getSize() &&
+//                    children.back()->skRect.bottom() < skRect.bottom() + 50)) {
+            View *firstChild = nullptr;
+            View *lastChild = nullptr;
+            if (!children.empty()) {
+                firstChild = children.front();
+                lastChild = children.back();
+            }
+            auto addedHeight = 0;
+            //todo
+            //虽然child add进去了，但是只经过measure过程，还没layout，所以没法得知新加进去child的top或者bottom
+            while ((children.empty() && adapter->getSize() > 0) ||
                    (height == 0 && childHeightSum < layoutParams->_height) ||
-                   (height > 0 && skRect.height() > 0 && !lastScrollDown &&
+                   (firstChild != nullptr && height > 0 && !lastScrollDown &&
                     adapter->startIndex > 0 &&
-                    children.front()->skRect.top() > skRect.top() - 50) ||
-                   (height > 0 && skRect.height() > 0 && lastScrollDown &&
+                    firstChild->skRect.top() - addedHeight > skRect.top() - 50) ||
+                   (lastChild != nullptr && height > 0 && lastScrollDown &&
                     adapter->endIndex < adapter->getSize() &&
-                    children.back()->skRect.bottom() < skRect.bottom() + 50)) {
+                    lastChild->skRect.bottom() + addedHeight < skRect.bottom() + 50)) {
                 RecyclerViewHolder<T> *vh = nullptr;
                 if (lastScrollDown) {
                     vh = adapter->handleEndVH();
@@ -92,17 +118,23 @@ public:
                 }
                 View *child = vh->getItemView();
                 auto viewLayoutParams = LayoutParams::makeExactlyWidth(layoutParams->_width);
+                //todo crash added child already has owner
+//                if (child->node->getOwner() != nullptr) {
+//                    YGNodeRemoveChild(child->node->getOwner(), child->node);
+//                }
+                assert(child->node->getOwner() == nullptr);
                 if (lastScrollDown) {
                     ScrollView::addView(child, viewLayoutParams);
                 } else {
                     ScrollView::addViewAt(child, viewLayoutParams, 0);
                 }
-                ALOGD("RecyclerView addView: %s", child->name())
+//                ALOGD("RecyclerView addView: %s", child->name())
                 child->measure(widthMeasureSpec, heightMeasureSpec);
                 if (!lastScrollDown) {
                     translateY -= child->getHeight();
                 }
                 childHeightSum += child->getHeight();
+                addedHeight += child->getHeight();
             }
         } else {
             //todo 横向滑动暂时忽略
@@ -118,7 +150,7 @@ public:
     }
 
     virtual void draw(SkCanvas *canvas) override {
-        ALOGD("RecyclerView draw, child count: %d", children.size())
+//        ALOGD("RecyclerView draw, child count: %d", children.size())
         for (auto child: children) {
             //不同于ScrollView，RecyclerView不需要判断不可见的child不绘制
             child->draw(canvas);

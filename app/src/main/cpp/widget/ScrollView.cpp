@@ -103,7 +103,7 @@ void ScrollView::updateTranslateX(float diffX) {
 bool ScrollView::addView(View *view, LayoutParams *layoutParams) {
     isDirty = true;
     auto index = YGNodeGetChildCount(node);
-    ALOGD("RecyclerView addView at %d %ld", index, children.size())
+//    ALOGD("RecyclerView addView at %d %ld", index, children.size())
     return FlexboxLayout::addViewAt(view, layoutParams, index);
 }
 
@@ -211,4 +211,8 @@ bool ScrollView::ignoreChildDraw(const View *child) {
         auto scrollRight = skRect.right();
         return childLeft > scrollRight + 100 || childRight < scrollLeft - 100;
     }
+}
+
+const char *ScrollView::name() {
+    return "ScrollView";
 }

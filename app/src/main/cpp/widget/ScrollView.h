@@ -61,6 +61,8 @@ public:
 
     void addScrollCallback(std::function<void(float dx, float dy)> callback);
 
+    virtual const char * name() override;
+
 protected:
 
     float xVelocity, yVelocity;
