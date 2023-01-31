@@ -152,7 +152,7 @@ public:
             if (!stack.empty()) {
                 text1 = static_cast<TextView *>(stack.top()->getItemView())->getText().c_str();
             }
-            ALOGD("RecyclerView get VH from Cache, owner is not null %d %d %s %s", endIndex, vh->getItemView()->node->getOwner() != nullptr,  text.c_str(), text1)
+            ALOGD("RecyclerView get VH from Cache, owner is not null %d %d %s %s", endIndex, vh->getItemView()->node->getOwner() != nullptr, text.c_str(), text1)
 
 //            ALOGD("RecyclerView getVHFromCache %d", endIndex)
         }

@@ -59,13 +59,6 @@ public:
                         break;
                     }
                 }
-//                auto firstVH = adapter->currVHList[0];
-//                if (ignoreChildDraw(firstVH->getItemView())) {
-//                    ScrollView::removeViewAt(0);
-//                    adapter->recycleStartVH(adapter->currVHList[0]);
-//                    translateY += firstVH->getItemView()->skRect.height();
-//                }
-
 
                 //从尾清理
                 for (auto itr = adapter->currVHList.cend() - 1;
@@ -85,14 +78,6 @@ public:
             }
 
             //再setMeasureDimension调用前height为0，此时要用layoutParams->_height才行
-//            while (children.empty() ||
-//                   (height == 0 && childHeightSum < layoutParams->_height) ||
-//                   (height > 0 && skRect.height() > 0 && !lastScrollDown &&
-//                    adapter->startIndex > 0 &&
-//                    children.front()->skRect.top() > skRect.top() - 50) ||
-//                   (height > 0 && skRect.height() > 0 && lastScrollDown &&
-//                    adapter->endIndex < adapter->getSize() &&
-//                    children.back()->skRect.bottom() < skRect.bottom() + 50)) {
             View *firstChild = nullptr;
             View *lastChild = nullptr;
             if (!children.empty()) {
