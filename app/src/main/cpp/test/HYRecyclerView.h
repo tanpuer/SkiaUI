@@ -119,7 +119,7 @@ public:
                     this->itemClickListener(item, view);
                 });
             }
-//            ALOGD("RecyclerView onBindViewHolder %s", item->b.c_str())
+            ALOGD("RecyclerView onBindViewHolder %d %s", index, item->b.c_str())
         }
 
         void
@@ -128,7 +128,8 @@ public:
         }
 
         int getItemType(int index) override {
-            return index % 3;
+//            return index % 3;
+            return 0;
         }
 
         class HYRecyclerVH : public RecyclerViewHolder<TestModel *> {

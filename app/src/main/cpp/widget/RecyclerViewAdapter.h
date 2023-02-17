@@ -66,7 +66,14 @@ public:
         } else {
             auto vhStack = vhCache[itemType];
             auto vh = vhStack.top();
+//            auto text = static_cast<TextView *>(vh->getItemView())->getText();
+//            ALOGD("RecyclerView vhStack pop %d, %s", vhStack.size(), text.c_str())
             vhStack.pop();
+//            auto vh1 = vhStack.top();
+//            if (vh1 != nullptr) {
+//                auto text1 = static_cast<TextView *>(vh1->getItemView())->getText();
+//                ALOGD("RecyclerView vhStack pop %d %s", vhStack.size(), text1.c_str())
+//            }
             return vh;
         }
     }
@@ -95,7 +102,7 @@ public:
      */
     void recycleStartVH(RecyclerViewHolder<T> *vh) {
         auto text = static_cast<TextView *>(vh->getItemView())->getText();
-//        ALOGD("RecyclerView recycleStartVH %d", startIndex)
+        ALOGD("RecyclerView recycleStartVH %d %s", startIndex, text.c_str())
         putViewHolderToCache(getItemType(startIndex), vh);
         onRecycleViewHolder(vh, data[startIndex]);
         startIndex++;
@@ -145,7 +152,6 @@ public:
             vh = onCreateViewHolder(itemType);
             ALOGD("RecyclerView create new VH %d", endIndex)
         } else {
-            ALOGD("RecyclerView create new VH %d", endIndex)
             auto text = static_cast<TextView *>(vh->getItemView())->getText();
             auto stack = vhCache[getItemType(endIndex)];
             const char *text1 = "null";

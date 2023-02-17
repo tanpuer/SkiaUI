@@ -27,6 +27,21 @@ public:
         return "RecyclerView";
     }
 
+    bool addView(View *view, LayoutParams *layoutParams) override {
+        ALOGD("RecyclerView addView at %d %ld", YGNodeGetChildCount(node), children.size())
+        return ScrollView::addView(view, layoutParams);
+    }
+
+    bool addViewAt(View *view, LayoutParams *layoutParams, uint32_t index) override {
+        ALOGD("RecyclerView addView at %d %ld", index, children.size())
+        return ScrollView::addViewAt(view, layoutParams, index);
+    }
+
+    bool removeViewAt(uint32_t index) override {
+        ALOGD("RecyclerView removeView at %d, %ld", index, children.size())
+        return ScrollView::removeViewAt(index);
+    }
+
     virtual void measure(int widthMeasureSpec, int heightMeasureSpec) override {
         //简化处理RecyclerView必须指定宽高
         assert(layoutParams->_heightMode == EXACTLY);
@@ -61,20 +76,20 @@ public:
                 }
 
                 //从尾清理
-                for (auto itr = adapter->currVHList.cend() - 1;
-                     itr != adapter->currVHList.cbegin();) {
-                    if (*itr == nullptr) {
-                        break;
-                    }
-                    auto itemView = (*itr)->getItemView();
-                    if (ignoreChildDraw(itemView)) {
-                        adapter->recyclerEndVH(*itr);
-                        itr = adapter->currVHList.cend() - 1;
-                        ScrollView::removeViewAt(children.size() - 1);
-                    } else {
-                        break;
-                    }
-                }
+//                for (auto itr = adapter->currVHList.cend() - 1;
+//                     itr != adapter->currVHList.cbegin();) {
+//                    if (*itr == nullptr) {
+//                        break;
+//                    }
+//                    auto itemView = (*itr)->getItemView();
+//                    if (ignoreChildDraw(itemView)) {
+//                        adapter->recyclerEndVH(*itr);
+//                        itr = adapter->currVHList.cend() - 1;
+//                        ScrollView::removeViewAt(children.size() - 1);
+//                    } else {
+//                        break;
+//                    }
+//                }
             }
 
             //再setMeasureDimension调用前height为0，此时要用layoutParams->_height才行
@@ -109,9 +124,9 @@ public:
 //                }
                 assert(child->node->getOwner() == nullptr);
                 if (lastScrollDown) {
-                    ScrollView::addView(child, viewLayoutParams);
+                    addView(child, viewLayoutParams);
                 } else {
-                    ScrollView::addViewAt(child, viewLayoutParams, 0);
+                    addViewAt(child, viewLayoutParams, 0);
                 }
 //                ALOGD("RecyclerView addView: %s", child->name())
                 child->measure(widthMeasureSpec, heightMeasureSpec);
