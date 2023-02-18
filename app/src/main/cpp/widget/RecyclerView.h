@@ -76,20 +76,20 @@ public:
                 }
 
                 //从尾清理
-//                for (auto itr = adapter->currVHList.cend() - 1;
-//                     itr != adapter->currVHList.cbegin();) {
-//                    if (*itr == nullptr) {
-//                        break;
-//                    }
-//                    auto itemView = (*itr)->getItemView();
-//                    if (ignoreChildDraw(itemView)) {
-//                        adapter->recyclerEndVH(*itr);
-//                        itr = adapter->currVHList.cend() - 1;
-//                        ScrollView::removeViewAt(children.size() - 1);
-//                    } else {
-//                        break;
-//                    }
-//                }
+                for (auto itr = adapter->currVHList.cend() - 1;
+                     itr != adapter->currVHList.cbegin();) {
+                    if (*itr == nullptr) {
+                        break;
+                    }
+                    auto itemView = (*itr)->getItemView();
+                    if (ignoreChildDraw(itemView)) {
+                        adapter->recyclerEndVH(*itr);
+                        itr = adapter->currVHList.cend() - 1;
+                        ScrollView::removeViewAt(children.size() - 1);
+                    } else {
+                        break;
+                    }
+                }
             }
 
             //再setMeasureDimension调用前height为0，此时要用layoutParams->_height才行
@@ -118,17 +118,12 @@ public:
                 }
                 View *child = vh->getItemView();
                 auto viewLayoutParams = LayoutParams::makeExactlyWidth(layoutParams->_width);
-                //todo crash added child already has owner
-//                if (child->node->getOwner() != nullptr) {
-//                    YGNodeRemoveChild(child->node->getOwner(), child->node);
-//                }
                 assert(child->node->getOwner() == nullptr);
                 if (lastScrollDown) {
                     addView(child, viewLayoutParams);
                 } else {
                     addViewAt(child, viewLayoutParams, 0);
                 }
-//                ALOGD("RecyclerView addView: %s", child->name())
                 child->measure(widthMeasureSpec, heightMeasureSpec);
                 if (!lastScrollDown) {
                     translateY -= child->getHeight();

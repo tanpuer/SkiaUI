@@ -51,29 +51,26 @@ public:
 
     virtual void putViewHolderToCache(int itemType, RecyclerViewHolder<T> *vh) {
         if (vhCache.find(itemType) == vhCache.end()) {
-            vhCache.emplace(itemType, std::stack<RecyclerViewHolder<T> *>());
+            ALOGD("RecyclerView init cache %d", itemType)
+            vhCache.emplace(itemType, new std::stack<RecyclerViewHolder<T> *>());
         }
-        ALOGD("RecyclerView push to cache %d %s", itemType, static_cast<TextView*>(vh->getItemView())->getText().c_str())
-        vhCache[itemType].push(vh);
+        auto vhStack = vhCache[itemType];
+        vhStack->push(vh);
+        ALOGD("RecyclerView push to cache %d %d", itemType, vhStack->size())
     }
 
     virtual RecyclerViewHolder<T> *getViewHolderFromCache(int itemType) {
         if (vhCache.find(itemType) == vhCache.end()) {
-            vhCache.emplace(itemType, std::stack<RecyclerViewHolder<T> *>());
+            ALOGD("RecyclerView init cache %d", itemType)
+            vhCache.emplace(itemType, new std::stack<RecyclerViewHolder<T> *>());
+            return nullptr;
         }
-        if (vhCache[itemType].empty()) {
+        auto vhStack = vhCache[itemType];
+        if (vhStack->empty()) {
             return nullptr;
         } else {
-            auto vhStack = vhCache[itemType];
-            auto vh = vhStack.top();
-//            auto text = static_cast<TextView *>(vh->getItemView())->getText();
-//            ALOGD("RecyclerView vhStack pop %d, %s", vhStack.size(), text.c_str())
-            vhStack.pop();
-//            auto vh1 = vhStack.top();
-//            if (vh1 != nullptr) {
-//                auto text1 = static_cast<TextView *>(vh1->getItemView())->getText();
-//                ALOGD("RecyclerView vhStack pop %d %s", vhStack.size(), text1.c_str())
-//            }
+            auto vh = vhStack->top();
+            vhStack->pop();
             return vh;
         }
     }
@@ -132,7 +129,7 @@ public:
             vh = onCreateViewHolder(itemType);
             ALOGD("RecyclerView create new VH %d", startIndex)
         } else {
-            ALOGD("RecyclerView getVHFromCache %d", startIndex)
+            ALOGD("RecyclerView getVHFromCache for start%d", startIndex)
         }
         auto item = data[startIndex];
         onBindViewHolder(vh, startIndex, item);
@@ -146,21 +143,12 @@ public:
      */
     RecyclerViewHolder<T> *handleEndVH() {
         auto vh = getViewHolderFromCache(getItemType(endIndex));
-//        assert(vhCache[getItemType(endIndex)].empty());
         if (vh == nullptr) {
             auto itemType = getItemType(endIndex);
             vh = onCreateViewHolder(itemType);
-            ALOGD("RecyclerView create new VH %d", endIndex)
+            ALOGD("RecyclerView create new VH for end %d", endIndex)
         } else {
-            auto text = static_cast<TextView *>(vh->getItemView())->getText();
-            auto stack = vhCache[getItemType(endIndex)];
-            const char *text1 = "null";
-            if (!stack.empty()) {
-                text1 = static_cast<TextView *>(stack.top()->getItemView())->getText().c_str();
-            }
-            ALOGD("RecyclerView get VH from Cache, owner is not null %d %d %s %s", endIndex, vh->getItemView()->node->getOwner() != nullptr, text.c_str(), text1)
-
-//            ALOGD("RecyclerView getVHFromCache %d", endIndex)
+            ALOGD("RecyclerView get VH from Cache for end %d", endIndex)
         }
         auto item = data[endIndex];
         onBindViewHolder(vh, endIndex, item);
@@ -192,7 +180,7 @@ private:
     /**
      * vh缓存，暂时用Map + Stack实现
      */
-    std::unordered_map<int, std::stack<RecyclerViewHolder<T> *>> vhCache;
+    std::unordered_map<int, std::stack<RecyclerViewHolder<T> *> *> vhCache;
 
 public:
     /**
