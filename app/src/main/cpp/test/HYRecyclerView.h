@@ -77,7 +77,7 @@ public:
                     flexboxLayout->setAlignItems(YGAlignCenter);
                     flexboxLayout->setAlignContent(YGAlignCenter);
                     flexboxLayout->setStyle(SkPaint::kStroke_Style);
-                    auto vh = new HYRecyclerVH2(flexboxLayout);
+                    auto vh = new HYRecyclerVH3(flexboxLayout);
                     {
                         auto imageView = new ImageView();
                         imageView->setConfig(config);
