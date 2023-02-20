@@ -69,7 +69,7 @@ public:
                         adapter->recycleStartVH(*itr);
                         itr = adapter->currVHList.cbegin();
                         translateY += children[0]->skRect.height();
-                        ScrollView::removeViewAt(0);
+                        removeViewAt(0);
                     } else {
                         break;
                     }
@@ -85,7 +85,7 @@ public:
                     if (ignoreChildDraw(itemView)) {
                         adapter->recyclerEndVH(*itr);
                         itr = adapter->currVHList.cend() - 1;
-                        ScrollView::removeViewAt(children.size() - 1);
+                        removeViewAt(children.size() - 1);
                     } else {
                         break;
                     }

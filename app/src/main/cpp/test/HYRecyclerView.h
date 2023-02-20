@@ -46,53 +46,53 @@ public:
 
         RecyclerViewHolder<TestModel *> *onCreateViewHolder(int itemType) override {
             switch (itemType) {
-//                case 1: {
-//                    auto flexboxLayout = new FlexboxLayout();
-//                    flexboxLayout->setConfig(config);
-//                    flexboxLayout->setFlexWrap(YGWrapNoWrap);
-//                    flexboxLayout->setFlexDirection(YGFlexDirectionColumn);
-//                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
-//                    flexboxLayout->setAlignItems(YGAlignCenter);
-//                    flexboxLayout->setAlignContent(YGAlignCenter);
-//                    flexboxLayout->setStyle(SkPaint::kStroke_Style);
-//                    auto vh = new HYRecyclerVH2(flexboxLayout);
-//                    {
-//                        auto progressBar = new ProgressBar();
-//                        progressBar->setConfig(config);
-//                        progressBar->setBarColor(SK_ColorRED);
-//                        progressBar->setBackgroundColor(SK_ColorGRAY);
-//                        progressBar->setStrokeWidth(10.0);
-//                        progressBar->setStyle(SkPaint::kStroke_Style);
-//                        flexboxLayout->addView(progressBar,
-//                                               LayoutParams::makeExactlyLayoutParams(200, 200));
-//                    }
-//                    return vh;
-//                }
-//                case 2: {
-//                    auto flexboxLayout = new FlexboxLayout();
-//                    flexboxLayout->setConfig(config);
-//                    flexboxLayout->setFlexWrap(YGWrapNoWrap);
-//                    flexboxLayout->setFlexDirection(YGFlexDirectionColumn);
-//                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
-//                    flexboxLayout->setAlignItems(YGAlignCenter);
-//                    flexboxLayout->setAlignContent(YGAlignCenter);
-//                    flexboxLayout->setStyle(SkPaint::kStroke_Style);
-//                    auto vh = new HYRecyclerVH2(flexboxLayout);
-//                    {
-//                        auto imageView = new ImageView();
-//                        imageView->setConfig(config);
-//                        imageView->setSource("/sdcard/cowboy.png");
-//                        imageView->setCornerRadius(100);
-//                        imageView->setScaleType(ImageView::ScaleType::FitCenter);
-//                        imageView->setStyle(SkPaint::kStroke_Style);
-//                        imageView->setBackgroundColor(SK_ColorRED);
-//                        imageView->setStrokeWidth(2);
-//                        auto lp = LayoutParams::makeExactlyLayoutParams(200, 200);
-//                        lp->setMargin({0, 100, 0, 100});
-//                        flexboxLayout->addView(imageView, lp);
-//                    }
-//                    return vh;
-//                }
+                case 1: {
+                    auto flexboxLayout = new FlexboxLayout();
+                    flexboxLayout->setConfig(config);
+                    flexboxLayout->setFlexWrap(YGWrapNoWrap);
+                    flexboxLayout->setFlexDirection(YGFlexDirectionColumn);
+                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
+                    flexboxLayout->setAlignItems(YGAlignCenter);
+                    flexboxLayout->setAlignContent(YGAlignCenter);
+                    flexboxLayout->setStyle(SkPaint::kStroke_Style);
+                    auto vh = new HYRecyclerVH2(flexboxLayout);
+                    {
+                        auto progressBar = new ProgressBar();
+                        progressBar->setConfig(config);
+                        progressBar->setBarColor(SK_ColorRED);
+                        progressBar->setBackgroundColor(SK_ColorGRAY);
+                        progressBar->setStrokeWidth(10.0);
+                        progressBar->setStyle(SkPaint::kStroke_Style);
+                        flexboxLayout->addView(progressBar,
+                                               LayoutParams::makeExactlyLayoutParams(200, 200));
+                    }
+                    return vh;
+                }
+                case 2: {
+                    auto flexboxLayout = new FlexboxLayout();
+                    flexboxLayout->setConfig(config);
+                    flexboxLayout->setFlexWrap(YGWrapNoWrap);
+                    flexboxLayout->setFlexDirection(YGFlexDirectionColumn);
+                    flexboxLayout->setJustifyContent(YGJustifyFlexStart);
+                    flexboxLayout->setAlignItems(YGAlignCenter);
+                    flexboxLayout->setAlignContent(YGAlignCenter);
+                    flexboxLayout->setStyle(SkPaint::kStroke_Style);
+                    auto vh = new HYRecyclerVH2(flexboxLayout);
+                    {
+                        auto imageView = new ImageView();
+                        imageView->setConfig(config);
+                        imageView->setSource("/sdcard/cowboy.png");
+                        imageView->setCornerRadius(100);
+                        imageView->setScaleType(ImageView::ScaleType::FitCenter);
+                        imageView->setStyle(SkPaint::kStroke_Style);
+                        imageView->setBackgroundColor(SK_ColorRED);
+                        imageView->setStrokeWidth(2);
+                        auto lp = LayoutParams::makeExactlyLayoutParams(200, 200);
+                        lp->setMargin({0, 100, 0, 100});
+                        flexboxLayout->addView(imageView, lp);
+                    }
+                    return vh;
+                }
                 default: {
                     auto textView = new TextView();
                     textView->setConfig(config);
@@ -128,8 +128,8 @@ public:
         }
 
         int getItemType(int index) override {
-//            return index % 3;
-            return 0;
+            return index % 3;
+//            return 0;
         }
 
         class HYRecyclerVH : public RecyclerViewHolder<TestModel *> {

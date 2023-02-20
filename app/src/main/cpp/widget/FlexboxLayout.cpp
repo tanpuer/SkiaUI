@@ -51,10 +51,9 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
             YGNodeStyleSetHeight(node, getChildHeightSum());
         }
     }
-    ALOGD("YGNodeCalculateLayout %s %f %f", name(),
-          YGNodeStyleGetWidth(node).value, YGNodeStyleGetHeight(node).value);
     YGNodeCalculateLayout(node, YGNodeStyleGetWidth(node).value, YGNodeStyleGetHeight(node).value,
                           YGDirectionLTR);
+    ViewGroup::setMeasuredDimension(YGNodeStyleGetWidth(node).value, YGNodeStyleGetHeight(node).value);
     //如果是wrap，存在换行的情况，要重新计算FlexboxLayout的宽高
     if (layoutParams->_heightMode != EXACTLY && _direction == YGFlexDirectionRow &&
         YGNodeStyleGetFlexWrap(node) == YGWrapWrap) {
@@ -70,6 +69,7 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
         }
         if (maxTop > minTop) {
             YGNodeStyleSetHeight(node, YGNodeStyleGetHeight(node).value + maxTop - minTop);
+            ViewGroup::setMeasuredDimension(YGNodeStyleGetWidth(node).value, YGNodeStyleGetHeight(node).value + maxTop - minTop);
         }
     } else if (layoutParams->_widthMode != EXACTLY && _direction == YGFlexDirectionColumn &&
                YGNodeStyleGetFlexWrap(node) == YGWrapWrap) {
@@ -85,12 +85,13 @@ void FlexboxLayout::measure(int widthMeasureSpec, int heightMeasureSpec) {
         }
         if (maxLeft > minLeft) {
             YGNodeStyleSetWidth(node, YGNodeStyleGetWidth(node).value + maxLeft - minLeft);
+            ViewGroup::setMeasuredDimension(YGNodeStyleGetWidth(node).value + maxLeft - minLeft, YGNodeStyleGetHeight(node).value);
         }
     }
 }
 
 void FlexboxLayout::layout(int l, int t, int r, int b) {
-    ALOGD("FlexboxLayout margin %d %d %d %d", marginLeft, marginTop, marginRight, marginBottom);
+//    ALOGD("FlexboxLayout margin %d %d %d %d", marginLeft, marginTop, marginRight, marginBottom);
     View::layout(l, t, r, b);
     if (_direction == YGFlexDirectionRow) {
         layoutHorizontal(l, t, r, b);
@@ -106,8 +107,7 @@ void FlexboxLayout::layoutVertical(int l, int t, int r, int b) {
         auto width = static_cast<int>(YGNodeLayoutGetWidth(child->node));
         auto height = static_cast<int>(YGNodeLayoutGetHeight(child->node));
         //todo 需要考虑padding
-        ALOGD("FlexboxLayout: layout vertical %s %d %d %d %d", child->name(), left, top, width,
-              height)
+//        ALOGD("FlexboxLayout: layout vertical %s %d %d %d %d", child->name(), left, top, width, height)
         child->layout(left + l, top + t, left + l + width, top + t + height);
     }
 }
@@ -118,8 +118,7 @@ void FlexboxLayout::layoutHorizontal(int l, int t, int r, int b) {
         auto top = static_cast<int>(YGNodeLayoutGetTop(child->node));
         auto width = static_cast<int>(YGNodeLayoutGetWidth(child->node));
         auto height = static_cast<int>(YGNodeLayoutGetHeight(child->node));
-        ALOGD("FlexboxLayout: layout horizontal %s %d %d %d %d", child->name(), left, top, width,
-              height)
+//        ALOGD("FlexboxLayout: layout horizontal %s %d %d %d %d", child->name(), left, top, width, height)
         //todo 需要考虑padding
         child->layout(left + l, top + t, left + l + width, top + t + height);
     }

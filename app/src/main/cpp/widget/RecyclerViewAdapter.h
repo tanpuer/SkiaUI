@@ -127,9 +127,9 @@ public:
         if (vh == nullptr) {
             auto itemType = getItemType(startIndex);
             vh = onCreateViewHolder(itemType);
-            ALOGD("RecyclerView create new VH %d", startIndex)
+            ALOGD("RecyclerView create new VH for start %d, itemType: %d", startIndex, getItemType(startIndex))
         } else {
-            ALOGD("RecyclerView getVHFromCache for start%d", startIndex)
+            ALOGD("RecyclerView getVHFromCache for start: %d, itemType: %d", startIndex, getItemType(startIndex))
         }
         auto item = data[startIndex];
         onBindViewHolder(vh, startIndex, item);
@@ -146,9 +146,9 @@ public:
         if (vh == nullptr) {
             auto itemType = getItemType(endIndex);
             vh = onCreateViewHolder(itemType);
-            ALOGD("RecyclerView create new VH for end %d", endIndex)
+            ALOGD("RecyclerView create new VH for end %d, itemType: %d", endIndex, getItemType(endIndex))
         } else {
-            ALOGD("RecyclerView get VH from Cache for end %d", endIndex)
+            ALOGD("RecyclerView get VH from Cache for end %d, itemType: %d", endIndex, getItemType(endIndex))
         }
         auto item = data[endIndex];
         onBindViewHolder(vh, endIndex, item);

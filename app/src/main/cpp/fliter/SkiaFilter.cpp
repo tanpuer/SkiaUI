@@ -26,9 +26,9 @@ SkiaFilter::SkiaFilter() : skCanvas(nullptr) {
 //    testDraw = new ImageViewTest();
 //    testDraw = new TextViewTest();
 //    testDraw = new MovingDrawTest();
-    testDraw = new ScrollViewTest();
+//    testDraw = new ScrollViewTest();
 //    testDraw = new ProgressBarDrawTest();
-//    testDraw = new ListViewTest();
+    testDraw = new ListViewTest();
 }
 
 SkiaFilter::~SkiaFilter() {
@@ -79,7 +79,7 @@ void SkiaFilter::doFrame(long time) {
 
     auto start = javaTimeMillis();
     testDraw->doDrawTest(drawCount, skCanvas, width, height);
-    ALOGD("SkiaFilter doFrame duration %ld", javaTimeMillis() - start)
+//    ALOGD("SkiaFilter doFrame duration %ld", javaTimeMillis() - start)
 
     skCanvas->flush();
 }
