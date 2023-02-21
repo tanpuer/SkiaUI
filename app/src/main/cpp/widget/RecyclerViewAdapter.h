@@ -106,7 +106,7 @@ public:
      * @param vh
      */
     void recycleStartVH(RecyclerViewHolder<T> *vh) {
-        ALOGD("RecyclerView recycleStartVH %d %s", startIndex)
+        ALOGD("RecyclerView recycleStartVH %d", startIndex)
         putViewHolderToCache(getItemType(startIndex), vh);
         onRecycleViewHolder(vh, data[startIndex]);
         startIndex++;
