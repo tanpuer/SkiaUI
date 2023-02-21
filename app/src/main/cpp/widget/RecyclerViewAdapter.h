@@ -74,6 +74,7 @@ public:
             return nullptr;
         }
         auto vhStack = vhCache[itemType];
+        ALOGD("Recyclerview getViewHolderFromCache %d %d", itemType, vhStack->size())
         if (vhStack->empty()) {
             return nullptr;
         } else {
@@ -106,7 +107,7 @@ public:
      * @param vh
      */
     void recycleStartVH(RecyclerViewHolder<T> *vh) {
-        ALOGD("RecyclerView recycleStartVH %d", startIndex)
+        ALOGD("RecyclerView recycleStartVH %d %d", startIndex, getItemType(startIndex))
         putViewHolderToCache(getItemType(startIndex), vh);
         onRecycleViewHolder(vh, data[startIndex]);
         startIndex++;
@@ -130,8 +131,8 @@ public:
      */
     RecyclerViewHolder<T> *handleStartVH() {
         startIndex--;
-        auto vh = getViewHolderFromCache(getItemType(startIndex));
         auto itemType = getItemType(startIndex);
+        RecyclerViewHolder<T> *vh = getViewHolderFromCache(itemType);
         if (vh == nullptr) {
             vh = onCreateViewHolder(itemType);
             ALOGD("RecyclerView create new VH for start %d, itemType: %d", startIndex, itemType)
@@ -149,8 +150,8 @@ public:
      * @return
      */
     RecyclerViewHolder<T> *handleEndVH() {
-        auto vh = getViewHolderFromCache(getItemType(endIndex));
         auto itemType = getItemType(endIndex);
+        auto vh = getViewHolderFromCache(itemType);
         if (vh == nullptr) {
             vh = onCreateViewHolder(itemType);
             ALOGD("RecyclerView create new VH for end %d, itemType: %d", endIndex, itemType)
