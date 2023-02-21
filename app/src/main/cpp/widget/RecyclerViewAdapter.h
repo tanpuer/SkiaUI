@@ -9,7 +9,6 @@
 #include "stack"
 #include "RecyclerViewHolder.h"
 #include "unordered_map"
-#include "TextView.h"
 
 template<typename T>
 class RecyclerViewAdapter {
@@ -21,7 +20,16 @@ public:
     }
 
     virtual ~RecyclerViewAdapter() {
-        //todo 析构 data 和 vh
+        for (auto &vh: currVHList) {
+            delete vh;
+        }
+        for (auto &cache: vhCache) {
+            while (!cache.second->empty()) {
+                auto vh = cache.second->top();
+                cache.second->pop();
+                delete vh;
+            }
+        }
     }
 
     virtual void setData(std::vector<T> data) {
@@ -98,8 +106,7 @@ public:
      * @param vh
      */
     void recycleStartVH(RecyclerViewHolder<T> *vh) {
-        auto text = static_cast<TextView *>(vh->getItemView())->getText();
-        ALOGD("RecyclerView recycleStartVH %d %s", startIndex, text.c_str())
+        ALOGD("RecyclerView recycleStartVH %d %s", startIndex)
         putViewHolderToCache(getItemType(startIndex), vh);
         onRecycleViewHolder(vh, data[startIndex]);
         startIndex++;
@@ -124,12 +131,12 @@ public:
     RecyclerViewHolder<T> *handleStartVH() {
         startIndex--;
         auto vh = getViewHolderFromCache(getItemType(startIndex));
+        auto itemType = getItemType(startIndex);
         if (vh == nullptr) {
-            auto itemType = getItemType(startIndex);
             vh = onCreateViewHolder(itemType);
-            ALOGD("RecyclerView create new VH for start %d, itemType: %d", startIndex, getItemType(startIndex))
+            ALOGD("RecyclerView create new VH for start %d, itemType: %d", startIndex, itemType)
         } else {
-            ALOGD("RecyclerView getVHFromCache for start: %d, itemType: %d", startIndex, getItemType(startIndex))
+            ALOGD("RecyclerView getVHFromCache for start: %d, itemType: %d", startIndex, itemType)
         }
         auto item = data[startIndex];
         onBindViewHolder(vh, startIndex, item);
@@ -143,12 +150,12 @@ public:
      */
     RecyclerViewHolder<T> *handleEndVH() {
         auto vh = getViewHolderFromCache(getItemType(endIndex));
+        auto itemType = getItemType(endIndex);
         if (vh == nullptr) {
-            auto itemType = getItemType(endIndex);
             vh = onCreateViewHolder(itemType);
-            ALOGD("RecyclerView create new VH for end %d, itemType: %d", endIndex, getItemType(endIndex))
+            ALOGD("RecyclerView create new VH for end %d, itemType: %d", endIndex, itemType)
         } else {
-            ALOGD("RecyclerView get VH from Cache for end %d, itemType: %d", endIndex, getItemType(endIndex))
+            ALOGD("RecyclerView get VH from Cache for end %d, itemType: %d", endIndex, itemType)
         }
         auto item = data[endIndex];
         onBindViewHolder(vh, endIndex, item);
