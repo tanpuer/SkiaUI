@@ -21,8 +21,7 @@ Using Skia, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework
 8. todo 脏区渲染
 9. 实现RecyclerView，adapter，ViewHolder复用机制，目前快速滑动有问题。
 
-
-![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example1.jpeg)
-![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.jpeg)
 ![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example1.gif)
 ![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.gif)
+![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example1.jpeg)
+![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.jpeg)
