@@ -1,5 +1,8 @@
 # SkiaUI
 
+plse refer https://github.com/tanpuer/SkiaUI2, this repo will never update.
+
+<strike>
 switch to branch develop
 
 Using Skia, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework for Android.
@@ -25,3 +28,5 @@ Using Skia, Yoga, SurfaceView/TextureView to build a simple Flexbox-UI framework
 ![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.gif)
 ![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example1.jpeg)
 ![image](https://github.com/tanpuer/SkiaUI/blob/develop/app/example2.jpeg)
+
+</strike>
